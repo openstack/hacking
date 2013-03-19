@@ -1,6 +1,8 @@
 include AUTHORS
 include ChangeLog
 include README.rst
+include requirements.txt
+include test-requirements.txt
 exclude .gitignore
 exclude .gitreview
 
