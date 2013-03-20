@@ -67,7 +67,7 @@ def load_tests(loader, tests, pattern):
     flake8_style = engine.get_style_guide(parse_argv=False, ignore='F')
     options = flake8_style.options
 
-    for name, check in hacking.__dict__.items():
+    for name, check in hacking.core.__dict__.items():
         if not name.startswith("hacking_"):
             continue
         for (lineno, (code, source)) in enumerate(_get_lines(check)):
