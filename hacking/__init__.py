@@ -18,7 +18,7 @@
 
 """OpenStack HACKING file compliance testing
 
-Built on top of pep8.py
+Built as a sets of pep8 checks using flake8.
 """
 
 import imp
@@ -29,8 +29,6 @@ import subprocess
 import sys
 import tokenize
 import traceback
-
-import pep8
 
 # Don't need this for testing
 logging.disable('LOG')
@@ -56,9 +54,6 @@ IMPORT_EXCEPTIONS = ['sqlalchemy', 'migrate', 'nova.db.sqlalchemy.session',
 # Paste is missing a __init__ in top level directory
 START_DOCSTRING_TRIPLE = ['u"""', 'r"""', '"""', "u'''", "r'''", "'''"]
 END_DOCSTRING_TRIPLE = ['"""', "'''"]
-VERBOSE_MISSING_IMPORT = os.getenv('HACKING_VERBOSE_MISSING_IMPORT', 'False')
-
-_missingImport = set([])
 
 
 def is_import_exception(mod):
@@ -185,7 +180,6 @@ def hacking_import_rules(logical_line, filename):
                 missing = str(exc).split()[-1]
                 if (missing != mod.split('.')[-1] or
                         "cannot import" in str(exc)):
-                    _missingImport.add(missing)
                     return True
                 return False
             except Exception:
@@ -592,36 +586,14 @@ def once_git_check_commit_title():
         error = True
     return error
 
-imports_on_separate_lines_H301_compliant = r"""
-    Imports should usually be on separate lines.
+    @classmethod
+    def add_options(cls, parser):
+        parser.add_option('--git-message', action='store_true',
+                          default=False, dest='git_message',
+                          help="Check for well-formed git commit messages")
+        parser.config_options.append('git-message')
 
-    Okay: import os\nimport sys
-    E401: import sys, os
-
-    H301: from subprocess import Popen, PIPE
-    Okay: from myclas import MyClass
-    Okay: from foo.bar.yourclass import YourClass
-    Okay: import myclass
-    Okay: import foo.bar.yourclass
-    """
-
-if __name__ == "__main__":
-    #include nova path
-    sys.path.append(os.getcwd())
-    #Run once tests (not per line)
-    once_error = once_git_check_commit_title()
-    #NOVA error codes start with an N
-    pep8.SELFTEST_REGEX = re.compile(r'(Okay|[EWN]\d{3}):\s(.*)')
-    pep8.ERRORCODE_REGEX = re.compile(r'[EWN]\d{3}')
-    # we need to kill this doctring otherwise the self tests fail
-    pep8.imports_on_separate_lines.__doc__ = \
-        imports_on_separate_lines_H301_compliant
-
-    try:
-        pep8._main()
-        sys.exit(once_error)
-    finally:
-        if len(_missingImport) > 0:
-            print >> sys.stderr, (
-                "%i imports missing in this test environment"
-                % len(_missingImport))
+    @classmethod
+    def parse_options(cls, options):
+        if options.git_message:
+            once_git_check_commit_title()

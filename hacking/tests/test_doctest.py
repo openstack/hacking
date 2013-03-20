@@ -20,7 +20,6 @@ from flake8 import engine
 import pep8
 import testtools
 from testtools import content
-from testtools import content_type
 from testtools import matchers
 
 import testscenarios
@@ -30,6 +29,7 @@ import hacking
 SELFTEST_REGEX = re.compile(r'\b(Okay|[HEW]\d{3}):\s(.*)')
 # Each scenario is (name, dict(lines=.., options=..., code=...))
 file_cases = []
+
 
 class HackingTestCase(testtools.TestCase):
 
@@ -46,9 +46,9 @@ class HackingTestCase(testtools.TestCase):
                 len(report.counters),
                 matchers.Not(matchers.GreaterThan(
                     len(self.options.benchmark_keys))),
-                    "incorrectly found %s" % ', '.join(
-                        [key for key in report.counters
-                             if key not in self.options.benchmark_keys]))
+                "incorrectly found %s" % ', '.join(
+                    [key for key in report.counters
+                     if key not in self.options.benchmark_keys]))
         else:
             self.assertIn(self.code, report.counters)
 
@@ -73,5 +73,6 @@ def load_tests(loader, tests, pattern):
         for (lineno, (code, source)) in enumerate(_get_lines(check)):
             lines = [part.replace(r'\t', '\t') + '\n'
                      for part in source.split(r'\n')]
-            file_cases.append(("%s-line-%s" % (name, lineno), dict(lines=lines, options=options, code=code)))
+            file_cases.append(("%s-line-%s" % (name, lineno),
+                              dict(lines=lines, options=options, code=code)))
     return testscenarios.load_tests_apply_scenarios(loader, tests, pattern)
