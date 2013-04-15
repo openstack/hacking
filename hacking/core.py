@@ -21,6 +21,7 @@
 Built as a sets of pep8 checks using flake8.
 """
 
+import gettext
 import imp
 import logging
 import os
@@ -32,6 +33,9 @@ import traceback
 
 # Don't need this for testing
 logging.disable('LOG')
+
+# Import tests need to inject _ properly into the builtins
+gettext.install('hacking', unicode=1)
 
 
 def flake8ext(f):
