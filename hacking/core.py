@@ -274,20 +274,6 @@ def hacking_import_alphabetical(logical_line, blank_lines, previous_logical,
                        % (split_previous[1], split_line[1]))
 
 
-@flake8ext
-def hacking_import_no_db_in_virt(logical_line, filename):
-    """Check for db calls from nova/virt
-
-    As of grizzly-2 all the database calls have been removed from
-    nova/virt, and we want to keep it that way.
-
-    H307
-    """
-    if "nova/virt" in filename and not filename.endswith("fake.py"):
-        if logical_line.startswith("from nova import db"):
-            yield (0, "H307: nova.db import not allowed in nova/virt/*")
-
-
 def is_docstring(physical_line, previous_logical):
     """Return True if found docstring
     'A docstring is a string literal that occurs as the first statement in a

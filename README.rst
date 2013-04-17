@@ -59,7 +59,6 @@ Imports
 - Do not import more than one module per line (*)
 - Do not use wildcard ``*`` import (*)
 - Do not make relative imports
-- Do not make new nova.db imports in nova/virt/*
 - Order your imports by the full module path
 - Organize your imports according to the following template
 
