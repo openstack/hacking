@@ -21,6 +21,7 @@
 Built as a sets of pep8 checks using flake8.
 """
 
+import ConfigParser
 import gettext
 import imp
 import logging
@@ -30,6 +31,9 @@ import subprocess
 import sys
 import tokenize
 import traceback
+
+import d2to1.util
+import pep8
 
 # Don't need this for testing
 logging.disable('LOG')
@@ -560,6 +564,9 @@ class GlobalCheck(object):
                 for r in ret:
                     yield ret
 
+    def run_once(self):
+        pass
+
 
 class GitCheck(GlobalCheck):
 
@@ -634,3 +641,37 @@ class OnceGitCheckCommitTitleLength(GitCheck):
                 "H802: git commit title ('%s') should be under 50 chars"
                 % title.strip(),
                 self.name)
+
+
+class ProxyChecks(GlobalCheck):
+    """Provide a mechanism for locally defined checks."""
+
+    name = 'ProxyChecker'
+
+    def __init__(self, tree, *args):
+        pass
+
+    @classmethod
+    def add_options(cls, parser):
+        # Abusing this method because of when it gets called
+        if not os.path.exists('tox.ini'):
+            return
+        tox_ini = ConfigParser.RawConfigParser()
+        tox_ini.read('tox.ini')
+        if not tox_ini.has_section('hacking'):
+            return
+
+        # We're looking for local checks, so we need to include the local
+        # dir in the search path
+        sys.path.append('.')
+        if tox_ini.has_option('hacking', 'local-check'):
+            for check_path in set(
+                    tox_ini.get('hacking', 'local-check').split(",")):
+                if check_path.strip():
+                    checker = d2to1.util.resolve_name(check_path)
+                    pep8.register_check(checker)
+        if tox_ini.has_option('hacking', 'local-check-factory'):
+            factory = d2to1.util.resolve_name(
+                tox_ini.get('hacking', 'local-check-factory'))
+            factory(pep8.register_check)
+        sys.path.pop()
