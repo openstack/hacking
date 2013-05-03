@@ -536,22 +536,32 @@ def hacking_not_in(logical_line):
                 yield (logical_line.find('not'), "H902: Use the 'not in' "
                        "operator for collection membership evaluation")
 
+_has_run_registry = dict()
 
-def once_git_check_commit_title():
-    """Check git commit messages.
 
-    nova HACKING recommends not referencing a bug or blueprint in first line,
-    it should provide an accurate description of the change
-    H801
-    H802 Title limited to 72 chars
-    """
-    #Get title of most recent commit
+class GlobalCheck(object):
+    """Base class for checks that should be run only once."""
 
-    subp = subprocess.Popen(['git', 'log', '--no-merges', '--pretty=%s', '-1'],
-                            stdout=subprocess.PIPE)
-    title = subp.communicate()[0]
-    if subp.returncode:
-        raise Exception("git log failed with code %s" % subp.returncode)
+    version = '0.0.1'
+
+    def run(self):
+        """Make run a no-op if run() has been called before.
+
+        Store in a global registry the list of checks we've run. If we have
+        run that one before, just skip doing anything the subsequent times.
+        This way, since pep8 is file/line based, we don't wind up re-running
+        a check on a git commit message over and over again.
+        """
+        global _has_run_registry
+        if self.name not in _has_run_registry.keys():
+            _has_run_registry[self.name] = True
+            ret = self.run_once()
+            if ret is not None:
+                for r in ret:
+                    yield ret
+
+
+class GitCheck(GlobalCheck):
 
     #From https://github.com/openstack/openstack-ci-puppet
     #       /blob/master/modules/gerrit/manifests/init.pp#L74
@@ -561,29 +571,66 @@ def once_git_check_commit_title():
                     '([Bb]lue[Pp]rint|[Bb][Pp])[\s\#:]*([A-Za-z0-9\\-]+)')
     GIT_REGEX = re.compile(git_keywords)
 
-    error = False
-    #NOTE(jogo) if match regex but over 3 words, acceptable title
-    if GIT_REGEX.search(title) is not None and len(title.split()) <= 3:
-        print ("H801: git commit title ('%s') should provide an accurate "
-               "description of the change, not just a reference to a bug "
-               "or blueprint" % title.strip())
-        error = True
-    # HACKING.rst recommends commit titles 50 chars or less, but enforces
-    # a 72 character limit
-    if len(title.decode('utf-8')) > 72:
-        print ("H802: git commit title ('%s') should be under 50 chars"
-               % title.strip())
-        error = True
-    return error
+    def __init__(self, tree, *args):
+        pass
 
-    @classmethod
-    def add_options(cls, parser):
-        parser.add_option('--git-message', action='store_true',
-                          default=False, dest='git_message',
-                          help="Check for well-formed git commit messages")
-        parser.config_options.append('git-message')
+    def _get_commit_title(self):
+        if not os.path.exists('.git'):
+            return None
 
-    @classmethod
-    def parse_options(cls, options):
-        if options.git_message:
-            once_git_check_commit_title()
+        #Get title of most recent commit
+        subp = subprocess.Popen(
+            ['git', 'log', '--no-merges', '--pretty=%s', '-1'],
+            stdout=subprocess.PIPE)
+        title = subp.communicate()[0]
+        if subp.returncode:
+            raise Exception("git log failed with code %s" % subp.returncode)
+        return title
+
+
+class OnceGitCheckCommitTitleBug(GitCheck):
+    """Check git commit messages for bugs.
+
+    nova HACKING recommends not referencing a bug or blueprint in first line,
+    it should provide an accurate description of the change
+    H801
+    """
+    name = "GitCheckCommitTitleBug"
+
+    def __init__(self, tree, *args):
+        pass
+
+    def run_once(self):
+        title = self._get_commit_title()
+
+        #NOTE(jogo) if match regex but over 3 words, acceptable title
+        if (title and self.GIT_REGEX.search(title) is not None
+                and len(title.split()) <= 3):
+            return(1, 0,
+                   "H801: git commit title ('%s') should provide an accurate "
+                   "description of the change, not just a reference to a bug "
+                   "or blueprint" % title.strip(), self.name)
+
+
+class OnceGitCheckCommitTitleLength(GitCheck):
+    """Check git commit message length.
+
+    HACKING.rst recommends commit titles 50 chars or less, but enforces
+    a 72 character limit
+
+    H802 Title limited to 72 chars
+    """
+    name = "GitCheckCommitTitleLength"
+
+    def __init__(self, tree, *args):
+        pass
+
+    def run_once(self):
+        title = self._get_commit_title()
+
+        if title and len(title.decode('utf-8')) > 72:
+            return(
+                1, 0,
+                "H802: git commit title ('%s') should be under 50 chars"
+                % title.strip(),
+                self.name)
