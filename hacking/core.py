@@ -87,7 +87,7 @@ def import_normalize(line):
 def hacking_todo_format(physical_line, tokens):
     """Check for 'TODO()'.
 
-    nova HACKING guide recommendation for TODO:
+    OpenStack HACKING guide recommendation for TODO:
     Include your name with TODOs as in "#TODO(termie)"
 
     Okay: #TODO(sdague)
@@ -106,7 +106,7 @@ def hacking_todo_format(physical_line, tokens):
 def hacking_except_format(logical_line):
     r"""Check for 'except:'.
 
-    nova HACKING guide recommends not using except:
+    OpenStack HACKING guide recommends not using except:
     Do not write "except:", use "except Exception:" at the very least
 
     Okay: try:\n    pass\nexcept Exception:\n    pass
@@ -120,7 +120,7 @@ def hacking_except_format(logical_line):
 def hacking_except_format_assert(logical_line):
     r"""Check for 'assertRaises(Exception'.
 
-    nova HACKING guide recommends not using assertRaises(Exception...):
+    OpenStack HACKING guide recommends not using assertRaises(Exception...):
     Do not use overly broad Exception type
 
     Okay: self.assertRaises(NovaException)
@@ -140,7 +140,7 @@ RE_RELATIVE_IMPORT = re.compile('^from\s*[.]')
 def hacking_import_rules(logical_line, filename):
     r"""Check for imports.
 
-    nova HACKING guide recommends one import per line:
+    OpenStack HACKING guide recommends one import per line:
     Do not import more than one module per line
 
     Examples:
@@ -150,7 +150,7 @@ def hacking_import_rules(logical_line, filename):
 
     Imports should usually be on separate lines.
 
-    nova HACKING guide recommends importing only modules:
+    OpenStack HACKING guide recommends importing only modules:
     Do not import objects, only modules
 
     Examples:
@@ -300,7 +300,7 @@ def is_docstring(physical_line, previous_logical):
 def hacking_docstring_start_space(physical_line, previous_logical):
     r"""Check for docstring not start with space.
 
-    nova HACKING guide recommendation for docstring:
+    OpenStack HACKING guide recommendation for docstring:
     Docstring should not start with space
 
     Okay: def foo():\n    '''This is good.'''
@@ -327,7 +327,7 @@ def hacking_docstring_start_space(physical_line, previous_logical):
 def hacking_docstring_one_line(physical_line, previous_logical):
     r"""Check one line docstring end.
 
-    nova HACKING guide recommendation for one line docstring:
+    OpenStack HACKING guide recommendation for one line docstring:
     A one line docstring looks like this and ends in punctuation.
 
     Okay: def foo():\n    '''This is good.'''
@@ -355,7 +355,7 @@ def hacking_docstring_one_line(physical_line, previous_logical):
 def hacking_docstring_multiline_end(physical_line, previous_logical, tokens):
     r"""Check multi line docstring end.
 
-    nova HACKING guide recommendation for docstring:
+    OpenStack HACKING guide recommendation for docstring:
     Docstring should end on a new line
 
     Okay: '''foobar\nfoo\nbar\n'''
@@ -379,7 +379,7 @@ def hacking_docstring_multiline_end(physical_line, previous_logical, tokens):
 def hacking_docstring_multiline_start(physical_line, previous_logical, tokens):
     r"""Check multi line docstring start with summary.
 
-    nova HACKING guide recommendation for docstring:
+    OpenStack HACKING guide recommendation for docstring:
     Docstring should start with A multi line docstring has a one-line summary
 
     Okay: '''foobar\nfoo\nbar\n'''
@@ -598,8 +598,8 @@ class GitCheck(GlobalCheck):
 class OnceGitCheckCommitTitleBug(GitCheck):
     """Check git commit messages for bugs.
 
-    nova HACKING recommends not referencing a bug or blueprint in first line,
-    it should provide an accurate description of the change
+    OpenStack HACKING recommends not referencing a bug or blueprint in first
+    line, it should provide an accurate description of the change
     H801
     """
     name = "GitCheckCommitTitleBug"
