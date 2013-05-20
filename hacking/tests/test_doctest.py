@@ -40,7 +40,7 @@ class HackingTestCase(testtools.TestCase):
         checker = pep8.Checker(lines=self.lines, options=self.options,
                                report=report)
         checker.check_all()
-        self.addDetail('lines', content.text_content("\n".join(self.lines)))
+        self.addDetail('doctest', content.text_content(self.raw))
         if self.code == 'Okay':
             self.assertThat(
                 len(report.counters),
@@ -50,6 +50,9 @@ class HackingTestCase(testtools.TestCase):
                     [key for key in report.counters
                      if key not in self.options.benchmark_keys]))
         else:
+            self.addDetail('reason',
+                           content.text_content("Failed to trigger rule %s" %
+                                                self.code))
             self.assertIn(self.code, report.counters)
 
 
@@ -59,7 +62,7 @@ def _get_lines(check):
         match = SELFTEST_REGEX.match(line)
         if match is None:
             continue
-        yield match.groups()
+        yield (line, match.groups())
 
 
 def load_tests(loader, tests, pattern):
@@ -70,9 +73,10 @@ def load_tests(loader, tests, pattern):
     for name, check in hacking.core.__dict__.items():
         if not name.startswith("hacking_"):
             continue
-        for (lineno, (code, source)) in enumerate(_get_lines(check)):
+        for (lineno, (raw, (code, source))) in enumerate(_get_lines(check)):
             lines = [part.replace(r'\t', '\t') + '\n'
                      for part in source.split(r'\n')]
             file_cases.append(("%s-line-%s" % (name, lineno),
-                              dict(lines=lines, options=options, code=code)))
+                              dict(lines=lines, raw=raw, options=options,
+                                   code=code)))
     return testscenarios.load_tests_apply_scenarios(loader, tests, pattern)
