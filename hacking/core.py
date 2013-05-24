@@ -625,13 +625,16 @@ def hacking_not_in(logical_line):
                 yield (logical_line.find('not'), "H902: Use the 'not in' "
                        "operator for collection membership evaluation")
 
-_has_run_registry = dict()
-
 
 class GlobalCheck(object):
     """Base class for checks that should be run only once."""
 
+    name = None
     version = '0.0.1'
+    _has_run = set()
+
+    def __init__(self, tree, *args):
+        pass
 
     def run(self):
         """Make run a no-op if run() has been called before.
@@ -641,9 +644,8 @@ class GlobalCheck(object):
         This way, since pep8 is file/line based, we don't wind up re-running
         a check on a git commit message over and over again.
         """
-        global _has_run_registry
-        if self.name not in _has_run_registry.keys():
-            _has_run_registry[self.name] = True
+        if self.name and self.name not in self.__class__._has_run:
+            self.__class__._has_run.add(self.name)
             ret = self.run_once()
             if ret is not None:
                 yield ret
@@ -653,17 +655,7 @@ class GlobalCheck(object):
 
 
 class GitCheck(GlobalCheck):
-
-    #From https://github.com/openstack/openstack-ci-puppet
-    #       /blob/master/modules/gerrit/manifests/init.pp#L74
-    #Changeid|bug|blueprint
-    git_keywords = (r'(I[0-9a-f]{8,40})|'
-                    '([Bb]ug|[Ll][Pp])[\s\#:]*(\d+)|'
-                    '([Bb]lue[Pp]rint|[Bb][Pp])[\s\#:]*([A-Za-z0-9\\-]+)')
-    GIT_REGEX = re.compile(git_keywords)
-
-    def __init__(self, tree, *args):
-        pass
+    """Base-class for Git related checks."""
 
     def _get_commit_title(self):
         if not os.path.exists('.git'):
@@ -688,8 +680,13 @@ class OnceGitCheckCommitTitleBug(GitCheck):
     """
     name = "GitCheckCommitTitleBug"
 
-    def __init__(self, tree, *args):
-        pass
+    #From https://github.com/openstack/openstack-ci-puppet
+    #       /blob/master/modules/gerrit/manifests/init.pp#L74
+    #Changeid|bug|blueprint
+    GIT_REGEX = re.compile(
+        r'(I[0-9a-f]{8,40})|'
+        '([Bb]ug|[Ll][Pp])[\s\#:]*(\d+)|'
+        '([Bb]lue[Pp]rint|[Bb][Pp])[\s\#:]*([A-Za-z0-9\\-]+)')
 
     def run_once(self):
         title = self._get_commit_title()
@@ -697,10 +694,10 @@ class OnceGitCheckCommitTitleBug(GitCheck):
         #NOTE(jogo) if match regex but over 3 words, acceptable title
         if (title and self.GIT_REGEX.search(title) is not None
                 and len(title.split()) <= 3):
-            return(1, 0,
-                   "H801: git commit title ('%s') should provide an accurate "
-                   "description of the change, not just a reference to a bug "
-                   "or blueprint" % title.strip(), self.name)
+            return (1, 0,
+                    "H801: git commit title ('%s') should provide an accurate "
+                    "description of the change, not just a reference to a bug "
+                    "or blueprint" % title.strip(), self.name)
 
 
 class OnceGitCheckCommitTitleLength(GitCheck):
@@ -713,14 +710,11 @@ class OnceGitCheckCommitTitleLength(GitCheck):
     """
     name = "GitCheckCommitTitleLength"
 
-    def __init__(self, tree, *args):
-        pass
-
     def run_once(self):
         title = self._get_commit_title()
 
         if title and len(title.decode('utf-8')) > 72:
-            return(
+            return (
                 1, 0,
                 "H802: git commit title ('%s') should be under 50 chars"
                 % title.strip(),
@@ -729,11 +723,7 @@ class OnceGitCheckCommitTitleLength(GitCheck):
 
 class ProxyChecks(GlobalCheck):
     """Provide a mechanism for locally defined checks."""
-
     name = 'ProxyChecker'
-
-    def __init__(self, tree, *args):
-        pass
 
     @classmethod
     def add_options(cls, parser):
