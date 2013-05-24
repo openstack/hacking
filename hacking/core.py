@@ -561,8 +561,7 @@ class GlobalCheck(object):
             _has_run_registry[self.name] = True
             ret = self.run_once()
             if ret is not None:
-                for r in ret:
-                    yield ret
+                yield ret
 
     def run_once(self):
         pass
