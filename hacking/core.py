@@ -47,6 +47,8 @@ def flake8ext(f):
     f.version = '0.0.1'
     return f
 
+# Error code block layout
+
 #H1xx comments
 #H2xx except
 #H3xx imports

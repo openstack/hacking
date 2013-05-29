@@ -1,8 +1,3 @@
-Introduction
-============
-
-hacking is a set of flake8 plugins that test and enforce:
-
 OpenStack Style Commandments
 ============================
 
@@ -301,24 +296,3 @@ and how to split up commits into a series of changes, consult the
 project wiki:
 
    http://wiki.openstack.org/GitCommitMessages
-
-Local Checks
-============
-
-hacking supports having local changes in a source tree. They can be configured
-to run in two different ways. They can be registered individually, or with
-a factory function.
-
-For individual registration, put a comma separated list of pep8 compatible
-check functions into the hacking section of tox.ini. Like
-
-  [hacking]
-  local-check = nova.tests.hacking.bad_code_is_terrible
-
-Alternately, you can specify the location of a callable that will be called
-at registration time and will be passed the registration function. The callable
-should expect to call the passed in function on everything if wants to
-register. Such as:
-
-  [hacking]
-  local-check-factory = nova.tests.hacking.factory
