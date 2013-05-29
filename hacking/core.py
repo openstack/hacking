@@ -521,7 +521,7 @@ def hacking_is_not(logical_line):
     if (len(split_line) == 5 and split_line[0] == 'if' and
             split_line[1] == 'not' and split_line[3] == 'is'):
                 yield (logical_line.find('not'), "H901: Use the 'is not' "
-                       "operator for when testing for unequal identities")
+                       "operator when testing for unequal identities")
 
 
 @flake8ext
