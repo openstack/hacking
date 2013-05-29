@@ -280,6 +280,7 @@ def hacking_import_alphabetical(logical_line, blank_lines, previous_logical,
 
 def is_docstring(physical_line, previous_logical):
     """Return True if found docstring
+
     'A docstring is a string literal that occurs as the first statement in a
     module, function, class,'
     http://www.python.org/dev/peps/pep-0257/#what-is-a-docstring
@@ -298,7 +299,7 @@ def is_docstring(physical_line, previous_logical):
 
 @flake8ext
 def hacking_docstring_start_space(physical_line, previous_logical):
-    r"""Check for docstring not start with space.
+    r"""Check for docstring not starting with space.
 
     OpenStack HACKING guide recommendation for docstring:
     Docstring should not start with space
@@ -598,7 +599,7 @@ class OnceGitCheckCommitTitleBug(GitCheck):
     """Check git commit messages for bugs.
 
     OpenStack HACKING recommends not referencing a bug or blueprint in first
-    line, it should provide an accurate description of the change
+    line. It should provide an accurate description of the change
     H801
     """
     name = "GitCheckCommitTitleBug"
