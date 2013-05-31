@@ -18,20 +18,20 @@ import re
 
 from flake8 import engine
 import pep8
-import testtools
 from testtools import content
 from testtools import matchers
 
 import testscenarios
 
 import hacking
+import hacking.tests
 
 SELFTEST_REGEX = re.compile(r'\b(Okay|[HEW]\d{3}):\s(.*)')
 # Each scenario is (name, dict(lines=.., options=..., code=...))
 file_cases = []
 
 
-class HackingTestCase(testtools.TestCase):
+class HackingTestCase(hacking.tests.TestCase):
 
     scenarios = file_cases
 
