@@ -93,10 +93,17 @@ def hacking_todo_format(physical_line, tokens):
     Include your name with TODOs as in "#TODO(termie)"
 
     Okay: #TODO(sdague)
+    Okay: # TODO(sdague)
     H101: #TODO fail
+    H101: #TODO
     H101: #TODO (jogo) fail
+    Okay: TODO = 5
     """
-    # TODO(sdague): TODO check shouldn't fail inside of space
+    #TODO(jogo): make the following doctests pass:
+    #            H101: #TODO(jogo fail
+    #            H101: #TODO(jogo
+    #TODO(jogo): make this check docstrings as well (don't have to be at top
+    # of function)
     pos = physical_line.find('TODO')
     pos1 = physical_line.find('TODO(')
     pos2 = physical_line.find('#')  # make sure it's a comment
