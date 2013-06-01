@@ -435,6 +435,8 @@ def hacking_docstring_one_line(physical_line, previous_logical):
     Okay: class Foo:\n    pass\n    '''This is not a docstring'''
     H402: def foo():\n    '''This is not'''
     H402: def foo():\n    '''Bad punctuation,'''
+    H402: def foo():\n    '''Bad punctuation:'''
+    H402: def foo():\n    '''Bad punctuation;'''
     H402: class Foo:\n    '''Bad punctuation,'''
     """
     #TODO(jogo) make this apply to multi line docstrings as well
@@ -501,6 +503,7 @@ def hacking_no_cr(physical_line):
     # upstream fix
     H601 import os\r\nimport sys
     """
+    #TODO(jogo): This should not be in H6xx, it should be in H9xx
     pos = physical_line.find('\r')
     if pos != -1 and pos == (len(physical_line) - 2):
         return (pos, "H601: Windows style line endings not allowed in code")
@@ -587,6 +590,7 @@ def hacking_localization_strings(logical_line, tokens):
 
     Okay: _("This is fine")
     Okay: _("This is also fine %s")
+    Okay: _("So is this %s, %(foo)s") % {foo: 'foo'}
     H701: _('')
     H702: _("Bob" + " foo")
     H702: _("Bob %s" % foo)
@@ -607,7 +611,7 @@ def hacking_localization_strings(logical_line, tokens):
 
 @flake8ext
 def hacking_is_not(logical_line):
-    r"""Check localization in line.
+    r"""Check for use of 'is not' for testing unequal identities.
 
     Okay: if x is not y:\n    pass
     H901: if not X is Y
@@ -622,7 +626,7 @@ def hacking_is_not(logical_line):
 
 @flake8ext
 def hacking_not_in(logical_line):
-    r"""Check localization in line.
+    r"""Check for use of "not in" for evaluating membership.
 
     Okay: if x not in y:\n    pass
     Okay: if not (X in Y or X is Z):\n    pass
