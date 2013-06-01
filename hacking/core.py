@@ -257,6 +257,8 @@ def hacking_import_rules(logical_line, filename):
     H303: from os.path import *
     H304: from .compute import rpcapi
     """
+    #TODO(jogo): make the following doctests pass:
+    #            H301: import os, sys
     #NOTE(afazekas): An old style relative import example will not be able to
     # pass the doctest, since the relativity depends on the file's locality
     #TODO(mordred: We need to split this into 4 different checks so that they
@@ -355,6 +357,7 @@ def hacking_import_alphabetical(logical_line, blank_lines, previous_logical,
     imports in human alphabetical order
 
     Okay: import os\nimport sys\n\nimport nova\nfrom nova import test
+    Okay: import os\nimport sys
     H306: import sys\nimport os
     """
     # handle import x
