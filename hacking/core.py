@@ -201,6 +201,7 @@ def hacking_except_format(logical_line):
     Do not write "except:", use "except Exception:" at the very least
 
     Okay: try:\n    pass\nexcept Exception:\n    pass
+    H201: try:\n    pass\nexcept:\n    pass
     H201: except:
     """
     if logical_line.startswith("except:"):
@@ -215,9 +216,10 @@ def hacking_except_format_assert(logical_line):
     Do not use overly broad Exception type
 
     Okay: self.assertRaises(NovaException)
+    Okay: self.assertRaises(ExceptionStrangeNotation)
     H202: self.assertRaises(Exception)
     """
-    if logical_line.startswith("self.assertRaises(Exception"):
+    if logical_line.startswith("self.assertRaises(Exception)"):
         yield 1, "H202: assertRaises Exception too broad"
 
 
