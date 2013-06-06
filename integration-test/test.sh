@@ -15,6 +15,6 @@ fi
 git clone $REPO_ROOT/$org/$project --depth=1
 cd $project
 set +e
-flake8
+flake8 --select H --statistics
 cd ..
 rm -rf $project
