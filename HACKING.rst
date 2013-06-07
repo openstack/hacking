@@ -71,7 +71,7 @@ Example::
   \n
   {{third-party lib imports in human alphabetical order}}
   \n
-  {{nova imports in human alphabetical order}}
+  {{project imports in human alphabetical order}}
   \n
   \n
   {{begin your code}}
@@ -218,42 +218,20 @@ bug that had no unit test, a new passing unit test should be added. If a
 submitted bug fix does have a unit test, be sure to add a new one that fails
 without the patch and passes with the patch.
 
-For more information on creating unit tests and utilizing the testing
-infrastructure in OpenStack Nova, please read nova/tests/README.rst.
 
-
-Running Tests
--------------
-The testing system is based on a combination of tox and testr. The canonical
-approach to running tests is to simply run the command `tox`. This will
-create virtual environments, populate them with depenedencies and run all of
-the tests that OpenStack CI systems run. Behind the scenes, tox is running
-`testr run --parallel`, but is set up such that you can supply any additional
-testr arguments that are needed to tox. For example, you can run:
-`tox -- --analyze-isolation` to cause tox to tell testr to add
---analyze-isolation to its argument list.
-
-It is also possible to run the tests inside of a virtual environment
-you have created, or it is possible that you have all of the dependencies
-installed locally already. In this case, you can interact with the testr
-command directly. Running `testr run` will run the entire test suite. `testr
-run --parallel` will run it in parallel (this is the default incantation tox
-uses.) More information about testr can be found at:
-http://wiki.openstack.org/testr
-
-
-openstack-common
+oslo-incubator
 ----------------
 
-A number of modules from openstack-common are imported into the project.
+A number of modules from oslo-incubator are imported into the project.
 
-These modules are "incubating" in openstack-common and are kept in sync
-with the help of openstack-common's update.py script. See:
+These modules are "incubating" in oslo-incubator and are kept in sync
+with the help of oslo-incubator's update.py script. See:
 
-  http://wiki.openstack.org/CommonLibrary#Incubation
+  https://wiki.openstack.org/wiki/Oslo#Incubation
+
 
 The copy of the code should never be directly modified here. Please
-always update openstack-common first and then run the script to copy
+always update oslo-incubator first and then run the script to copy
 the changes across.
 
 OpenStack Trademark
@@ -295,4 +273,4 @@ For further information on constructing high quality commit messages,
 and how to split up commits into a series of changes, consult the
 project wiki:
 
-   http://wiki.openstack.org/GitCommitMessages
+   https://wiki.openstack.org/GitCommitMessages
