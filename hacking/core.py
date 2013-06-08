@@ -50,7 +50,8 @@ def flake8ext(f):
 # Error code block layout
 
 #H1xx comments
-#H2xx except
+#H20x except
+#H23x Python 2.x -> 3.x portability issues
 #H3xx imports
 #H4xx docstrings
 #H5xx dictionaries/lists
@@ -243,7 +244,7 @@ def hacking_except_format_assert(logical_line):
 
 
 @flake8ext
-def hacking_except_python3x_compatible(logical_line):
+def hacking_python3x_except_compatible(logical_line):
     r"""Check for except statements to be Python 3.x compatible
 
     As of Python 3.x, the construct 'except x,y:' has been removed.
@@ -252,7 +253,7 @@ def hacking_except_python3x_compatible(logical_line):
 
     Okay: try:\n    pass\nexcept Exception:\n    pass
     Okay: try:\n    pass\nexcept (Exception, AttributeError):\n    pass
-    H203: try:\n    pass\nexcept AttributeError, e:\n    pass
+    H231: try:\n    pass\nexcept AttributeError, e:\n    pass
     """
 
     def is_old_style_except(logical_line):
@@ -262,7 +263,7 @@ def hacking_except_python3x_compatible(logical_line):
     if (logical_line.startswith("except ")
             and logical_line.endswith(':')
             and is_old_style_except(logical_line)):
-        yield 0, "H203: Python 3.x incompatible 'except x,y:' construct"
+        yield 0, "H231: Python 3.x incompatible 'except x,y:' construct"
 
 
 modules_cache = dict((mod, True) for mod in tuple(sys.modules.keys())
