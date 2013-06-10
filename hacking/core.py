@@ -223,6 +223,29 @@ def hacking_except_format_assert(logical_line):
         yield 1, "H202: assertRaises Exception too broad"
 
 
+@flake8ext
+def hacking_except_python3x_compatible(logical_line):
+    r"""Check for except statements to be Python 3.x compatible
+
+    As of Python 3.x, the construct 'except x,y:' has been removed.
+    Use 'except x as y:' instead.
+
+
+    Okay: try:\n    pass\nexcept Exception:\n    pass
+    Okay: try:\n    pass\nexcept (Exception, AttributeError):\n    pass
+    H203: try:\n    pass\nexcept AttributeError, e:\n    pass
+    """
+
+    def is_old_style_except(logical_line):
+        return (',' in logical_line
+                and ')' not in logical_line.rpartition(',')[2])
+
+    if (logical_line.startswith("except ")
+            and logical_line.endswith(':')
+            and is_old_style_except(logical_line)):
+        yield 0, "H203: Python 3.x incompatible 'except x,y:' construct"
+
+
 modules_cache = dict((mod, True) for mod in tuple(sys.modules.keys())
                      + sys.builtin_module_names)
 
@@ -277,7 +300,7 @@ def hacking_import_rules(logical_line, filename):
             try:
                 # NOTE(vish): handle namespace modules
                 __import__(mod)
-            except ImportError, exc:
+            except ImportError as exc:
                 # NOTE(vish): the import error might be due
                 #             to a missing dependency
                 missing = str(exc).split()[-1]
