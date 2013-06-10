@@ -111,7 +111,7 @@ def hacking_todo_format(physical_line, tokens):
         return pos, "H101: Use TODO(NAME)"
 
 
-def _check_for_apache(start, lines):
+def _check_for_exact_apache(start, lines):
     """Check for the Apache 2.0 license header.
 
     We strip all the newlines and extra spaces so this license string
@@ -142,7 +142,8 @@ under the License."""
     if stripped_apache2 in content:
         return True
     else:
-        print "License '%s' != '%s'" % (stripped_apache2, content)
+        print ("<license>!=<apache2>:\n'%s' !=\n'%s'" %
+               (stripped_apache2, content))
         return False
 
 
@@ -170,7 +171,7 @@ def _project_is_apache():
 def hacking_has_license(physical_line, filename, lines, line_number):
     """Check for Apache 2.0 license.
 
-    H102
+    H102 license header not found
     """
     # don't work about init files for now
     # TODO(sdague): enforce license in init file if it's not empty of content
@@ -184,13 +185,31 @@ def hacking_has_license(physical_line, filename, lines, line_number):
             # if it's more than 10 characters in, it's probably not in the
             # header
             if 0 < line.find('Licensed under the Apache License') < 10:
-                if _check_for_apache(idx, lines):
                     license_found = True
-                else:
-                    return (idx, "H102: Apache 2.0 license header not found")
-
         if not license_found:
             return (0, "H102: Apache 2.0 license header not found")
+
+
+@flake8ext
+def hacking_has_correct_license(physical_line, filename, lines, line_number):
+    """Check for Apache 2.0 license.
+
+    H103 header does not match Apache 2.0 License notice
+    """
+    # don't work about init files for now
+    # TODO(sdague): enforce license in init file if it's not empty of content
+
+    # skip files that are < 10 lines, which isn't enough for a license to fit
+    # this allows us to handle empty files, as well as not fail on the Okay
+    # doctests.
+    if _project_is_apache() and not line_number > 1 and len(lines) > 10:
+        for idx, line in enumerate(lines):
+            # if it's more than 10 characters in, it's probably not in the
+            # header
+            if (0 < line.find('Licensed under the Apache License') < 10 and not
+                    _check_for_exact_apache(idx, lines)):
+                return (idx, "H103: Header does not match Apache 2.0 "
+                        "License notice")
 
 
 @flake8ext
