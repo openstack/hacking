@@ -779,6 +779,26 @@ class OnceGitCheckCommitTitleLength(GitCheck):
                 self.name)
 
 
+class OnceGitCheckCommitTitlePeriodEnding(GitCheck):
+    """Check the end of the first line of git commit messages.
+
+    The first line of git commit message should not end with a period.
+
+    H803 Commit message should not end with a period
+    """
+    name = "GitCheckCommitTitlePeriodEnding"
+
+    def run_once(self):
+        title = self._get_commit_title()
+
+        if title.rstrip().endswith('.'):
+            return (
+                1, 0,
+                "H803: git commit title ('%s') should not end with period"
+                % title.strip(),
+                self.name)
+
+
 class ProxyChecks(GlobalCheck):
     """Provide a mechanism for locally defined checks."""
     name = 'ProxyChecker'
