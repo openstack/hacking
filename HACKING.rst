@@ -272,7 +272,8 @@ readable. Follow these guidelines:
 
   The first line of the commit message should provide an accurate
   description of the change, not just a reference to a bug or
-  blueprint. It must be followed by a single blank line.
+  blueprint. It must not end with a period and must be followed by
+  a single blank line.
 
   If the change relates to a specific driver (libvirt, xenapi, qpid, etc...),
   begin the first line of the commit message with the driver name, lowercased,
