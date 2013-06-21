@@ -230,7 +230,7 @@ RE_RELATIVE_IMPORT = re.compile('^from\s*[.]')
 
 
 @flake8ext
-def hacking_import_rules(logical_line, filename):
+def hacking_import_rules(logical_line, physical_line, filename):
     r"""Check for imports.
 
     OpenStack HACKING guide recommends one import per line:
@@ -252,6 +252,7 @@ def hacking_import_rules(logical_line, filename):
     Okay: from os import (path as p)
     Okay: import os.path
     Okay: from nova.compute import rpcapi
+    Okay: from os.path import dirname as dirname2  # noqa
     H302: from os.path import dirname as dirname2
     H302: from os.path import (dirname as dirname2)
     H303: from os.path import *
@@ -263,6 +264,9 @@ def hacking_import_rules(logical_line, filename):
     # pass the doctest, since the relativity depends on the file's locality
     #TODO(mordred: We need to split this into 4 different checks so that they
     # can be disabled by command line switches properly
+
+    if pep8.noqa(physical_line):
+        return
 
     def is_module_for_sure(mod, search_path=sys.path):
         mod = mod.replace('(', '')  # Ignore parentheses
