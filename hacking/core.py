@@ -870,7 +870,7 @@ class OnceGitCheckCommitTitlePeriodEnding(GitCheck):
     def run_once(self):
         title = self._get_commit_title()
 
-        if title.rstrip().endswith('.'):
+        if title and title.rstrip().endswith('.'):
             return (
                 1, 0,
                 "H803: git commit title ('%s') should not end with period"
