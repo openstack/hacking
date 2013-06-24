@@ -19,6 +19,7 @@ Each check is a pep8 plugin so read
 
 Requirements
 ------------
+- The check must already have community support. We do not want to dictate style, only enforce it.
 - The canonical source of the OpenStack Style Commandments is `HACKING.rst <HACKING.rst>`_, and hacking just enforces them; so when adding a new check, it must be in HACKING.rst
 - False negatives are ok, but false positives are not
 - Cannot be project specific, project specific checks should be `Local Checks`_
