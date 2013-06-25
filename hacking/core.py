@@ -266,6 +266,31 @@ def hacking_python3x_except_compatible(logical_line):
         yield 0, "H231: Python 3.x incompatible 'except x,y:' construct"
 
 
+@flake8ext
+def hacking_python3x_octal_literals(logical_line, tokens):
+    r"""Check for octal literals in Python 3.x compatible form.
+
+    As of Python 3.x, the construct "0755" has been removed.
+    Use "0o755" instead".
+
+
+    Okay: f(0o755)
+    Okay: 'f(0755)'
+    Okay: f(755)
+    Okay: f(0)
+    Okay: f(000)
+    Okay: MiB = 1.0415
+    H232: f(0755)
+    """
+
+    for tokentype, text, _, _, _ in tokens:
+        if tokentype == tokenize.NUMBER:
+            match = re.match(r"0+([1-9]\d*)", text)
+            if match:
+                yield 0, ("H232: octal %s should be written as 0o%s " %
+                          (match.group(0)[1:], match.group(1)))
+
+
 modules_cache = dict((mod, True) for mod in tuple(sys.modules.keys())
                      + sys.builtin_module_names)
 

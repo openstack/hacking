@@ -221,7 +221,11 @@ Use
 
     except x as y:
 
-instead. Other Python 3.x compatility issues, like e.g. print operator
+instead. Also Python 3.x has become more strict regarding octal string
+literals. Use "0o755" instead of "0755". Similarly, explicit use of long
+literals (01234L) should be avoided.
+
+Other Python 3.x compatility issues, like e.g. print operator
 can be avoided in new code by using
 
     from __future__ import print_function
