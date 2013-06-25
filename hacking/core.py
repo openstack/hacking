@@ -291,6 +291,26 @@ def hacking_python3x_octal_literals(logical_line, tokens):
                           (match.group(0)[1:], match.group(1)))
 
 
+@flake8ext
+def hacking_python3x_print_function(logical_line):
+    r"""Check that all occurrences look like print functions, not
+        print operator.
+
+    As of Python 3.x, the print operator has been removed.
+
+
+    Okay: print(msg)
+    Okay: print (msg)
+    H233: print msg
+    H233: print >>sys.stderr, "hello"
+    H233: print msg,
+    """
+
+    for match in re.finditer(r"\bprint\s+[^\(]", logical_line):
+        yield match.start(0), (
+            "H233: Python 3.x incompatible use of print operator")
+
+
 modules_cache = dict((mod, True) for mod in tuple(sys.modules.keys())
                      + sys.builtin_module_names)
 
