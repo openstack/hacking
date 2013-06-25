@@ -721,7 +721,13 @@ class GitCheck(GlobalCheck):
     """Base-class for Git related checks."""
 
     def _get_commit_title(self):
-        if not os.path.exists('.git'):
+        # Check if we're inside a git checkout
+        subp = subprocess.Popen(
+            ['git', 'rev-parse', '--show-toplevel'],
+            stdout=subprocess.PIPE)
+        gitdir = subp.communicate()[0].rstrip()
+
+        if not os.path.exists(gitdir):
             return None
 
         #Get title of most recent commit
@@ -729,6 +735,7 @@ class GitCheck(GlobalCheck):
             ['git', 'log', '--no-merges', '--pretty=%s', '-1'],
             stdout=subprocess.PIPE)
         title = subp.communicate()[0]
+
         if subp.returncode:
             raise Exception("git log failed with code %s" % subp.returncode)
         return title
