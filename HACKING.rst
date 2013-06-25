@@ -152,6 +152,8 @@ Example::
       },
   }
 
+Do not use ``locals()`` for formatting strings, it is not clear as using
+explicit dictionaries and can hide errors during refactoring.
 
 Calling Methods
 ---------------
