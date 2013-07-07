@@ -138,13 +138,13 @@ under the License."""
     content = ''.join(lines[start:(start + 12)])
     content = re.sub('\#', '', content)
     content = re.sub('\s+', ' ', content)
-    stripped_apache2 = re.sub('\s+', ' ', APACHE2)
+    stripped_apache2 = re.sub('\s+', ' ', APACHE2).strip()
 
     if stripped_apache2 in content:
         return True
     else:
         print ("<license>!=<apache2>:\n'%s' !=\n'%s'" %
-               (stripped_apache2, content))
+               (content, stripped_apache2))
         return False
 
 
