@@ -287,7 +287,8 @@ def hacking_python3x_octal_literals(logical_line, tokens):
         if tokentype == tokenize.NUMBER:
             match = re.match(r"0+([1-9]\d*)", text)
             if match:
-                yield 0, ("H232: octal %s should be written as 0o%s " %
+                yield 0, ("H232: Python 3.x incompatible octal %s should be "
+                          "written as 0o%s " %
                           (match.group(0)[1:], match.group(1)))
 
 
