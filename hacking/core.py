@@ -788,10 +788,14 @@ class GitCheck(GlobalCheck):
 
     def _get_commit_title(self):
         # Check if we're inside a git checkout
-        subp = subprocess.Popen(
-            ['git', 'rev-parse', '--show-toplevel'],
-            stdout=subprocess.PIPE)
-        gitdir = subp.communicate()[0].rstrip()
+        try:
+            subp = subprocess.Popen(
+                ['git', 'rev-parse', '--show-toplevel'],
+                stdout=subprocess.PIPE)
+            gitdir = subp.communicate()[0].rstrip()
+        except OSError:
+            # "git" was not found
+            return None
 
         if not os.path.exists(gitdir):
             return None
