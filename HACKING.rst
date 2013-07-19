@@ -1,10 +1,9 @@
-OpenStack Style Commandments
-============================
+OpenStack Style Guidelines
+==========================
 
 - Step 1: Read http://www.python.org/dev/peps/pep-0008/
 - Step 2: Read http://www.python.org/dev/peps/pep-0008/ again
 - Step 3: Read on
-
 
 General
 -------
@@ -320,3 +319,8 @@ and how to split up commits into a series of changes, consult the
 project wiki:
 
    https://wiki.openstack.org/GitCommitMessages
+
+Futher Reading
+--------------
+
+  http://google-styleguide.googlecode.com/svn/trunk/pyguide.html

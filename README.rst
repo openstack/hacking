@@ -3,6 +3,16 @@ Introduction
 
 hacking is a set of flake8 plugins that test and enforce the OpenStack Style Commandments, `HACKING.rst <HACKING.rst>`_.
 
+Origin
+======
+
+Most of the additional style guidelines that OpenStack has taken on came from
+the Google Python Style Guide.
+
+  http://google-styleguide.googlecode.com/svn/trunk/pyguide.html
+
+Since then, a few more OpenStack specific ones have been added or modified.
+
 
 Versioning
 ==========
