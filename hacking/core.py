@@ -65,8 +65,14 @@ def flake8ext(f):
 CONF = config.Config('hacking')
 
 
-IMPORT_EXCEPTIONS = ['sqlalchemy', 'migrate', 'nova.db.sqlalchemy.session',
-                     'nova.db.sqlalchemy.migration.versioning_api']
+DEFAULT_IMPORT_EXCEPTIONS = [
+    'sqlalchemy',
+    'migrate',
+]
+
+IMPORT_EXCEPTIONS = CONF.get_multiple('import_exceptions', default=[])
+IMPORT_EXCEPTIONS += DEFAULT_IMPORT_EXCEPTIONS
+
 # Paste is missing a __init__ in top level directory
 START_DOCSTRING_TRIPLE = ['u"""', 'r"""', '"""', "u'''", "r'''", "'''"]
 END_DOCSTRING_TRIPLE = ['"""', "'''"]
