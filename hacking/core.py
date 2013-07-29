@@ -21,7 +21,6 @@
 Built as a sets of pep8 checks using flake8.
 """
 
-import ConfigParser
 import gettext
 import imp
 import logging
@@ -34,6 +33,8 @@ import traceback
 
 import d2to1.util
 import pep8
+
+from hacking import config
 
 # Don't need this for testing
 logging.disable('LOG')
@@ -59,6 +60,10 @@ def flake8ext(f):
 #H7xx localization
 #H8xx git commit messages
 #H9xx other
+
+
+CONF = config.Config('hacking')
+
 
 IMPORT_EXCEPTIONS = ['sqlalchemy', 'migrate', 'nova.db.sqlalchemy.session',
                      'nova.db.sqlalchemy.migration.versioning_api']
@@ -887,25 +892,19 @@ class ProxyChecks(GlobalCheck):
 
     @classmethod
     def add_options(cls, parser):
-        # Abusing this method because of when it gets called
-        if not os.path.exists('tox.ini'):
-            return
-        tox_ini = ConfigParser.RawConfigParser()
-        tox_ini.read('tox.ini')
-        if not tox_ini.has_section('hacking'):
-            return
-
         # We're looking for local checks, so we need to include the local
         # dir in the search path
         sys.path.append('.')
-        if tox_ini.has_option('hacking', 'local-check'):
-            for check_path in set(
-                    tox_ini.get('hacking', 'local-check').split(",")):
-                if check_path.strip():
-                    checker = d2to1.util.resolve_name(check_path)
-                    pep8.register_check(checker)
-        if tox_ini.has_option('hacking', 'local-check-factory'):
-            factory = d2to1.util.resolve_name(
-                tox_ini.get('hacking', 'local-check-factory'))
+
+        local_check = CONF.get_multiple('local-check', default=[])
+        for check_path in set(local_check):
+            if check_path.strip():
+                checker = d2to1.util.resolve_name(check_path)
+                pep8.register_check(checker)
+
+        local_check_fact = CONF.get('local-check-factory')
+        if local_check_fact:
+            factory = d2to1.util.resolve_name(local_check_fact)
             factory(pep8.register_check)
+
         sys.path.pop()
