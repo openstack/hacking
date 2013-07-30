@@ -233,11 +233,11 @@ def hacking_except_format_assert(logical_line):
     OpenStack HACKING guide recommends not using assertRaises(Exception...):
     Do not use overly broad Exception type
 
-    Okay: self.assertRaises(NovaException)
-    Okay: self.assertRaises(ExceptionStrangeNotation)
-    H202: self.assertRaises(Exception)
+    Okay: self.assertRaises(NovaException, foo)
+    Okay: self.assertRaises(ExceptionStrangeNotation, foo)
+    H202: self.assertRaises(Exception, foo)
     """
-    if logical_line.startswith("self.assertRaises(Exception)"):
+    if logical_line.startswith("self.assertRaises(Exception,"):
         yield 1, "H202: assertRaises Exception too broad"
 
 
