@@ -199,7 +199,7 @@ template string then do the replacement.
 
 Example::
 
-    msg = _("Missing parameter: %s") % ("flavor",)
+    msg = _("Missing parameter: %s") % ("flavor")
     LOG.error(msg)
 
 If you have multiple variables to place in the string, use keyword parameters.
