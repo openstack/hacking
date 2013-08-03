@@ -725,7 +725,7 @@ def hacking_localization_strings(logical_line, tokens):
     gen = check_i18n()
     next(gen)
     try:
-        map(gen.send, tokens)
+        list(map(gen.send, tokens))
         gen.close()
     except LocalizationError as e:
         yield e.args
@@ -819,7 +819,7 @@ class GitCheck(GlobalCheck):
 
         if subp.returncode:
             raise Exception("git log failed with code %s" % subp.returncode)
-        return title
+        return title.decode('utf-8')
 
 
 class OnceGitCheckCommitTitleBug(GitCheck):
@@ -864,7 +864,7 @@ class OnceGitCheckCommitTitleLength(GitCheck):
     def run_once(self):
         title = self._get_commit_title()
 
-        if title and len(title.decode('utf-8')) > 72:
+        if title and len(title) > 72:
             return (
                 1, 0,
                 "H802: git commit title ('%s') should be under 50 chars"
