@@ -31,7 +31,7 @@ import sys
 import tokenize
 import traceback
 
-import d2to1.util
+import pbr.util
 import pep8
 
 from hacking import config
@@ -905,12 +905,12 @@ class ProxyChecks(GlobalCheck):
         local_check = CONF.get_multiple('local-check', default=[])
         for check_path in set(local_check):
             if check_path.strip():
-                checker = d2to1.util.resolve_name(check_path)
+                checker = pbr.util.resolve_name(check_path)
                 pep8.register_check(checker)
 
         local_check_fact = CONF.get('local-check-factory')
         if local_check_fact:
-            factory = d2to1.util.resolve_name(local_check_fact)
+            factory = pbr.util.resolve_name(local_check_fact)
             factory(pep8.register_check)
 
         sys.path.pop()
