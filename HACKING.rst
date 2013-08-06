@@ -320,7 +320,7 @@ project wiki:
 
    https://wiki.openstack.org/GitCommitMessages
 
-Futher Reading
+Further Reading
 --------------
 
   http://google-styleguide.googlecode.com/svn/trunk/pyguide.html
