@@ -584,10 +584,10 @@ def hacking_docstring_multiline_end(physical_line, previous_logical, tokens):
 
 @flake8ext
 def hacking_docstring_multiline_start(physical_line, previous_logical, tokens):
-    r"""Check multi line docstring start with summary.
+    r"""Check multi line docstring starts immediately with summary.
 
     OpenStack HACKING guide recommendation for docstring:
-    Docstring should start with A multi line docstring has a one-line summary
+    Docstring should start with a one-line summary, less than 80 characters.
 
     Okay: '''foobar\nfoo\nbar\n'''
     Okay: def foo():\n    a = '''\nnot\na docstring\n'''
@@ -599,7 +599,7 @@ def hacking_docstring_multiline_start(physical_line, previous_logical, tokens):
         if len(tokens) == 0 and pos != -1 and len(physical_line) == pos + 4:
             if physical_line.strip() in START_DOCSTRING_TRIPLE:
                 return (pos, "H404: multi line docstring "
-                        "should start with a summary")
+                        "should start without a leading new line")
 
 
 @flake8ext
