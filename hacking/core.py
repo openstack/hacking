@@ -639,6 +639,22 @@ def hacking_no_cr(physical_line):
         return (pos, "H601: Windows style line endings not allowed in code")
 
 
+@flake8ext
+def hacking_no_assert_equals(logical_line, tokens):
+    r"""assertEquals() is deprecated, use assertEqual instead.
+
+    Okay: self.assertEqual(0, 0)
+    H602: self.assertEquals(0, 0)
+    """
+
+    for token_type, text, start_index, _, _ in tokens:
+
+        if token_type == tokenize.NAME and text == "assertEquals":
+            yield (
+                start_index[1],
+                "H602: assertEquals is deprecated, use assertEqual")
+
+
 FORMAT_RE = re.compile("%(?:"
                        "%|"           # Ignore plain percents
                        "(\(\w+\))?"   # mapping key
