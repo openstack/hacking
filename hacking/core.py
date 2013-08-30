@@ -72,10 +72,10 @@ def allownoqa(f):
             HackingDecoratorError: if physical_line argument missing from
                 decorated function.
         """
-        if 'physical_line' not in f.func_code.co_varnames:
+        if 'physical_line' not in f.__code__.co_varnames:
             raise HackingDecoratorError("Missing physical_line argument "
                                         "for decorated function")
-        index = f.func_code.co_varnames.index('physical_line')
+        index = f.__code__.co_varnames.index('physical_line')
         if pep8.noqa(args[index]):
             return
         else:
