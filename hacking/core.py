@@ -281,8 +281,9 @@ def hacking_except_format_assert(logical_line):
     Okay: self.assertRaises(NovaException, foo)
     Okay: self.assertRaises(ExceptionStrangeNotation, foo)
     H202: self.assertRaises(Exception, foo)
+    H202: self.assertRaises(Exception)
     """
-    if logical_line.startswith("self.assertRaises(Exception,"):
+    if re.match(r"self\.assertRaises\(Exception[,\)]", logical_line):
         yield 1, "H202: assertRaises Exception too broad"
 
 
