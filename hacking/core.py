@@ -856,7 +856,7 @@ class GitCheck(GlobalCheck):
         try:
             subp = subprocess.Popen(
                 ['git', 'rev-parse', '--show-toplevel'],
-                stdout=subprocess.PIPE)
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             gitdir = subp.communicate()[0].rstrip()
         except OSError:
             # "git" was not found
