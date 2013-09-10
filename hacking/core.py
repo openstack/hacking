@@ -687,6 +687,22 @@ def hacking_no_assert_equals(logical_line, tokens):
                 "H602: assertEquals is deprecated, use assertEqual")
 
 
+@flake8ext
+def hacking_no_assert_underscore(logical_line, tokens):
+    r"""assert_() is deprecated, use assertTrue instead.
+
+    Okay: self.assertTrue(foo)
+    H603: self.assert_(foo)
+    """
+
+    for token_type, text, start_index, _, _ in tokens:
+
+        if token_type == tokenize.NAME and text == "assert_":
+            yield (
+                start_index[1],
+                "H603: assert_ is deprecated, use assertTrue")
+
+
 FORMAT_RE = re.compile("%(?:"
                        "%|"           # Ignore plain percents
                        "(\(\w+\))?"   # mapping key
