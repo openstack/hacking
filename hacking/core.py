@@ -924,7 +924,7 @@ class OnceGitCheckCommitTitleBug(GitCheck):
 class OnceGitCheckCommitTitleLength(GitCheck):
     """Check git commit message length.
 
-    HACKING.rst recommends commit titles 50 chars or less, but enforces
+    HACKING recommends commit titles 50 chars or less, but enforces
     a 72 character limit
 
     H802 Title limited to 72 chars

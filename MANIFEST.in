@@ -1,7 +1,6 @@
 include AUTHORS
 include ChangeLog
 include README.rst
-include HACKING.rst
 include requirements.txt
 include test-requirements.txt
 exclude .gitignore

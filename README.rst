@@ -1,7 +1,8 @@
 Introduction
 ============
 
-hacking is a set of flake8 plugins that test and enforce the OpenStack Style Commandments, `HACKING.rst <HACKING.rst>`_.
+hacking is a set of flake8 plugins that test and enforce the `OpenStack
+Style Guidlines <http://docs.openstack.org/developer/hacking>`_.
 
 Origin
 ======
@@ -17,7 +18,11 @@ Since then, a few more OpenStack specific ones have been added or modified.
 Versioning
 ==========
 
-hacking uses the major.minor.maintenance release notation, where maintenance releases cannot contain new checks.  This way projects can gate on hacking by pinning on the major.minor number while accepting maintenance updates without being concerned that a new version will break the gate with a new check.
+hacking uses the major.minor.maintenance release notation, where maintenance
+releases cannot contain new checks.  This way projects can gate on hacking
+by pinning on the major.minor number while accepting maintenance updates
+without being concerned that a new version will break the gate with a new
+check.
 
 
 Adding additional checks
@@ -30,7 +35,10 @@ Each check is a pep8 plugin so read
 Requirements
 ------------
 - The check must already have community support. We do not want to dictate style, only enforce it.
-- The canonical source of the OpenStack Style Commandments is `HACKING.rst <HACKING.rst>`_, and hacking just enforces them; so when adding a new check, it must be in HACKING.rst
+- The canonical source of the OpenStack Style Guidelines is
+  `doc/source/index.rst
+  <http://docs.openstack.org/developer/hacking>`_, and hacking just enforces
+  them; so when adding a new check, it must be in docs/source/index.rst
 - False negatives are ok, but false positives are not
 - Cannot be project specific, project specific checks should be `Local Checks`_
 - Docstring tests
@@ -58,4 +66,3 @@ register. Such as:
 
   [hacking]
   local-check-factory = nova.tests.hacking.factory
-
