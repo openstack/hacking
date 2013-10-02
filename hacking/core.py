@@ -230,7 +230,7 @@ def hacking_has_license(physical_line, filename, lines, line_number):
         for idx, line in enumerate(lines):
             # if it's more than 10 characters in, it's probably not in the
             # header
-            if 0 < line.find('Licensed under the Apache License') < 10:
+            if 0 <= line.find('Licensed under the Apache License') < 10:
                     license_found = True
         if not license_found:
             return (0, "H102: Apache 2.0 license header not found")
