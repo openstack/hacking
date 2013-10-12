@@ -673,18 +673,20 @@ def hacking_no_cr(physical_line):
 
 @flake8ext
 def hacking_no_assert_equals(logical_line, tokens):
-    r"""assertEquals() is deprecated, use assertEqual instead.
+    r"""assert(Not)Equals() is deprecated, use assert(Not)Equal instead.
 
     Okay: self.assertEqual(0, 0)
+    Okay: self.assertNotEqual(0, 1)
     H602: self.assertEquals(0, 0)
+    H602: self.assertNotEquals(0, 1)
     """
 
     for token_type, text, start_index, _, _ in tokens:
 
-        if token_type == tokenize.NAME and text == "assertEquals":
-            yield (
-                start_index[1],
-                "H602: assertEquals is deprecated, use assertEqual")
+        if token_type == tokenize.NAME:
+            if text == "assertEquals" or text == "assertNotEquals":
+                yield (start_index[1],
+                       "H602: %s is deprecated, use %s" % (text, text[:-1]))
 
 
 @flake8ext
