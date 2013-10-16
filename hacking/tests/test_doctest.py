@@ -18,10 +18,9 @@ import re
 
 from flake8 import engine
 import pep8
+import testscenarios
 from testtools import content
 from testtools import matchers
-
-import testscenarios
 
 import hacking
 import hacking.tests

@@ -13,11 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import inspect
+
 import fixtures
 
 import hacking.core
 import hacking.tests
-import inspect
 
 
 def _fake_none_commit_title(self):
