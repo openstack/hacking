@@ -493,7 +493,74 @@ def hacking_import_rules(logical_line, physical_line, filename):
                       " '%s' is a relative import" % logical_line)
 
 
-#TODO(jogo): import template: H305
+# Get the location of a known stdlib module
+_, p, _ = imp.find_module('imp')
+stdlib_path_prefix = os.path.dirname(p)
+module_cache = dict()
+
+
+def _get_import_type(module):
+    mod_base, _, _ = module.partition('.')
+    if mod_base in module_cache:
+        return module_cache[mod_base]
+
+    def cache_type(module_type):
+        module_cache[mod_base] = module_type
+        return module_type
+
+    # First check if the module is local
+    try:
+        imp.find_module(mod_base, ['.'])
+        # If the previous line succeeded then it must be a project module
+        return cache_type('project')
+    except ImportError:
+        pass
+
+    try:
+        _, path, _ = imp.find_module(mod_base)
+    except ImportError:
+        return cache_type('third-party')
+
+    if 'site-packages' in path or 'dist-packages' in path:
+        return cache_type('third-party')
+    if (path.startswith(stdlib_path_prefix) or
+            path.startswith(sys.prefix) or
+            path == module):
+        return cache_type('stdlib')
+    return cache_type('third-party')
+
+
+@flake8ext
+def hacking_import_groups(logical_line, blank_lines, previous_logical,
+                          indent_level, previous_indent_level, physical_line):
+    r"""Check that imports are grouped correctly.
+
+    OpenStack HACKING guide recommendation for imports:
+    imports grouped such that Python standard library imports are together,
+    third party library imports are together, and project imports are
+    together
+
+    Okay: import os\nimport sys\n\nimport six\n\nimport hacking
+    Okay: import six\nimport znon_existent_package
+    H305: import hacking\nimport os
+    H305: import os\nimport six
+    H305: import os\nimport znon_existent_package
+    """
+    if (pep8.noqa(physical_line) or blank_lines > 0 or
+            indent_level != previous_indent_level):
+        return
+
+    normalized_line = import_normalize(logical_line.strip()).split()
+    normalized_previous = import_normalize(previous_logical.strip()).split()
+    if normalized_line and normalized_line[0] == 'import':
+        current_type = _get_import_type(normalized_line[1])
+        if normalized_previous and normalized_previous[0] == 'import':
+            previous_type = _get_import_type(normalized_previous[1])
+            if current_type != previous_type:
+                yield(0, 'H305: imports not grouped correctly '
+                      '(%s: %s, %s: %s)' %
+                      (normalized_previous[1], previous_type,
+                       normalized_line[1], current_type))
 
 
 @flake8ext
