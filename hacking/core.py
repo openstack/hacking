@@ -54,34 +54,6 @@ def flake8ext(f):
     f.version = '0.0.1'
     return f
 
-
-class HackingDecoratorError(Exception):
-    pass
-
-
-def allownoqa(f):
-    def wrapper(*args, **kwargs):
-        """Decorator wrapper function for noqa usage.
-
-        Will send None as result of parent function if parent function has
-        physical_line as one of its arguments and also has '# noqa' in the
-        value of the physical_line argument or it will return
-        the parent function with its original arguments.
-
-        Raises:
-            HackingDecoratorError: if physical_line argument missing from
-                decorated function.
-        """
-        if 'physical_line' not in f.__code__.co_varnames:
-            raise HackingDecoratorError("Missing physical_line argument "
-                                        "for decorated function")
-        index = f.__code__.co_varnames.index('physical_line')
-        if pep8.noqa(args[index]):
-            return
-        else:
-            return f(*args, **kwargs)
-    return wrapper
-
 # Error code block layout
 
 #H1xx comments
@@ -288,8 +260,7 @@ def hacking_except_format_assert(logical_line):
 
 
 @flake8ext
-@allownoqa
-def hacking_python3x_except_compatible(logical_line, physical_line):
+def hacking_python3x_except_compatible(logical_line):
     r"""Check for except statements to be Python 3.x compatible
 
     As of Python 3.x, the construct 'except x,y:' has been removed.
@@ -298,7 +269,6 @@ def hacking_python3x_except_compatible(logical_line, physical_line):
 
     Okay: try:\n    pass\nexcept Exception:\n    pass
     Okay: try:\n    pass\nexcept (Exception, AttributeError):\n    pass
-    Okay: try:\n    pass\nexcept AttributeError, e:  # noqa\n    pass
     H231: try:\n    pass\nexcept AttributeError, e:\n    pass
     """
 
@@ -339,8 +309,7 @@ def hacking_python3x_octal_literals(logical_line, tokens):
 
 
 @flake8ext
-@allownoqa
-def hacking_python3x_print_function(logical_line, physical_line):
+def hacking_python3x_print_function(logical_line):
     r"""Check that all occurrences look like print functions, not
         print operator.
 
@@ -349,9 +318,6 @@ def hacking_python3x_print_function(logical_line, physical_line):
 
     Okay: print(msg)
     Okay: print (msg)
-    Okay: print msg  # noqa
-    Okay: print >>sys.stderr, "hello"  # noqa
-    Okay: print msg,  # noqa
     H233: print msg
     H233: print >>sys.stderr, "hello"
     H233: print msg,
@@ -369,7 +335,6 @@ RE_RELATIVE_IMPORT = re.compile('^from\s*[.]')
 
 
 @flake8ext
-@allownoqa
 def hacking_import_rules(logical_line, physical_line, filename):
     r"""Check for imports.
 
@@ -404,6 +369,9 @@ def hacking_import_rules(logical_line, physical_line, filename):
     # pass the doctest, since the relativity depends on the file's locality
     #TODO(mordred: We need to split this into 4 different checks so that they
     # can be disabled by command line switches properly
+
+    if pep8.noqa(physical_line):
+        return
 
     def is_module_for_sure(mod, search_path=sys.path):
         mod = mod.replace('(', '')  # Ignore parentheses
@@ -636,7 +604,6 @@ def hacking_docstring_multiline_start(physical_line, previous_logical, tokens):
 
 
 @flake8ext
-@allownoqa
 def hacking_no_locals(logical_line, physical_line, tokens):
     """Do not use locals() for string formatting.
 
@@ -647,6 +614,8 @@ def hacking_no_locals(logical_line, physical_line, tokens):
     H501: print("%(something)" % locals())
     Okay: print("%(something)" % locals())  # noqa
     """
+    if pep8.noqa(physical_line):
+        return
     for_formatting = False
     for token_type, text, start, _, _ in tokens:
         if text == "%" and token_type == tokenize.OP:
