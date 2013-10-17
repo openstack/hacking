@@ -260,7 +260,7 @@ def hacking_except_format_assert(logical_line):
 
 
 @flake8ext
-def hacking_python3x_except_compatible(logical_line):
+def hacking_python3x_except_compatible(logical_line, physical_line):
     r"""Check for except statements to be Python 3.x compatible
 
     As of Python 3.x, the construct 'except x,y:' has been removed.
@@ -270,7 +270,10 @@ def hacking_python3x_except_compatible(logical_line):
     Okay: try:\n    pass\nexcept Exception:\n    pass
     Okay: try:\n    pass\nexcept (Exception, AttributeError):\n    pass
     H231: try:\n    pass\nexcept AttributeError, e:\n    pass
+    Okay: try:\n    pass\nexcept AttributeError, e:  # noqa\n    pass
     """
+    if pep8.noqa(physical_line):
+        return
 
     def is_old_style_except(logical_line):
         return (',' in logical_line
@@ -309,7 +312,7 @@ def hacking_python3x_octal_literals(logical_line, tokens):
 
 
 @flake8ext
-def hacking_python3x_print_function(logical_line):
+def hacking_python3x_print_function(logical_line, physical_line):
     r"""Check that all occurrences look like print functions, not
         print operator.
 
@@ -318,11 +321,13 @@ def hacking_python3x_print_function(logical_line):
 
     Okay: print(msg)
     Okay: print (msg)
+    Okay: print msg  # noqa
     H233: print msg
     H233: print >>sys.stderr, "hello"
     H233: print msg,
     """
-
+    if pep8.noqa(physical_line):
+        return
     for match in re.finditer(r"\bprint\s+[^\(]", logical_line):
         yield match.start(0), (
             "H233: Python 3.x incompatible use of print operator")
