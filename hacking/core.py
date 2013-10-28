@@ -333,6 +333,40 @@ def hacking_python3x_print_function(logical_line, physical_line):
             "H233: Python 3.x incompatible use of print operator")
 
 
+@flake8ext
+def hacking_no_assert_equals(logical_line, tokens):
+    r"""assert(Not)Equals() is deprecated, use assert(Not)Equal instead.
+
+    Okay: self.assertEqual(0, 0)
+    Okay: self.assertNotEqual(0, 1)
+    H234: self.assertEquals(0, 0)
+    H234: self.assertNotEquals(0, 1)
+    """
+
+    for token_type, text, start_index, _, _ in tokens:
+
+        if token_type == tokenize.NAME:
+            if text == "assertEquals" or text == "assertNotEquals":
+                yield (start_index[1],
+                       "H234: %s is deprecated, use %s" % (text, text[:-1]))
+
+
+@flake8ext
+def hacking_no_assert_underscore(logical_line, tokens):
+    r"""assert_() is deprecated, use assertTrue instead.
+
+    Okay: self.assertTrue(foo)
+    H235: self.assert_(foo)
+    """
+
+    for token_type, text, start_index, _, _ in tokens:
+
+        if token_type == tokenize.NAME and text == "assert_":
+            yield (
+                start_index[1],
+                "H235: assert_ is deprecated, use assertTrue")
+
+
 modules_cache = dict((mod, True) for mod in tuple(sys.modules.keys())
                      + sys.builtin_module_names)
 
@@ -630,55 +664,6 @@ def hacking_no_locals(logical_line, physical_line, tokens):
             yield (start[1], "H501: Do not use locals() for string formatting")
 
 
-@flake8ext
-def hacking_no_cr(physical_line):
-    r"""Check that we only use newlines not carriage returns.
-
-    Okay: import os\nimport sys
-    # pep8 doesn't yet replace \r in strings, will work on an
-    # upstream fix
-    H601 import os\r\nimport sys
-    """
-    #TODO(jogo): This should not be in H6xx, it should be in H9xx
-    pos = physical_line.find('\r')
-    if pos != -1 and pos == (len(physical_line) - 2):
-        return (pos, "H601: Windows style line endings not allowed in code")
-
-
-@flake8ext
-def hacking_no_assert_equals(logical_line, tokens):
-    r"""assert(Not)Equals() is deprecated, use assert(Not)Equal instead.
-
-    Okay: self.assertEqual(0, 0)
-    Okay: self.assertNotEqual(0, 1)
-    H602: self.assertEquals(0, 0)
-    H602: self.assertNotEquals(0, 1)
-    """
-
-    for token_type, text, start_index, _, _ in tokens:
-
-        if token_type == tokenize.NAME:
-            if text == "assertEquals" or text == "assertNotEquals":
-                yield (start_index[1],
-                       "H602: %s is deprecated, use %s" % (text, text[:-1]))
-
-
-@flake8ext
-def hacking_no_assert_underscore(logical_line, tokens):
-    r"""assert_() is deprecated, use assertTrue instead.
-
-    Okay: self.assertTrue(foo)
-    H603: self.assert_(foo)
-    """
-
-    for token_type, text, start_index, _, _ in tokens:
-
-        if token_type == tokenize.NAME and text == "assert_":
-            yield (
-                start_index[1],
-                "H603: assert_ is deprecated, use assertTrue")
-
-
 FORMAT_RE = re.compile("%(?:"
                        "%|"           # Ignore plain percents
                        "(\(\w+\))?"   # mapping key
@@ -810,6 +795,20 @@ def hacking_not_in(logical_line):
             split_line[2].startswith('(')):
                 yield (logical_line.find('not'), "H902: Use the 'not in' "
                        "operator for collection membership evaluation")
+
+
+@flake8ext
+def hacking_no_cr(physical_line):
+    r"""Check that we only use newlines not carriage returns.
+
+    Okay: import os\nimport sys
+    # pep8 doesn't yet replace \r in strings, will work on an
+    # upstream fix
+    H903 import os\r\nimport sys
+    """
+    pos = physical_line.find('\r')
+    if pos != -1 and pos == (len(physical_line) - 2):
+        return (pos, "H903: Windows style line endings not allowed in code")
 
 
 class GlobalCheck(object):
