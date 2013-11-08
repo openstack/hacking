@@ -606,8 +606,8 @@ def hacking_docstring_multiline_end(physical_line, previous_logical, tokens):
     Docstring should end on a new line
 
     Okay: '''foobar\nfoo\nbar\n'''
-    Okay: def foo():\n    '''foobar\nfoo\nbar\n'''
-    Okay: class Foo:\n    '''foobar\nfoo\nbar\n'''
+    Okay: def foo():\n    '''foobar\n\nfoo\nbar\n'''
+    Okay: class Foo:\n    '''foobar\n\nfoo\nbar\n'''
     Okay: def foo():\n    a = '''not\na\ndocstring'''
     Okay: def foo():\n    pass\n'''foobar\nfoo\nbar\n   d'''
     H403: def foo():\n    '''foobar\nfoo\nbar\ndocstring'''
@@ -629,7 +629,7 @@ def hacking_docstring_multiline_start(physical_line, previous_logical, tokens):
     OpenStack HACKING guide recommendation for docstring:
     Docstring should start with a one-line summary, less than 80 characters.
 
-    Okay: '''foobar\nfoo\nbar\n'''
+    Okay: '''foobar\n\nfoo\nbar\n'''
     Okay: def foo():\n    a = '''\nnot\na docstring\n'''
     H404: def foo():\n'''\nfoo\nbar\n'''\n\n
     """
@@ -640,6 +640,30 @@ def hacking_docstring_multiline_start(physical_line, previous_logical, tokens):
             if physical_line.strip() in START_DOCSTRING_TRIPLE:
                 return (pos, "H404: multi line docstring "
                         "should start without a leading new line")
+
+
+@flake8ext
+def hacking_docstring_summary(physical_line, previous_logical, tokens, lines,
+                              line_number):
+    r"""Check multi line docstring summary is separted with empty line.
+
+    OpenStack HACKING guide recommendation for docstring:
+    Docstring should start with a one-line summary, less than 80 characters.
+
+    Okay: def foo():\n    a = '''\nnot\na docstring\n'''
+    Okay: '''foobar\n\nfoo\nbar\n'''
+    H405: def foo():\n    '''foobar\nfoo\nbar\n'''
+    H405: def foo():\n    '''foobar\n'''
+    """
+    if is_docstring(physical_line, previous_logical):
+        if (len(tokens) == 0 and
+                not physical_line.strip().endswith(
+                    tuple(END_DOCSTRING_TRIPLE))):
+            # start of multiline docstring
+            if lines[line_number].strip():
+                # second line is not empty
+                return (len(physical_line) - 1, "H405: multi line docstring "
+                        "summary not separated with an empty line")
 
 
 @flake8ext
