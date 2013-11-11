@@ -65,7 +65,6 @@ Imports
 
 Example::
 
-  # vim: tabstop=4 shiftwidth=4 softtabstop=4
   {{stdlib imports in human alphabetical order}}
   \n
   {{third-party lib imports in human alphabetical order}}
