@@ -8,7 +8,7 @@ OpenStack Style Guidelines
 General
 -------
 - Put two newlines between top-level code (funcs, classes, etc)
-- Use only UNIX style newlines ("\n"), not Windows style ("\r\n")
+- Use only UNIX style newlines (``\n``), not Windows style (``\r\n``)
 - Put one newline between methods in classes and anywhere else
 - Long lines should be wrapped in parentheses
   in preference to using a backslash for line continuation.
