@@ -404,6 +404,43 @@ def hacking_python3x_metaclass(logical_line, physical_line):
                "use six.add_metaclass()")
 
 
+# NOTE(guochbo): This is removed module list:
+# http://python3porting.com/stdlib.html#removed-modules
+removed_modules = [
+    'audiodev', 'Bastion', 'bsddb185', 'bsddb3',
+    'Canvas', 'cfmfile', 'cl', 'commands', 'compiler'
+    'dircache', 'dl', 'exception', 'fpformat',
+    'htmllib', 'ihooks', 'imageop', 'imputil'
+    'linuxaudiodev', 'md5', 'mhlib', 'mimetools'
+    'MimeWriter', 'mimify', 'multifile', 'mutex',
+    'new', 'popen2', 'posixfile', 'pure', 'rexec'
+    'rfc822', 'sha', 'sgmllib', 'sre', 'stat'
+    'stringold', 'sunaudio' 'sv', 'test.testall',
+    'thread', 'timing', 'toaiff', 'user'
+]
+
+
+@flake8ext
+def hacking_no_removed_module(logical_line):
+    r"""Check for removed modules in Python 3.
+
+    Examples:
+    Okay: from os import path
+    Okay: from os import path as p
+    Okay: from os import (path as p)
+    Okay: import os.path
+    H237: import thread
+    H237: import commands
+    H237: import md5 as std_md5
+    """
+    line = import_normalize(logical_line.strip())
+    if line and line.split()[0] == 'import':
+        module_name = line.split()[1].split('.')[0]
+        if module_name in removed_modules:
+            yield 0, ("H237: module %s is "
+                      "removed in Python 3" % module_name)
+
+
 modules_cache = dict((mod, True) for mod in tuple(sys.modules.keys())
                      + sys.builtin_module_names)
 
