@@ -228,6 +228,19 @@ def hacking_has_correct_license(physical_line, filename, lines, line_number):
                     "License notice")
 
 
+EMPTY_LINE_RE = re.compile("^\s*(#.*|$)")
+
+
+@flake8ext
+def hacking_has_only_comments(physical_line, filename, lines, line_number):
+    """Check for empty files with only comments
+
+    H104 empty file with only comments
+    """
+    if line_number == 1 and all(map(EMPTY_LINE_RE.match, lines)):
+        return (0, "H104: File contains nothing but comments")
+
+
 @flake8ext
 def hacking_except_format(logical_line, physical_line):
     r"""Check for 'except:'.

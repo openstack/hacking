@@ -285,6 +285,8 @@ All source files should have the following header:
     #    License for the specific language governing permissions and limitations
     #    under the License.
 
+Files with no code shouldn't contain any license header nor comments, and
+must be left completely empty.
 
 Commit Messages
 ---------------

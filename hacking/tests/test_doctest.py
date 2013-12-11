@@ -66,7 +66,10 @@ def _get_lines(check):
 
 def load_tests(loader, tests, pattern):
 
-    flake8_style = engine.get_style_guide(parse_argv=False, ignore='F')
+    flake8_style = engine.get_style_guide(parse_argv=False,
+                                          # Ignore H104 otherwise it's
+                                          # raised on doctests.
+                                          ignore=('F', 'H104'))
     options = flake8_style.options
 
     for name, check in hacking.core.__dict__.items():
