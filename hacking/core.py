@@ -42,9 +42,9 @@ logging.disable('LOG')
 # Import tests need to inject _ properly into the builtins
 kwargs = {}
 if sys.version_info[0] < 3:
-    # In Python2, eusnure that the _() that gets installed into built-ins
+    # In Python2, ensure that the _() that gets installed into built-ins
     # always returns unicodes. This matches the default behavior under Python
-    # 3, although the keyword arguement is not present in the Python 3 API.
+    # 3, although the keyword argument is not present in the Python 3 API.
     kwargs['unicode'] = True
 gettext.install('hacking', **kwargs)
 
