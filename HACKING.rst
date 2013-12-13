@@ -7,12 +7,10 @@ OpenStack Style Guidelines
 
 General
 -------
-- Put two newlines between top-level code (funcs, classes, etc)
 - Use only UNIX style newlines (``\n``), not Windows style (``\r\n``)
-- Put one newline between methods in classes and anywhere else
 - Wrap long lines in parentheses and not a backslash for line continuation.
-- Do not write "except:", use "except Exception:" at the very least
-- Include your name with TODOs as in "#TODO(termie)"
+- Do not write ``except:``, use ``except Exception:`` at the very least
+- Include your name with TODOs as in ``#TODO(yourname)``
 - Do not shadow a built-in or reserved word. Example::
 
     def list():
@@ -26,7 +24,7 @@ General
 
     mylist = Foo().list() # OKAY, does not shadow built-in
 
-- Use the "is not" operator when testing for unequal identities. Example::
+- Use the ``is not`` operator when testing for unequal identities. Example::
 
     if not X is Y:  # BAD, intended behavior is ambiguous
         pass
@@ -34,7 +32,7 @@ General
     if X is not Y:  # OKAY, intuitive
         pass
 
-- Use the "not in" operator for evaluating membership in a collection. Example::
+- Use the ``not in`` operator for evaluating membership in a collection. Example::
 
     if not X in Y:  # BAD, intended behavior is ambiguous
         pass
@@ -59,8 +57,6 @@ Imports
 
 - imports from ``migrate`` package
 - imports from ``sqlalchemy`` package
-- imports from ``nova.db.sqlalchemy.session`` module
-- imports from ``nova.db.sqlalchemy.migration.versioning_api`` package
 
 Example::
 
@@ -212,20 +208,20 @@ Example::
 Python 3.x compatibility
 ------------------------
 OpenStack code should become Python 3.x compatible. That means all Python 2.x-only
-constructs or dependencies should be avoided. An example is
+constructs or dependencies should be avoided. An example is::
 
     except x,y:
 
-Use
+Use::
 
     except x as y:
 
 instead. Also Python 3.x has become more strict regarding octal string
-literals. Use "0o755" instead of "0755". Similarly, explicit use of long
-literals (01234L) should be avoided.
+literals. Use ``0o755`` instead of ``0755``. Similarly, explicit use of long
+literals (``01234L``) should be avoided.
 
 Other Python 3.x compatibility issues, like e.g. print operator
-can be avoided in new code by using
+can be avoided in new code by using::
 
     from __future__ import print_function
 
@@ -279,19 +275,19 @@ OpenStack Licensing
 -------------------
 
 Newly contributed Source Code should be licensed under the Apache 2.0 license.
-All source files should have the following header:
+All source files should have the following header::
 
-    #    Licensed under the Apache License, Version 2.0 (the "License"); you may
-    #    not use this file except in compliance with the License. You may obtain
-    #    a copy of the License at
+    #  Licensed under the Apache License, Version 2.0 (the "License"); you may
+    #  not use this file except in compliance with the License. You may obtain
+    #  a copy of the License at
     #
-    #         http://www.apache.org/licenses/LICENSE-2.0
+    #       http://www.apache.org/licenses/LICENSE-2.0
     #
-    #    Unless required by applicable law or agreed to in writing, software
-    #    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-    #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-    #    License for the specific language governing permissions and limitations
-    #    under the License.
+    #  Unless required by applicable law or agreed to in writing, software
+    #  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+    #  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+    #  License for the specific language governing permissions and limitations
+    #  under the License.
 
 Files with no code shouldn't contain any license header nor comments, and
 must be left completely empty.
