@@ -208,24 +208,26 @@ Example::
 Python 3.x compatibility
 ------------------------
 OpenStack code should become Python 3.x compatible. That means all Python 2.x-only
-constructs or dependencies should be avoided. An example is::
+constructs or dependencies should be avoided. In order to start making code
+Python 3.x compatible before it can be is fully Python 3.x compatible, we have checks for Python 2.x-only constructs:
+
+- ``except``. Instead of::
 
     except x,y:
 
-Use::
+  Use::
 
     except x as y:
 
-instead. Also Python 3.x has become more strict regarding octal string
-literals. Use ``0o755`` instead of ``0755``. Similarly, explicit use of long
-literals (``01234L``) should be avoided.
+- Python 3.x has become more strict regarding octal string
+  literals. Use ``0o755`` instead of ``0755``. Similarly, explicit use of long
+  literals (``01234L``) should be avoided.
 
-Other Python 3.x compatibility issues, like e.g. print operator
-can be avoided in new code by using::
+- The ``print`` operator can be avoided by using::
 
     from __future__ import print_function
 
-at the top of your module.
+  at the top of your module.
 
 If you need to use metaclass, use ``six.add_metaclass`` instead of ``__metaclass__``.
 
