@@ -245,6 +245,26 @@ bug that had no unit test, a new passing unit test should be added. If a
 submitted bug fix does have a unit test, be sure to add a new one that fails
 without the patch and passes with the patch.
 
+Unit Tests and assertRaises
+---------------------------
+
+A properly written test asserts that particular behavior occurs. This can
+be a success condition or a failure condition, including an exception.
+When asserting that a particular exception is raised, the most specific
+exception possible should be used.
+
+In particular, testing for ``Exception`` being raised is almost always a
+mistake since it will match (almost) every exception, even those
+unrelated to the exception intended to be tested.
+
+This applies to catching exceptions manually with a try/except block,
+or using ``assertRaises()``.
+
+Example::
+
+    self.assertRaises(exception.InstanceNotFound, db.instance_get_by_uuid,
+                          elevated, instance_uuid)
+
 
 oslo-incubator
 ----------------
