@@ -229,15 +229,20 @@ Python 3.x compatible before it can be is fully Python 3.x compatible, we have c
 
   at the top of your module.
 
-If you need to use metaclass, use ``six.add_metaclass`` instead of ``__metaclass__``.
+- ``assertEquals()`` logs a DeprecationWarning in Python 3.x, use
+  ``assertEqual()`` instead. The same goes for ``assertNotEquals()``.
 
-Example::
+- ``assert_()`` is deprecated in Python 3.x, use ``assertTrue()`` instead.
 
-  import six
+- Use ``six.add_metaclass`` instead of ``__metaclass__``.
 
-  @six.add_metaclass(Meta)
-  class YourClass():
-    ...
+  Example::
+
+    import six
+
+    @six.add_metaclass(Meta)
+    class YourClass():
+
 
 Creating Unit Tests
 -------------------
