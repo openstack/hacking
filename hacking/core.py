@@ -606,6 +606,61 @@ def hacking_import_alphabetical(logical_line, blank_lines, previous_logical,
                        % (split_previous[1], split_line[1]))
 
 
+class ImportGroupData:
+    """A class to hold persistent state data for import group checks.
+
+    To verify import grouping, it is necessary to know the current group
+    for the current file.  This can not always be known solely from the
+    current and previous line, so this class can be used to keep track.
+    """
+
+    # NOTE(bnemec): *args is needed because the test code tries to run this
+    # as a flake8 check and passes an argument to it.
+    def __init__(self, *args):
+        self.current_group = None
+        self.current_filename = None
+        self.current_import = None
+
+
+together_data = ImportGroupData()
+
+
+@flake8ext
+def hacking_import_groups_together(logical_line, blank_lines, indent_level,
+                                   previous_indent_level, line_number,
+                                   physical_line, filename):
+    r"""Check that like imports are grouped together.
+
+    OpenStack HACKING guide recommendation for imports:
+    Imports should be grouped together by type.
+
+    Okay: import os\nimport sys
+    Okay: try:\n    import foo\nexcept ImportError:\n    pass\n\nimport six
+    H307: import os\n\nimport sys
+    """
+    if line_number == 1 or filename != together_data.current_filename:
+        together_data.current_group = None
+    together_data.current_filename = filename
+
+    if pep8.noqa(physical_line):
+        return
+
+    normalized_line = import_normalize(logical_line.strip()).split()
+    if normalized_line and normalized_line[0] == 'import':
+        current_type = _get_import_type(normalized_line[1])
+        previous_import = together_data.current_import
+        together_data.current_import = normalized_line[1]
+        matched = current_type == together_data.current_group
+        together_data.current_group = current_type
+        if (matched and indent_level == previous_indent_level and
+                blank_lines >= 1):
+            yield(0, 'H307: like imports should be grouped together (%s and '
+                  '%s from %s are separated by whitespace)' %
+                  (previous_import,
+                   together_data.current_import,
+                   current_type))
+
+
 def is_docstring(physical_line, previous_logical):
     """Return True if found docstring
 
