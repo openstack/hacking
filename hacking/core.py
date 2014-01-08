@@ -974,6 +974,18 @@ def hacking_no_cr(physical_line):
         return (pos, "H903: Windows style line endings not allowed in code")
 
 
+@flake8ext
+def hacking_no_backsplash_line_continuation(physical_line):
+    r"""Wrap lines in parentheses and not a backslash for line continuation.
+
+    Okay: a = (5 +\n     6)
+    H904: b = 5 + \\\n   6
+    """
+    if len(physical_line) > 2 and physical_line[-2] == '\\':
+        return (len(physical_line)-2,
+                "H904: Wrap long lines in parentheses instead of a backslash")
+
+
 class GlobalCheck(object):
     """Base class for checks that should be run only once."""
 
