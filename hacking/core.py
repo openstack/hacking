@@ -381,6 +381,29 @@ def hacking_no_assert_underscore(logical_line, tokens):
                 "H235: assert_ is deprecated, use assertTrue")
 
 
+@flake8ext
+def hacking_python3x_metaclass(logical_line, physical_line):
+    r"""Check for metaclass to be Python 3.x compatible.
+
+    Okay: @six.add_metaclass(Meta)\nclass Foo():\n    pass
+    Okay: @six.with_metaclass(Meta)\nclass Foo():\n    pass
+    Okay: class Foo():\n    '''docstring\n\n    __metaclass__ = Meta\n'''
+    H236: class Foo():\n    __metaclass__ = Meta
+    H236: class Foo():\n    foo=bar\n    __metaclass__ = Meta
+    H236: class Foo():\n    '''docstr.'''\n    __metaclass__ = Meta
+    H236: class Foo():\n    __metaclass__ = \\\n        Meta
+    Okay: class Foo():\n    __metaclass__ = Meta  # noqa
+    """
+    if pep8.noqa(physical_line):
+        return
+    split_line = logical_line.split()
+    if(split_line[0] == '__metaclass__' and
+       split_line[1] == '='):
+        yield (logical_line.find('__metaclass__'),
+               "H236: Python 3.x incompatible __metaclass__, "
+               "use six.add_metaclass()")
+
+
 modules_cache = dict((mod, True) for mod in tuple(sys.modules.keys())
                      + sys.builtin_module_names)
 

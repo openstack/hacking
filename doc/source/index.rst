@@ -231,6 +231,15 @@ can be avoided in new code by using
 
 at the top of your module.
 
+If you need to use metaclass, use six.add_metaclass intead of __metaclass__.
+
+Example::
+
+  import six
+
+  @six.add_metaclass(Meta)
+  class YourClass():
+    ...
 
 Creating Unit Tests
 -------------------
