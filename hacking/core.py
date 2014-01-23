@@ -327,10 +327,11 @@ def hacking_python3x_octal_literals(logical_line, tokens):
 
 @flake8ext
 def hacking_python3x_print_function(logical_line, physical_line):
-    r"""Check that all occurrences look like print functions, not
-        print operator.
+    r"""Check that all print occurrences look like print functions.
 
-    As of Python 3.x, the print operator has been removed.
+    Check that all occurrences of print look like functions, not
+    print operator. As of Python 3.x, the print operator has
+    been removed.
 
 
     Okay: print(msg)
@@ -681,6 +682,20 @@ def hacking_import_groups_together(logical_line, blank_lines, indent_level,
                    current_type))
 
 
+def _find_first_of(line, substrings):
+    """Find earliest occurrence of one of substrings in line.
+
+    Returns pair of index and found substring, or (-1, None)
+    if no occurrences of any of substrings were found in line.
+    """
+    starts = ((line.find(i), i) for i in substrings)
+    found = [(i, sub) for i, sub in starts if i != -1]
+    if found:
+        return min(found)
+    else:
+        return -1, None
+
+
 def is_docstring(physical_line, previous_logical):
     """Return True if found docstring
 
@@ -689,15 +704,15 @@ def is_docstring(physical_line, previous_logical):
     http://www.python.org/dev/peps/pep-0257/#what-is-a-docstring
     """
     line = physical_line.lstrip()
-    start = max([line.find(i) for i in START_DOCSTRING_TRIPLE])
+    start, start_triple = _find_first_of(line, START_DOCSTRING_TRIPLE)
     end = max([line[-4:-1] == i for i in END_DOCSTRING_TRIPLE])
     if (previous_logical.startswith("def ") or
             previous_logical.startswith("class ")):
-        if start is 0:
+        if start == 0:
             return True
         else:
             # Handle multi line comments
-            return end and start in (-1, len(line) - 4)
+            return end and start in (-1, len(line) - len(start_triple) - 1)
 
 
 @flake8ext
@@ -708,9 +723,11 @@ def hacking_docstring_start_space(physical_line, previous_logical):
     Docstring should not start with space
 
     Okay: def foo():\n    '''This is good.'''
+    Okay: def foo():\n    r'''This is good.'''
     Okay: def foo():\n    a = ''' This is not a docstring.'''
     Okay: def foo():\n    pass\n    ''' This is not.'''
     H401: def foo():\n    ''' This is not.'''
+    H401: def foo():\n    r''' This is not.'''
     """
     # short circuit so that we don't fail on our own fail test
     # when running under external pep8
@@ -735,16 +752,20 @@ def hacking_docstring_one_line(physical_line, previous_logical):
     A one line docstring looks like this and ends in punctuation.
 
     Okay: def foo():\n    '''This is good.'''
+    Okay: def foo():\n    r'''This is good.'''
     Okay: def foo():\n    '''This is good too!'''
     Okay: def foo():\n    '''How about this?'''
     Okay: def foo():\n    a = '''This is not a docstring'''
     Okay: def foo():\n    pass\n    '''This is not a docstring'''
+    Okay: def foo():\n    pass\n    r'''This is not a docstring'''
     Okay: class Foo:\n    pass\n    '''This is not a docstring'''
     H402: def foo():\n    '''This is not'''
+    H402: def foo():\n    r'''This is not'''
     H402: def foo():\n    '''Bad punctuation,'''
     H402: def foo():\n    '''Bad punctuation:'''
     H402: def foo():\n    '''Bad punctuation;'''
     H402: class Foo:\n    '''Bad punctuation,'''
+    H402: class Foo:\n    r'''Bad punctuation,'''
     """
     #TODO(jogo) make this apply to multi line docstrings as well
     line = physical_line.lstrip()
@@ -770,6 +791,7 @@ def hacking_docstring_multiline_end(physical_line, previous_logical, tokens):
     Okay: def foo():\n    a = '''not\na\ndocstring'''
     Okay: def foo():\n    pass\n'''foobar\nfoo\nbar\n   d'''
     H403: def foo():\n    '''foobar\nfoo\nbar\ndocstring'''
+    H403: def foo():\n    '''foobar\nfoo\nbar\npretend raw: r'''
     H403: class Foo:\n    '''foobar\nfoo\nbar\ndocstring'''\n\n
     """
     # if find OP tokens, not a docstring
@@ -790,7 +812,8 @@ def hacking_docstring_multiline_start(physical_line, previous_logical, tokens):
 
     Okay: '''foobar\n\nfoo\nbar\n'''
     Okay: def foo():\n    a = '''\nnot\na docstring\n'''
-    H404: def foo():\n'''\nfoo\nbar\n'''\n\n
+    H404: def foo():\n    '''\nfoo\nbar\n'''\n\n
+    H404: def foo():\n    r'''\nfoo\nbar\n'''\n\n
     """
     if is_docstring(physical_line, previous_logical):
         pos = max([physical_line.find(i) for i in START_DOCSTRING_TRIPLE])
@@ -812,6 +835,7 @@ def hacking_docstring_summary(physical_line, previous_logical, tokens, lines,
     Okay: def foo():\n    a = '''\nnot\na docstring\n'''
     Okay: '''foobar\n\nfoo\nbar\n'''
     H405: def foo():\n    '''foobar\nfoo\nbar\n'''
+    H405: def foo():\n    r'''foobar\nfoo\nbar\n'''
     H405: def foo():\n    '''foobar\n'''
     """
     if is_docstring(physical_line, previous_logical):
