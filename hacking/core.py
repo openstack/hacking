@@ -559,6 +559,10 @@ def _get_import_type(module):
     except ImportError:
         return cache_type('third-party')
 
+    if path is None:
+        #NOTE(imelnikov): python 3 returns None for path of builtin
+        # modules, like sys or builtin; they are definitely stdlib
+        return cache_type('stdlib')
     if 'site-packages' in path or 'dist-packages' in path:
         return cache_type('third-party')
     if (path.startswith(stdlib_path_prefix) or
