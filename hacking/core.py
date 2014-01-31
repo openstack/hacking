@@ -804,7 +804,8 @@ def hacking_docstring_multiline_end(physical_line, previous_logical, tokens):
             len(ops) == 0):
         pos = max(physical_line.find(i) for i in END_DOCSTRING_TRIPLE)
         if physical_line.strip() not in START_DOCSTRING_TRIPLE:
-            return (pos, "H403: multi line docstring end on new line")
+            return (pos,
+                    "H403: multi line docstrings should end on a new line")
 
 
 @flake8ext
