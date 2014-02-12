@@ -134,8 +134,8 @@ Example::
           "name": "Just a Snapshot",
           "size": 2749573,
           "properties": {
-               "user_id": 12,
-               "arch": "x86_64",
+              "user_id": 12,
+              "arch": "x86_64",
           },
           "things": [
               "thing_one",
