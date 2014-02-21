@@ -499,20 +499,28 @@ def hacking_import_rules(logical_line, physical_line, filename):
         except ImportError:
             try:
                 # NOTE(vish): handle namespace modules
-                __import__(mod)
-            except ImportError as exc:
-                # NOTE(vish): the import error might be due
-                #             to a missing dependency
-                missing = str(exc).split()[-1]
-                if (missing != mod.split('.')[-1] or
-                        "cannot import" in str(exc)):
-                    return True
-                return False
+                if '.' in mod:
+                    pack_name, mod_name = mod.rsplit('.', 1)
+                    __import__(pack_name, fromlist=[mod_name])
+                else:
+                    __import__(mod)
+            except ImportError:
+                # NOTE(imelnikov): import error here means the thing is
+                # not importable in current environment, either because
+                # of missing dependency, typo in code being checked, or
+                # any other reason. Anyway, we have no means to know if
+                # it is module or not, so we return True to avoid
+                # false positives.
+                return True
             except Exception:
                 # NOTE(jogo) don't stack trace if unexpected import error,
                 # log and continue.
                 traceback.print_exc()
                 return False
+            else:
+                # NOTE(imelnikov): we imported the thing; if it was module,
+                # it must be there:
+                return mod in sys.modules
         return True
 
     def is_module(mod):
