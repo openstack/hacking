@@ -337,13 +337,15 @@ def hacking_python3x_print_function(logical_line, physical_line):
     Okay: print(msg)
     Okay: print (msg)
     Okay: print msg  # noqa
+    Okay: print()
     H233: print msg
     H233: print >>sys.stderr, "hello"
     H233: print msg,
+    H233: print
     """
     if pep8.noqa(physical_line):
         return
-    for match in re.finditer(r"\bprint\s+[^\(]", logical_line):
+    for match in re.finditer(r"\bprint(?:$|\s+[^\(])", logical_line):
         yield match.start(0), (
             "H233: Python 3.x incompatible use of print operator")
 
