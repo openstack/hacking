@@ -49,6 +49,12 @@ gettext.install('hacking', **kwargs)
 def flake8ext(f):
     f.name = __name__
     f.version = '0.0.1'
+    f.skip_on_py3 = False
+    return f
+
+
+def skip_on_py3(f):
+    f.skip_on_py3 = True
     return f
 
 # Error code block layout
@@ -273,6 +279,7 @@ def hacking_except_format_assert(logical_line):
         yield 1, "H202: assertRaises Exception too broad"
 
 
+@skip_on_py3
 @flake8ext
 def hacking_python3x_except_compatible(logical_line, physical_line):
     r"""Check for except statements to be Python 3.x compatible
@@ -299,6 +306,7 @@ def hacking_python3x_except_compatible(logical_line, physical_line):
         yield 0, "H231: Python 3.x incompatible 'except x,y:' construct"
 
 
+@skip_on_py3
 @flake8ext
 def hacking_python3x_octal_literals(logical_line, tokens):
     r"""Check for octal literals in Python 3.x compatible form.
@@ -325,6 +333,7 @@ def hacking_python3x_octal_literals(logical_line, tokens):
                           (match.group(0)[1:], match.group(1)))
 
 
+@skip_on_py3
 @flake8ext
 def hacking_python3x_print_function(logical_line, physical_line):
     r"""Check that all print occurrences look like print functions.

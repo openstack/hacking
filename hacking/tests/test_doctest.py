@@ -18,6 +18,7 @@ import re
 
 from flake8 import engine
 import pep8
+import six
 import testscenarios
 from testtools import content
 from testtools import matchers
@@ -74,6 +75,8 @@ def load_tests(loader, tests, pattern):
 
     for name, check in hacking.core.__dict__.items():
         if not name.startswith("hacking_"):
+            continue
+        if six.PY3 and check.skip_on_py3:
             continue
         for (lineno, (raw, (code, source))) in enumerate(_get_lines(check)):
             lines = [part.replace(r'\t', '\t') + '\n'
