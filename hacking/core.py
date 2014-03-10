@@ -248,7 +248,7 @@ def hacking_except_format(logical_line, physical_line):
 
 
 @flake8ext
-def hacking_except_format_assert(logical_line):
+def hacking_except_format_assert(logical_line, physical_line):
     r"""Check for 'assertRaises(Exception'.
 
     OpenStack HACKING guide recommends not using assertRaises(Exception...):
@@ -258,7 +258,12 @@ def hacking_except_format_assert(logical_line):
     Okay: self.assertRaises(ExceptionStrangeNotation, foo)
     H202: self.assertRaises(Exception, foo)
     H202: self.assertRaises(Exception)
+    Okay: self.assertRaises(Exception)  # noqa
+    Okay: self.assertRaises(Exception, foo)  # noqa
     """
+    if pep8.noqa(physical_line):
+        return
+
     if re.match(r"self\.assertRaises\(Exception[,\)]", logical_line):
         yield 1, "H202: assertRaises Exception too broad"
 
