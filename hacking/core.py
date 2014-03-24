@@ -34,7 +34,7 @@ import pep8
 from hacking import config
 
 # Don't need this for testing
-logging.disable('LOG')
+logging.disable(logging.CRITICAL)
 
 # Import tests need to inject _ properly into the builtins
 kwargs = {}
