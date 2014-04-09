@@ -10,7 +10,7 @@ General
 - Use only UNIX style newlines (``\n``), not Windows style (``\r\n``)
 - Wrap long lines in parentheses and not a backslash for line continuation.
 - Do not write ``except:``, use ``except Exception:`` at the very least
-- Include your name with TODOs as in ``#TODO(yourname)``
+- Include your name with TODOs as in ``# TODO(yourname)``
 - Do not shadow a built-in or reserved word. Example::
 
     def list():

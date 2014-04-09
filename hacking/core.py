@@ -111,13 +111,12 @@ def hacking_todo_format(physical_line, tokens):
     """Check for 'TODO()'.
 
     OpenStack HACKING guide recommendation for TODO:
-    Include your name with TODOs as in "#TODO(termie)"
+    Include your name with TODOs as in "# TODO(termie)"
 
-    Okay: #TODO(sdague)
     Okay: # TODO(sdague)
-    H101: #TODO fail
-    H101: #TODO
-    H101: #TODO (jogo) fail
+    H101: # TODO fail
+    H101: # TODO
+    H101: # TODO (jogo) fail
     Okay: TODO = 5
     """
     # TODO(jogo): make the following doctests pass:
@@ -125,11 +124,12 @@ def hacking_todo_format(physical_line, tokens):
     #            H101: #TODO(jogo
     # TODO(jogo): make this check docstrings as well (don't have to be at top
     # of function)
-    pos = physical_line.find('TODO')
-    pos1 = physical_line.find('TODO(')
-    pos2 = physical_line.find('#')  # make sure it's a comment
-    if (pos != pos1 and pos2 >= 0 and pos2 < pos and len(tokens) == 0):
-        return pos, "H101: Use TODO(NAME)"
+    for token_type, text, start_index, _, _ in tokens:
+        if token_type == tokenize.COMMENT:
+            pos = text.find('TODO')
+            pos1 = text.find('TODO(')
+            if (pos != pos1):
+                return pos + start_index[1], "H101: Use TODO(NAME)"
 
 
 def _check_for_exact_apache(start, lines):
@@ -329,8 +329,8 @@ def hacking_python3x_octal_literals(logical_line, tokens):
     H232: f(0755)
     """
 
-    for tokentype, text, _, _, _ in tokens:
-        if tokentype == tokenize.NUMBER:
+    for token_type, text, _, _, _ in tokens:
+        if token_type == tokenize.NUMBER:
             match = re.match(r"0+([1-9]\d*)", text)
             if match:
                 yield 0, ("H232: Python 3.x incompatible octal %s should be "
@@ -761,27 +761,30 @@ def _find_first_of(line, substrings):
         return -1, None
 
 
-def is_docstring(physical_line, previous_logical):
-    """Return True if found docstring
+def is_docstring(tokens, previous_logical):
+    """Return found docstring
 
     'A docstring is a string literal that occurs as the first statement in a
     module, function, class,'
     http://www.python.org/dev/peps/pep-0257/#what-is-a-docstring
     """
-    line = physical_line.lstrip()
+    for token_type, text, start, _, _ in tokens:
+        if token_type == tokenize.STRING:
+            break
+        elif token_type != tokenize.INDENT:
+            return False
+    else:
+        return False
+    line = text.lstrip()
     start, start_triple = _find_first_of(line, START_DOCSTRING_TRIPLE)
-    end = max([line[-4:-1] == i for i in END_DOCSTRING_TRIPLE])
     if (previous_logical.startswith("def ") or
             previous_logical.startswith("class ")):
         if start == 0:
-            return True
-        else:
-            # Handle multi line comments
-            return end and start in (-1, len(line) - len(start_triple) - 1)
+            return text
 
 
 @flake8ext
-def hacking_docstring_start_space(physical_line, previous_logical):
+def hacking_docstring_start_space(physical_line, previous_logical, tokens):
     r"""Check for docstring not starting with space.
 
     OpenStack HACKING guide recommendation for docstring:
@@ -794,23 +797,18 @@ def hacking_docstring_start_space(physical_line, previous_logical):
     H401: def foo():\n    ''' This is not.'''
     H401: def foo():\n    r''' This is not.'''
     """
-    # short circuit so that we don't fail on our own fail test
-    # when running under external pep8
-    if physical_line.find("H401: def foo()") != -1:
-        return
-
-    # it's important that we determine this is actually a docstring,
-    # and not a doc block used somewhere after the first line of a
-    # function def
-    if is_docstring(physical_line, previous_logical):
-        pos = max([physical_line.find(i) for i in START_DOCSTRING_TRIPLE])
-        if physical_line[pos + 3] == ' ':
-            return (pos, "H401: docstring should not start with"
+    docstring = is_docstring(tokens, previous_logical)
+    if docstring:
+        start, start_triple = _find_first_of(docstring, START_DOCSTRING_TRIPLE)
+        if docstring[len(start_triple)] == ' ':
+            # docstrings get tokenized on the last line of the docstring, so
+            # we don't know the exact position.
+            return (0, "H401: docstring should not start with"
                     " a space")
 
 
 @flake8ext
-def hacking_docstring_one_line(physical_line, previous_logical):
+def hacking_docstring_one_line(physical_line, previous_logical, tokens):
     r"""Check one line docstring end.
 
     OpenStack HACKING guide recommendation for one line docstring:
@@ -832,15 +830,15 @@ def hacking_docstring_one_line(physical_line, previous_logical):
     H402: class Foo:\n    '''Bad punctuation,'''
     H402: class Foo:\n    r'''Bad punctuation,'''
     """
-    # TODO(jogo) make this apply to multi line docstrings as well
-    line = physical_line.lstrip()
-    if is_docstring(physical_line, previous_logical):
-        pos = max([line.find(i) for i in START_DOCSTRING_TRIPLE])  # start
+    docstring = is_docstring(tokens, previous_logical)
+    if docstring:
+        if '\n' in docstring:
+            # multi line docstring
+            return
+        line = physical_line.lstrip()
         end = max([line[-4:-1] == i for i in END_DOCSTRING_TRIPLE])  # end
-
-        if pos != -1 and end and len(line) > pos + 4:
-            if line[-5] not in ['.', '?', '!']:
-                return pos, "H402: one line docstring needs punctuation."
+        if line[-5] not in ['.', '?', '!']:
+            return end, "H402: one line docstring needs punctuation."
 
 
 @flake8ext
@@ -854,17 +852,22 @@ def hacking_docstring_multiline_end(physical_line, previous_logical, tokens):
     Okay: def foo():\n    '''foobar\n\nfoo\nbar\n'''
     Okay: class Foo:\n    '''foobar\n\nfoo\nbar\n'''
     Okay: def foo():\n    a = '''not\na\ndocstring'''
+    Okay: def foo():\n    a = '''not\na\ndocstring'''  # blah
     Okay: def foo():\n    pass\n'''foobar\nfoo\nbar\n   d'''
     H403: def foo():\n    '''foobar\nfoo\nbar\ndocstring'''
     H403: def foo():\n    '''foobar\nfoo\nbar\npretend raw: r'''
     H403: class Foo:\n    '''foobar\nfoo\nbar\ndocstring'''\n\n
     """
-    # if find OP tokens, not a docstring
-    ops = [t for t, _, _, _, _ in tokens if t == tokenize.OP]
-    if (is_docstring(physical_line, previous_logical) and len(tokens) > 0 and
-            len(ops) == 0):
-        pos = max(physical_line.find(i) for i in END_DOCSTRING_TRIPLE)
-        if physical_line.strip() not in START_DOCSTRING_TRIPLE:
+    docstring = is_docstring(tokens, previous_logical)
+    if docstring:
+        if '\n' not in docstring:
+            # not a multi line
+            return
+        else:
+            last_line = docstring.split('\n')[-1]
+        pos = max(last_line.rfind(i) for i in END_DOCSTRING_TRIPLE)
+        if len(last_line[:pos].strip()) > 0:
+            # Something before the end docstring triple
             return (pos,
                     "H403: multi line docstrings should end on a new line")
 
@@ -881,19 +884,23 @@ def hacking_docstring_multiline_start(physical_line, previous_logical, tokens):
     H404: def foo():\n    '''\nfoo\nbar\n'''\n\n
     H404: def foo():\n    r'''\nfoo\nbar\n'''\n\n
     """
-    if is_docstring(physical_line, previous_logical):
-        pos = max([physical_line.find(i) for i in START_DOCSTRING_TRIPLE])
-        # start of docstring when len(tokens)==0
-        if len(tokens) == 0 and pos != -1 and len(physical_line) == pos + 4:
-            if physical_line.strip() in START_DOCSTRING_TRIPLE:
-                return (pos, "H404: multi line docstring "
-                        "should start without a leading new line")
+    docstring = is_docstring(tokens, previous_logical)
+    if docstring:
+        if '\n' not in docstring:
+            # single line docstring
+            return
+        start, start_triple = _find_first_of(docstring, START_DOCSTRING_TRIPLE)
+        lines = docstring.split('\n')
+        if lines[0].strip() == start_triple:
+            # docstrings get tokenized on the last line of the docstring, so
+            # we don't know the exact position.
+            return (0, "H404: multi line docstring "
+                    "should start without a leading new line")
 
 
 @flake8ext
-def hacking_docstring_summary(physical_line, previous_logical, tokens, lines,
-                              line_number):
-    r"""Check multi line docstring summary is separted with empty line.
+def hacking_docstring_summary(physical_line, previous_logical, tokens):
+    r"""Check multi line docstring summary is separated with empty line.
 
     OpenStack HACKING guide recommendation for docstring:
     Docstring should start with a one-line summary, less than 80 characters.
@@ -904,15 +911,17 @@ def hacking_docstring_summary(physical_line, previous_logical, tokens, lines,
     H405: def foo():\n    r'''foobar\nfoo\nbar\n'''
     H405: def foo():\n    '''foobar\n'''
     """
-    if is_docstring(physical_line, previous_logical):
-        if (len(tokens) == 0 and
-                not physical_line.strip().endswith(
-                    tuple(END_DOCSTRING_TRIPLE))):
-            # start of multiline docstring
-            if lines[line_number].strip():
-                # second line is not empty
-                return (len(physical_line) - 1, "H405: multi line docstring "
-                        "summary not separated with an empty line")
+    docstring = is_docstring(tokens, previous_logical)
+    if docstring:
+        if '\n' not in docstring:
+            # not a multi line docstring
+            return
+        lines = docstring.split('\n')
+        if len(lines) > 1 and len(lines[1].strip()) is not 0:
+            # docstrings get tokenized on the last line of the docstring, so
+            # we don't know the exact position.
+            return (0, "H405: multi line docstring "
+                    "summary not separated with an empty line")
 
 
 @flake8ext
@@ -1085,15 +1094,19 @@ def hacking_no_cr(physical_line):
 
 
 @flake8ext
-def hacking_no_backsplash_line_continuation(physical_line):
+def hacking_no_backsplash_line_continuation(logical_line, tokens):
     r"""Wrap lines in parentheses and not a backslash for line continuation.
 
     Okay: a = (5 +\n     6)
-    H904: b = 5 + \\\n   6
+    H904: b = 5 + \\\n    6
     """
-    if len(physical_line) > 2 and physical_line[-2] == '\\':
-        return (len(physical_line) - 2,
-                "H904: Wrap long lines in parentheses instead of a backslash")
+    found = False
+    for token_type, text, start_index, stop_index, line in tokens:
+        if line.rstrip('\r\n').endswith('\\') and not found:
+            found = True
+            yield ((start_index[0], start_index[1]+len(line.strip())-1),
+                   "H904: Wrap long lines in parentheses instead of a "
+                   "backslash")
 
 
 class GlobalCheck(object):
