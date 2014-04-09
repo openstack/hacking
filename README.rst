@@ -10,7 +10,7 @@ Origin
 Most of the additional style guidelines that OpenStack has taken on came from
 the Google Python Style Guide.
 
-  http://google-styleguide.googlecode.com/svn/trunk/pyguide.html
+- http://google-styleguide.googlecode.com/svn/trunk/pyguide.html
 
 Since then, a few more OpenStack specific ones have been added or modified.
 
@@ -30,7 +30,7 @@ Adding additional checks
 
 Each check is a pep8 plugin so read
 
-   https://github.com/jcrocholl/pep8/blob/master/docs/developer.rst#contribute
+- https://github.com/jcrocholl/pep8/blob/master/docs/developer.rst#contribute
 
 Requirements
 ------------
@@ -54,7 +54,9 @@ to run in two different ways. They can be registered individually, or with
 a factory function.
 
 For individual registration, put a comma separated list of pep8 compatible
-check functions into the hacking section of tox.ini. Like
+check functions into the hacking section of tox.ini. E.g.:
+
+.. code-block:: ini
 
   [hacking]
   local-check = nova.tests.hacking.bad_code_is_terrible
@@ -63,6 +65,8 @@ Alternately, you can specify the location of a callable that will be called
 at registration time and will be passed the registration function. The callable
 should expect to call the passed in function on everything if wants to
 register. Such as:
+
+.. code-block:: ini
 
   [hacking]
   local-check-factory = nova.tests.hacking.factory
