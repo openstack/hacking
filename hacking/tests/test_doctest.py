@@ -18,6 +18,7 @@ import re
 
 from flake8 import engine
 import pep8
+import pkg_resources
 import six
 import testscenarios
 from testtools import content
@@ -73,9 +74,11 @@ def load_tests(loader, tests, pattern):
                                           ignore=('F', 'H104'))
     options = flake8_style.options
 
-    for name, check in hacking.core.__dict__.items():
-        if not name.startswith("hacking_"):
+    for entry in pkg_resources.iter_entry_points('flake8.extension'):
+        if not entry.module_name.startswith('hacking.'):
             continue
+        check = entry.load()
+        name = entry.attrs[0]
         if six.PY3 and check.skip_on_py3:
             continue
         for (lineno, (raw, (code, source))) in enumerate(_get_lines(check)):
