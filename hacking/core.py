@@ -106,44 +106,6 @@ def import_normalize(line):
         return line
 
 
-@flake8ext
-def hacking_except_format(logical_line, physical_line, noqa):
-    r"""Check for 'except:'.
-
-    OpenStack HACKING guide recommends not using except:
-    Do not write "except:", use "except Exception:" at the very least
-
-    Okay: try:\n    pass\nexcept Exception:\n    pass
-    H201: try:\n    pass\nexcept:\n    pass
-    H201: except:
-    Okay: try:\n    pass\nexcept:  # noqa\n    pass
-    """
-    if noqa:
-        return
-    if logical_line.startswith("except:"):
-        yield 6, "H201: no 'except:' at least use 'except Exception:'"
-
-
-@flake8ext
-def hacking_except_format_assert(logical_line, physical_line, noqa):
-    r"""Check for 'assertRaises(Exception'.
-
-    OpenStack HACKING guide recommends not using assertRaises(Exception...):
-    Do not use overly broad Exception type
-
-    Okay: self.assertRaises(NovaException, foo)
-    Okay: self.assertRaises(ExceptionStrangeNotation, foo)
-    H202: self.assertRaises(Exception, foo)
-    H202: self.assertRaises(Exception)
-    Okay: self.assertRaises(Exception)  # noqa
-    Okay: self.assertRaises(Exception, foo)  # noqa
-    """
-    if noqa:
-        return
-    if re.match(r"self\.assertRaises\(Exception[,\)]", logical_line):
-        yield 1, "H202: assertRaises Exception too broad"
-
-
 @skip_on_py3
 @flake8ext
 def hacking_python3x_except_compatible(logical_line, physical_line, noqa):
