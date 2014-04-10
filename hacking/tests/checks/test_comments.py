@@ -13,27 +13,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from hacking import core
+from hacking.checks import comments
 from hacking import tests
 
 
 class CoreTestCase(tests.TestCase):
     def test_H104_regex(self):
         """Verify that the H104 regex matches correct lines."""
-        self.assertTrue(core.hacking_has_only_comments(
+        self.assertTrue(comments.hacking_has_only_comments(
             None,
             None,
             ['# foo',
              '# bar'],
             1))
-        self.assertTrue(core.hacking_has_only_comments(
+        self.assertTrue(comments.hacking_has_only_comments(
             None,
             None,
             ['# foo',
              '# bar',
              ''],
             1))
-        self.assertTrue(core.hacking_has_only_comments(
+        self.assertTrue(comments.hacking_has_only_comments(
             None,
             None,
             ['# foo',
@@ -41,21 +41,21 @@ class CoreTestCase(tests.TestCase):
              '# bar'],
             1))
 
-        self.assertIsNone(core.hacking_has_only_comments(
+        self.assertIsNone(comments.hacking_has_only_comments(
             None,
             None,
             ['# foo',
              '   ',
              '"""foobar"""'],
             1))
-        self.assertIsNone(core.hacking_has_only_comments(
+        self.assertIsNone(comments.hacking_has_only_comments(
             None,
             None,
             ['# foo',
              '',
              'print(42)'],
             1))
-        self.assertIsNone(core.hacking_has_only_comments(
+        self.assertIsNone(comments.hacking_has_only_comments(
             None,
             None,
             ['# foo'],
