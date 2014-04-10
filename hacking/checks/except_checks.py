@@ -16,6 +16,8 @@ import re
 
 from hacking import core
 
+RE_ASSERT_RAISES_EXCEPTION = re.compile(r"self\.assertRaises\(Exception[,\)]")
+
 
 @core.flake8ext
 def hacking_except_format(logical_line, physical_line, noqa):
@@ -51,5 +53,5 @@ def hacking_except_format_assert(logical_line, physical_line, noqa):
     """
     if noqa:
         return
-    if re.match(r"self\.assertRaises\(Exception[,\)]", logical_line):
+    if RE_ASSERT_RAISES_EXCEPTION.search(logical_line):
         yield 1, "H202: assertRaises Exception too broad"
