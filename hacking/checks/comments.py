@@ -55,7 +55,7 @@ def hacking_has_license(physical_line, filename, lines, line_number):
     # skip files that are < 10 lines, which isn't enough for a license to fit
     # this allows us to handle empty files, as well as not fail on the Okay
     # doctests.
-    if _project_is_apache() and not line_number > 1 and len(lines) > 10:
+    if line_number is 1 and len(lines) > 10 and _project_is_apache():
         for idx, line in enumerate(lines):
             # if it's more than 10 characters in, it's probably not in the
             # header
@@ -77,7 +77,7 @@ def hacking_has_correct_license(physical_line, filename, lines, line_number):
     # skip files that are < 10 lines, which isn't enough for a license to fit
     # this allows us to handle empty files, as well as not fail on the Okay
     # doctests.
-    if _project_is_apache() and len(lines) > 10:
+    if len(lines) > 10 and _project_is_apache():
         column = physical_line.find('Licensed under the Apache License')
         if (0 < column < 10 and not
                 _check_for_exact_apache(line_number - 1, lines)):
@@ -98,6 +98,9 @@ def hacking_has_only_comments(physical_line, filename, lines, line_number):
         return (0, "H104: File contains nothing but comments")
 
 
+_is_apache_cache = None
+
+
 def _project_is_apache():
     """Determine if a project is Apache.
 
@@ -106,15 +109,20 @@ def _project_is_apache():
     enforcing license headers.
     """
 
+    global _is_apache_cache
+    if _is_apache_cache is not None:
+        return _is_apache_cache
     license_files = ["LICENSE"]
     for filename in license_files:
         try:
             with open(filename, "r") as file:
                 for line in file:
                     if re.search('Apache License', line):
+                        _is_apache_cache = True
                         return True
         except IOError:
             pass
+    _is_apache_cache = False
     return False
 
 
