@@ -15,6 +15,9 @@ import tokenize
 
 from hacking import core
 
+RE_OCTAL = re.compile(r"0+([1-9]\d*)")
+RE_PRINT = re.compile(r"\bprint(?:$|\s+[^\(])")
+
 
 @core.skip_on_py3
 @core.flake8ext
@@ -63,7 +66,7 @@ def hacking_python3x_octal_literals(logical_line, tokens):
 
     for token_type, text, _, _, _ in tokens:
         if token_type == tokenize.NUMBER:
-            match = re.match(r"0+([1-9]\d*)", text)
+            match = RE_OCTAL.match(text)
             if match:
                 yield 0, ("H232: Python 3.x incompatible octal %s should be "
                           "written as 0o%s " %
@@ -91,7 +94,7 @@ def hacking_python3x_print_function(logical_line, physical_line, noqa):
     """
     if noqa:
         return
-    for match in re.finditer(r"\bprint(?:$|\s+[^\(])", logical_line):
+    for match in RE_PRINT.finditer(logical_line):
         yield match.start(0), (
             "H233: Python 3.x incompatible use of print operator")
 
