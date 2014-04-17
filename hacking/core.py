@@ -59,16 +59,16 @@ def skip_on_py3(f):
 
 # Error code block layout
 
-#H1xx comments
-#H20x except
-#H23x Python 2.x -> 3.x portability issues
-#H3xx imports
-#H4xx docstrings
-#H5xx dictionaries/lists
-#H6xx calling methods
-#H7xx localization
-#H8xx git commit messages
-#H9xx other
+# H1xx comments
+# H20x except
+# H23x Python 2.x -> 3.x portability issues
+# H3xx imports
+# H4xx docstrings
+# H5xx dictionaries/lists
+# H6xx calling methods
+# H7xx localization
+# H8xx git commit messages
+# H9xx other
 
 
 CONF = config.Config('hacking')
@@ -120,10 +120,10 @@ def hacking_todo_format(physical_line, tokens):
     H101: #TODO (jogo) fail
     Okay: TODO = 5
     """
-    #TODO(jogo): make the following doctests pass:
+    # TODO(jogo): make the following doctests pass:
     #            H101: #TODO(jogo fail
     #            H101: #TODO(jogo
-    #TODO(jogo): make this check docstrings as well (don't have to be at top
+    # TODO(jogo): make this check docstrings as well (don't have to be at top
     # of function)
     pos = physical_line.find('TODO')
     pos1 = physical_line.find('TODO(')
@@ -226,7 +226,7 @@ def hacking_has_correct_license(physical_line, filename, lines, line_number):
     if _project_is_apache() and len(lines) > 10:
         column = physical_line.find('Licensed under the Apache License')
         if (0 < column < 10 and not
-                _check_for_exact_apache(line_number-1, lines)):
+                _check_for_exact_apache(line_number - 1, lines)):
             return (column, "H103: Header does not match Apache 2.0 "
                     "License notice")
 
@@ -414,7 +414,7 @@ def hacking_python3x_metaclass(logical_line, physical_line):
     if pep8.noqa(physical_line):
         return
     split_line = logical_line.split()
-    if(split_line[0] == '__metaclass__' and
+    if(len(split_line) > 2 and split_line[0] == '__metaclass__' and
        split_line[1] == '='):
         yield (logical_line.find('__metaclass__'),
                "H236: Python 3.x incompatible __metaclass__, "
@@ -493,11 +493,11 @@ def hacking_import_rules(logical_line, physical_line, filename):
     H303: from os.path import *
     H304: from .compute import rpcapi
     """
-    #TODO(jogo): make the following doctests pass:
+    # TODO(jogo): make the following doctests pass:
     #            H301: import os, sys
-    #NOTE(afazekas): An old style relative import example will not be able to
+    # NOTE(afazekas): An old style relative import example will not be able to
     # pass the doctest, since the relativity depends on the file's locality
-    #TODO(mordred: We need to split this into 4 different checks so that they
+    # TODO(mordred: We need to split this into 4 different checks so that they
     # can be disabled by command line switches properly
 
     if pep8.noqa(physical_line):
@@ -554,7 +554,7 @@ def hacking_import_rules(logical_line, physical_line, filename):
 
     split_line = logical_line.split()
     split_line_len = len(split_line)
-    if (split_line[0] in ('import', 'from') and split_line_len > 1 and
+    if (split_line_len > 1 and split_line[0] in ('import', 'from') and
             not is_import_exception(split_line[1])):
         pos = logical_line.find(',')
         if pos != -1:
@@ -582,7 +582,7 @@ def hacking_import_rules(logical_line, physical_line, filename):
                               "'%s' does not import a module" % logical_line)
                 return
 
-        #NOTE(afazekas): import searches first in the package
+        # NOTE(afazekas): import searches first in the package
         # The import keyword just imports modules
         # The guestfs module now imports guestfs
         mod = split_line[1]
@@ -621,7 +621,7 @@ def _get_import_type(module):
         return cache_type('third-party')
 
     if path is None:
-        #NOTE(imelnikov): python 3 returns None for path of builtin
+        # NOTE(imelnikov): python 3 returns None for path of builtin
         # modules, like sys or builtin; they are definitely stdlib
         return cache_type('stdlib')
     if 'site-packages' in path or 'dist-packages' in path:
@@ -832,7 +832,7 @@ def hacking_docstring_one_line(physical_line, previous_logical):
     H402: class Foo:\n    '''Bad punctuation,'''
     H402: class Foo:\n    r'''Bad punctuation,'''
     """
-    #TODO(jogo) make this apply to multi line docstrings as well
+    # TODO(jogo) make this apply to multi line docstrings as well
     line = physical_line.lstrip()
     if is_docstring(physical_line, previous_logical):
         pos = max([line.find(i) for i in START_DOCSTRING_TRIPLE])  # start
@@ -1034,7 +1034,7 @@ def hacking_localization_strings(logical_line, tokens):
     except LocalizationError as e:
         yield e.args
 
-#TODO(jogo) Dict and list objects
+# TODO(jogo) Dict and list objects
 
 
 @flake8ext
@@ -1092,7 +1092,7 @@ def hacking_no_backsplash_line_continuation(physical_line):
     H904: b = 5 + \\\n   6
     """
     if len(physical_line) > 2 and physical_line[-2] == '\\':
-        return (len(physical_line)-2,
+        return (len(physical_line) - 2,
                 "H904: Wrap long lines in parentheses instead of a backslash")
 
 
@@ -1141,7 +1141,7 @@ class GitCheck(GlobalCheck):
         if not os.path.exists(gitdir):
             return None
 
-        #Get title of most recent commit
+        # Get title of most recent commit
         subp = subprocess.Popen(
             ['git', 'log', '--no-merges', '--pretty=%s', '-1'],
             stdout=subprocess.PIPE)
@@ -1161,9 +1161,9 @@ class OnceGitCheckCommitTitleBug(GitCheck):
     """
     name = "GitCheckCommitTitleBug"
 
-    #From https://github.com/openstack/openstack-ci-puppet
+    # From https://github.com/openstack/openstack-ci-puppet
     #       /blob/master/modules/gerrit/manifests/init.pp#L74
-    #Changeid|bug|blueprint
+    # Changeid|bug|blueprint
     GIT_REGEX = re.compile(
         r'(I[0-9a-f]{8,40})|'
         '([Bb]ug|[Ll][Pp])[\s\#:]*(\d+)|'
@@ -1172,7 +1172,7 @@ class OnceGitCheckCommitTitleBug(GitCheck):
     def run_once(self):
         title = self._get_commit_title()
 
-        #NOTE(jogo) if match regex but over 3 words, acceptable title
+        # NOTE(jogo) if match regex but over 3 words, acceptable title
         if (title and self.GIT_REGEX.search(title) is not None
                 and len(title.split()) <= 3):
             return (1, 0,
