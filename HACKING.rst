@@ -57,6 +57,7 @@ Imports
 
 - imports from ``migrate`` package
 - imports from ``sqlalchemy`` package
+- imports from ``oslo-incubator.openstack.common.gettextutils`` module
 
 Example::
 
