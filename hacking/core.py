@@ -1093,7 +1093,7 @@ def hacking_no_cr(physical_line):
 
 
 @flake8ext
-def hacking_no_backsplash_line_continuation(logical_line, tokens):
+def hacking_no_backslash_line_continuation(logical_line, tokens):
     r"""Wrap lines in parentheses and not a backslash for line continuation.
 
     Okay: a = (5 +\n     6)
