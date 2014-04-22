@@ -245,7 +245,7 @@ def hacking_has_only_comments(physical_line, filename, lines, line_number):
 
 
 @flake8ext
-def hacking_except_format(logical_line, physical_line):
+def hacking_except_format(logical_line, physical_line, noqa):
     r"""Check for 'except:'.
 
     OpenStack HACKING guide recommends not using except:
@@ -256,15 +256,14 @@ def hacking_except_format(logical_line, physical_line):
     H201: except:
     Okay: try:\n    pass\nexcept:  # noqa\n    pass
     """
-    if pep8.noqa(physical_line):
+    if noqa:
         return
-
     if logical_line.startswith("except:"):
         yield 6, "H201: no 'except:' at least use 'except Exception:'"
 
 
 @flake8ext
-def hacking_except_format_assert(logical_line, physical_line):
+def hacking_except_format_assert(logical_line, physical_line, noqa):
     r"""Check for 'assertRaises(Exception'.
 
     OpenStack HACKING guide recommends not using assertRaises(Exception...):
@@ -277,16 +276,15 @@ def hacking_except_format_assert(logical_line, physical_line):
     Okay: self.assertRaises(Exception)  # noqa
     Okay: self.assertRaises(Exception, foo)  # noqa
     """
-    if pep8.noqa(physical_line):
+    if noqa:
         return
-
     if re.match(r"self\.assertRaises\(Exception[,\)]", logical_line):
         yield 1, "H202: assertRaises Exception too broad"
 
 
 @skip_on_py3
 @flake8ext
-def hacking_python3x_except_compatible(logical_line, physical_line):
+def hacking_python3x_except_compatible(logical_line, physical_line, noqa):
     r"""Check for except statements to be Python 3.x compatible
 
     As of Python 3.x, the construct 'except x,y:' has been removed.
@@ -298,7 +296,7 @@ def hacking_python3x_except_compatible(logical_line, physical_line):
     H231: try:\n    pass\nexcept AttributeError, e:\n    pass
     Okay: try:\n    pass\nexcept AttributeError, e:  # noqa\n    pass
     """
-    if pep8.noqa(physical_line):
+    if noqa:
         return
 
     def is_old_style_except(logical_line):
@@ -340,7 +338,7 @@ def hacking_python3x_octal_literals(logical_line, tokens):
 
 @skip_on_py3
 @flake8ext
-def hacking_python3x_print_function(logical_line, physical_line):
+def hacking_python3x_print_function(logical_line, physical_line, noqa):
     r"""Check that all print occurrences look like print functions.
 
     Check that all occurrences of print look like functions, not
@@ -357,7 +355,7 @@ def hacking_python3x_print_function(logical_line, physical_line):
     H233: print msg,
     H233: print
     """
-    if pep8.noqa(physical_line):
+    if noqa:
         return
     for match in re.finditer(r"\bprint(?:$|\s+[^\(])", logical_line):
         yield match.start(0), (
@@ -399,7 +397,7 @@ def hacking_no_assert_underscore(logical_line, tokens):
 
 
 @flake8ext
-def hacking_python3x_metaclass(logical_line, physical_line):
+def hacking_python3x_metaclass(logical_line, physical_line, noqa):
     r"""Check for metaclass to be Python 3.x compatible.
 
     Okay: @six.add_metaclass(Meta)\nclass Foo():\n    pass
@@ -411,7 +409,7 @@ def hacking_python3x_metaclass(logical_line, physical_line):
     H236: class Foo():\n    __metaclass__ = \\\n        Meta
     Okay: class Foo():\n    __metaclass__ = Meta  # noqa
     """
-    if pep8.noqa(physical_line):
+    if noqa:
         return
     split_line = logical_line.split()
     if(len(split_line) > 2 and split_line[0] == '__metaclass__' and
@@ -465,7 +463,7 @@ RE_RELATIVE_IMPORT = re.compile('^from\s*[.]')
 
 
 @flake8ext
-def hacking_import_rules(logical_line, physical_line, filename):
+def hacking_import_rules(logical_line, physical_line, filename, noqa):
     r"""Check for imports.
 
     OpenStack HACKING guide recommends one import per line:
@@ -500,7 +498,7 @@ def hacking_import_rules(logical_line, physical_line, filename):
     # TODO(mordred: We need to split this into 4 different checks so that they
     # can be disabled by command line switches properly
 
-    if pep8.noqa(physical_line):
+    if noqa:
         return
 
     def is_module_for_sure(mod, search_path=sys.path):
@@ -635,7 +633,8 @@ def _get_import_type(module):
 
 @flake8ext
 def hacking_import_groups(logical_line, blank_lines, previous_logical,
-                          indent_level, previous_indent_level, physical_line):
+                          indent_level, previous_indent_level, physical_line,
+                          noqa):
     r"""Check that imports are grouped correctly.
 
     OpenStack HACKING guide recommendation for imports:
@@ -649,7 +648,7 @@ def hacking_import_groups(logical_line, blank_lines, previous_logical,
     H305: import os\nimport six
     H305: import os\nimport znon_existent_package
     """
-    if (pep8.noqa(physical_line) or blank_lines > 0 or
+    if (noqa or blank_lines > 0 or
             indent_level != previous_indent_level):
         return
 
@@ -714,7 +713,7 @@ together_data = ImportGroupData()
 @flake8ext
 def hacking_import_groups_together(logical_line, blank_lines, indent_level,
                                    previous_indent_level, line_number,
-                                   physical_line, filename):
+                                   physical_line, filename, noqa):
     r"""Check that like imports are grouped together.
 
     OpenStack HACKING guide recommendation for imports:
@@ -728,7 +727,7 @@ def hacking_import_groups_together(logical_line, blank_lines, indent_level,
         together_data.current_group = None
     together_data.current_filename = filename
 
-    if pep8.noqa(physical_line):
+    if noqa:
         return
 
     normalized_line = import_normalize(logical_line.strip()).split()
@@ -925,7 +924,7 @@ def hacking_docstring_summary(physical_line, previous_logical, tokens):
 
 
 @flake8ext
-def hacking_no_locals(logical_line, physical_line, tokens):
+def hacking_no_locals(logical_line, physical_line, tokens, noqa):
     """Do not use locals() for string formatting.
 
     Okay: 'locals()'
@@ -935,7 +934,7 @@ def hacking_no_locals(logical_line, physical_line, tokens):
     H501: print("%(something)" % locals())
     Okay: print("%(something)" % locals())  # noqa
     """
-    if pep8.noqa(physical_line):
+    if noqa:
         return
     for_formatting = False
     for token_type, text, start, _, _ in tokens:
