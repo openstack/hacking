@@ -79,7 +79,7 @@ def load_tests(loader, tests, pattern):
             continue
         check = entry.load()
         name = entry.attrs[0]
-        if six.PY3 and check.skip_on_py3:
+        if check.skip_on_py3 and six.PY3:
             continue
         for (lineno, (raw, (code, source))) in enumerate(_get_lines(check)):
             lines = [part.replace(r'\t', '\t') + '\n'

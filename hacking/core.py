@@ -101,6 +101,7 @@ class GlobalCheck(object):
 
     name = None
     version = '0.0.1'
+    skip_on_py3 = False
     _has_run = set()
 
     def __init__(self, tree, *args):
