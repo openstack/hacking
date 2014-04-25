@@ -100,28 +100,6 @@ def import_normalize(line):
         return line
 
 
-@flake8ext
-def hacking_no_locals(logical_line, physical_line, tokens, noqa):
-    """Do not use locals() for string formatting.
-
-    Okay: 'locals()'
-    Okay: 'locals'
-    Okay: locals()
-    Okay: print(locals())
-    H501: print("%(something)" % locals())
-    Okay: print("%(something)" % locals())  # noqa
-    """
-    if noqa:
-        return
-    for_formatting = False
-    for token_type, text, start, _, _ in tokens:
-        if text == "%" and token_type == tokenize.OP:
-            for_formatting = True
-        if (for_formatting and token_type == tokenize.NAME and text ==
-                "locals" and "locals()" in logical_line):
-            yield (start[1], "H501: Do not use locals() for string formatting")
-
-
 FORMAT_RE = re.compile("%(?:"
                        "%|"           # Ignore plain percents
                        "(\(\w+\))?"   # mapping key
