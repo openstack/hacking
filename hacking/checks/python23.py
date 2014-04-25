@@ -48,7 +48,7 @@ def hacking_python3x_except_compatible(logical_line, physical_line, noqa):
 
 @core.skip_on_py3
 @core.flake8ext
-def hacking_python3x_octal_literals(logical_line, tokens):
+def hacking_python3x_octal_literals(logical_line, tokens, noqa):
     r"""Check for octal literals in Python 3.x compatible form.
 
     As of Python 3.x, the construct "0755" has been removed.
@@ -62,7 +62,10 @@ def hacking_python3x_octal_literals(logical_line, tokens):
     Okay: f(000)
     Okay: MiB = 1.0415
     H232: f(0755)
+    Okay: f(0755)  # noqa
     """
+    if noqa:
+        return
 
     for token_type, text, _, _, _ in tokens:
         if token_type == tokenize.NUMBER:
@@ -100,15 +103,19 @@ def hacking_python3x_print_function(logical_line, physical_line, noqa):
 
 
 @core.flake8ext
-def hacking_no_assert_equals(logical_line, tokens):
+def hacking_no_assert_equals(logical_line, tokens, noqa):
     r"""assert(Not)Equals() is deprecated, use assert(Not)Equal instead.
 
     Okay: self.assertEqual(0, 0)
     Okay: self.assertNotEqual(0, 1)
     H234: self.assertEquals(0, 0)
     H234: self.assertNotEquals(0, 1)
+    Okay: self.assertEquals(0, 0)  # noqa
+    Okay: self.assertNotEquals(0, 1)  # noqa
     """
 
+    if noqa:
+        return
     for token_type, text, start_index, _, _ in tokens:
 
         if token_type == tokenize.NAME:
@@ -118,13 +125,15 @@ def hacking_no_assert_equals(logical_line, tokens):
 
 
 @core.flake8ext
-def hacking_no_assert_underscore(logical_line, tokens):
+def hacking_no_assert_underscore(logical_line, tokens, noqa):
     r"""assert_() is deprecated, use assertTrue instead.
 
     Okay: self.assertTrue(foo)
     H235: self.assert_(foo)
+    Okay: self.assert_(foo)  # noqa
     """
-
+    if noqa:
+        return
     for token_type, text, start_index, _, _ in tokens:
 
         if token_type == tokenize.NAME and text == "assert_":
@@ -173,7 +182,7 @@ removed_modules = [
 
 
 @core.flake8ext
-def hacking_no_removed_module(logical_line):
+def hacking_no_removed_module(logical_line, noqa):
     r"""Check for removed modules in Python 3.
 
     Examples:
@@ -182,9 +191,12 @@ def hacking_no_removed_module(logical_line):
     Okay: from os import (path as p)
     Okay: import os.path
     H237: import thread
+    Okay: import thread  # noqa
     H237: import commands
     H237: import md5 as std_md5
     """
+    if noqa:
+        return
     line = core.import_normalize(logical_line.strip())
     if line and line.split()[0] == 'import':
         module_name = line.split()[1].split('.')[0]

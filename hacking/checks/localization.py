@@ -92,19 +92,23 @@ def check_i18n():
 
 
 @core.flake8ext
-def hacking_localization_strings(logical_line, tokens):
+def hacking_localization_strings(logical_line, tokens, noqa):
     r"""Check localization in line.
 
     Okay: _("This is fine")
     Okay: _("This is also fine %s")
     Okay: _("So is this %s, %(foo)s") % {foo: 'foo'}
     H701: _('')
+    Okay: _('')  # noqa
     H702: _("Bob" + " foo")
+    Okay: _("Bob" + " foo")  # noqa
     H702: _("Bob %s" % foo)
     # H703 check is not quite right, disabled by removing colon
     H703 _("%s %s" % (foo, bar))
     """
     # TODO(sdague) actually get these tests working
+    if noqa:
+        return
     gen = check_i18n()
     next(gen)
     try:
