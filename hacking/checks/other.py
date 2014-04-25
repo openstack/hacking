@@ -14,39 +14,6 @@ from hacking import core
 
 
 @core.flake8ext
-def hacking_is_not(logical_line):
-    r"""Check for use of 'is not' for testing unequal identities.
-
-    Okay: if x is not y:\n    pass
-    H901: if not X is Y
-    H901: if not X.B is Y
-    """
-    split_line = logical_line.split()
-    if (len(split_line) == 5 and split_line[0] == 'if' and
-            split_line[1] == 'not' and split_line[3] == 'is'):
-                yield (logical_line.find('not'), "H901: Use the 'is not' "
-                       "operator when testing for unequal identities")
-
-
-@core.flake8ext
-def hacking_not_in(logical_line):
-    r"""Check for use of "not in" for evaluating membership.
-
-    Okay: if x not in y:\n    pass
-    Okay: if not (X in Y or X is Z):\n    pass
-    Okay: if not (X in Y):\n    pass
-    H902: if not X in Y
-    H902: if not X.B in Y
-    """
-    split_line = logical_line.split()
-    if (len(split_line) == 5 and split_line[0] == 'if' and
-            split_line[1] == 'not' and split_line[3] == 'in' and not
-            split_line[2].startswith('(')):
-                yield (logical_line.find('not'), "H902: Use the 'not in' "
-                       "operator for collection membership evaluation")
-
-
-@core.flake8ext
 def hacking_no_cr(physical_line):
     r"""Check that we only use newlines not carriage returns.
 
