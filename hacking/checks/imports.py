@@ -186,9 +186,16 @@ def _get_import_type(module):
         return cache_type('stdlib')
     if 'site-packages' in path or 'dist-packages' in path:
         return cache_type('third-party')
-    if (path.startswith(stdlib_path_prefix) or
-            path.startswith(sys.prefix) or
-            path == module):
+    std_paths = [stdlib_path_prefix, sys.prefix]
+
+    # NOTE(imelnikov): if we are in virtualenv, we should consider
+    # real prefix too, as python 3 copies some stdlib modules to
+    # virtualenv, but not all of them.
+    real_prefix = getattr(sys, 'real_prefix', None)
+    if real_prefix is not None:
+        std_paths.append(real_prefix)
+
+    if path == module or any(path.startswith(p) for p in std_paths):
         return cache_type('stdlib')
     return cache_type('third-party')
 
@@ -206,6 +213,7 @@ def hacking_import_groups(logical_line, blank_lines, previous_logical,
 
     Okay: import os\nimport sys\n\nimport six\n\nimport hacking
     Okay: import six\nimport znon_existent_package
+    Okay: import os\nimport threading
     H305: import hacking\nimport os
     H305: import os\nimport six
     H305: import os\nimport znon_existent_package
