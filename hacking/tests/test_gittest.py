@@ -17,7 +17,7 @@ import inspect
 
 import fixtures
 
-import hacking.core
+import hacking.checks.git
 import hacking.tests
 
 
@@ -29,10 +29,11 @@ class HackingGitTestCase(hacking.tests.TestCase):
     def test_run_outside_git(self):
         """Verify that GitChecks don't fail if no .git available."""
 
-        with fixtures.MonkeyPatch('hacking.core.GitCheck._get_commit_title',
-                                  _fake_none_commit_title):
+        with fixtures.MonkeyPatch(
+                'hacking.checks.git.GitCheck._get_commit_title',
+                _fake_none_commit_title):
 
-            for name, obj in inspect.getmembers(hacking.core):
+            for name, obj in inspect.getmembers(hacking.checks.git):
                 if (inspect.isclass(obj) and
-                   isinstance(obj(None), hacking.core.GitCheck)):
+                   isinstance(obj(None), hacking.checks.git.GitCheck)):
                     obj(None).run_once()
