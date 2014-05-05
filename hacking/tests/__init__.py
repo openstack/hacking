@@ -43,3 +43,16 @@ class TestCase(testtools.TestCase):
         if os.environ.get('OS_STDERR_CAPTURE') in _TRUE_VALUES:
             stderr = self.useFixture(fixtures.StringStream('stderr')).stream
             self.useFixture(fixtures.MonkeyPatch('sys.stderr', stderr))
+
+    def assertCheckFails(self, check_func, *args, **kwargs):
+        if not list(check_func(*args, **kwargs)):
+            raise AssertionError("Check %s did not fail." %
+                                 check_func.__name__)
+
+    def assertCheckPasses(self, check_func, *args, **kwargs):
+        try:
+            self.assertCheckFails(check_func, *args, **kwargs)
+        except AssertionError:
+            return
+        else:
+            raise AssertionError("Check %s failed." % check_func.__name__)
