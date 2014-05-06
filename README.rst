@@ -36,9 +36,9 @@ Requirements
 ------------
 - The check must already have community support. We do not want to dictate style, only enforce it.
 - The canonical source of the OpenStack Style Guidelines is
-  `doc/source/index.rst
+  `HACKING.rst
   <http://docs.openstack.org/developer/hacking>`_, and hacking just enforces
-  them; so when adding a new check, it must be in docs/source/index.rst
+  them; so when adding a new check, it must be in ``HACKING.rst``
 - False negatives are ok, but false positives are not
 - Cannot be project specific, project specific checks should be `Local Checks`_
 - Docstring tests
