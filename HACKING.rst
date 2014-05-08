@@ -352,8 +352,3 @@ and how to split up commits into a series of changes, consult the
 project wiki:
 
    https://wiki.openstack.org/GitCommitMessages
-
-Further Reading
----------------
-
-  http://google-styleguide.googlecode.com/svn/trunk/pyguide.html
