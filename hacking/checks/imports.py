@@ -250,11 +250,11 @@ def hacking_import_alphabetical(logical_line, blank_lines, previous_logical,
     """
     # handle import x
     # use .lower since capitalization shouldn't dictate order
-    split_line = core.import_normalize(logical_line.strip()).lower().split()
-    split_previous = core.import_normalize(previous_logical.
-                                           strip()).lower().split()
-
     if blank_lines < 1 and indent_level == previous_indent_level:
+        split_line = core.import_normalize(logical_line.
+                                           strip()).lower().split()
+        split_previous = core.import_normalize(previous_logical.
+                                               strip()).lower().split()
         length = [2, 4]
         if (len(split_line) in length and len(split_previous) in length and
                 split_line[0] == "import" and split_previous[0] == "import"):
