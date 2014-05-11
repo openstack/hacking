@@ -4,6 +4,15 @@ Introduction
 hacking is a set of flake8 plugins that test and enforce the `OpenStack
 Style Guidlines <http://docs.openstack.org/developer/hacking>`_.
 
+Installation
+============
+
+hacking is available from pypi, so just run:
+
+  ``pip install hacking``
+
+This will install ``flake8`` with the ``hacking`` and ``pyflake`` plugins
+
 Origin
 ======
 
