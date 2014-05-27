@@ -323,20 +323,6 @@ readable. Follow these guidelines:
 - [H803] The first line of the commit message  must not end with a period
   and must be followed by a single blank line.
 
-- If the change relates to a specific driver (libvirt, xenapi, qpid, etc...),
-  begin the first line of the commit message with the driver name, lowercased,
-  followed by a colon.
-
-- Following your brief summary, provide a more detailed description of
-  the patch, manually wrapping the text at 72 characters. This
-  description should provide enough detail that one does not have to
-  refer to external resources to determine its high-level functionality.
-
-- Once you use 'git review', two lines will be appended to the commit
-  message: a blank line followed by a 'Change-Id'. This is important
-  to correlate this commit with a specific review in Gerrit, and it
-  should not be modified.
-
 For further information on constructing high quality commit messages,
 and how to split up commits into a series of changes, consult the
 project wiki:
