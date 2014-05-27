@@ -7,10 +7,10 @@ OpenStack Style Guidelines
 
 General
 -------
-- Use only UNIX style newlines (``\n``), not Windows style (``\r\n``)
-- Wrap long lines in parentheses and not a backslash for line continuation.
-- Do not write ``except:``, use ``except Exception:`` at the very least
-- Include your name with TODOs as in ``# TODO(yourname)``
+- [H903] Use only UNIX style newlines (``\n``), not Windows style (``\r\n``)
+- [H904] Wrap long lines in parentheses and not a backslash for line continuation.
+- [H201] Do not write ``except:``, use ``except Exception:`` at the very least
+- [H101] Include your name with TODOs as in ``# TODO(yourname)``
 - Do not shadow a built-in or reserved word. Example::
 
     def list():
@@ -46,12 +46,12 @@ General
 
 Imports
 -------
-- Do not import objects, only modules (*)
-- Do not import more than one module per line (*)
-- Do not use wildcard ``*`` import (*)
-- Do not make relative imports
+- [H302] Do not import objects, only modules (*)
+- [H301] Do not import more than one module per line (*)
+- [H303] Do not use wildcard ``*`` import (*)
+- [H304] Do not make relative imports
 - Order your imports by the full module path
-- Organize your imports according to the following template
+- [H305 H306 H307] Organize your imports according to the following template
 
 (*) exceptions are:
 
@@ -95,6 +95,13 @@ Example::
 
 Docstrings
 ----------
+- [H401] Docstrings should not start with a space.
+- [H402] The first line of a docstring should end with punctuation.
+- [H403] Multi line docstrings should end on a new line.
+- [H404] Multi line docstrings should start without a leading new line.
+- [H405] Multi line docstrings should start with a one line summary followed
+  by an empty line.
+
 Example::
 
   """A one line docstring looks like this and ends in a period."""
@@ -146,8 +153,9 @@ Example::
       },
   }
 
-Do not use ``locals()`` for formatting strings, it is not clear as using
-explicit dictionaries and can hide errors during refactoring.
+
+- [H501] Do not use ``locals()`` for formatting strings, it is not clear as using
+   explicit dictionaries and can hide errors during refactoring.
 
 Calling Methods
 ---------------
@@ -189,22 +197,21 @@ Example::
     msg = _("An error occurred")
     raise HTTPBadRequest(explanation=msg)
 
-If you have a variable to place within the string, first internationalize the
-template string then do the replacement.
+- [H702] If you have a variable to place within the string, first
+  internationalize the template string then do the replacement.
 
-Example::
+  Example::
 
-    msg = _("Missing parameter: %s") % ("flavor")
-    LOG.error(msg)
+      msg = _("Missing parameter: %s") % ("flavor")
+      LOG.error(msg)
 
-If you have multiple variables to place in the string, use keyword parameters.
-This helps our translators reorder parameters when needed.
+- [H703] If you have multiple variables to place in the string, use keyword
+  parameters. This helps our translators reorder parameters when needed.
 
-Example::
+  Example::
 
-    msg = _("The server with id %(s_id)s has no key %(m_key)s")
-    LOG.error(msg % {"s_id": "1234", "m_key": "imageId"})
-
+      msg = _("The server with id %(s_id)s has no key %(m_key)s")
+      LOG.error(msg % {"s_id": "1234", "m_key": "imageId"})
 
 Python 3.x compatibility
 ------------------------
@@ -212,7 +219,7 @@ OpenStack code should become Python 3.x compatible. That means all Python 2.x-on
 constructs or dependencies should be avoided. In order to start making code
 Python 3.x compatible before it can be is fully Python 3.x compatible, we have checks for Python 2.x-only constructs:
 
-- ``except``. Instead of::
+- [H231] ``except``. Instead of::
 
     except x,y:
 
@@ -220,22 +227,22 @@ Python 3.x compatible before it can be is fully Python 3.x compatible, we have c
 
     except x as y:
 
-- Python 3.x has become more strict regarding octal string
+- [H232] Python 3.x has become more strict regarding octal string
   literals. Use ``0o755`` instead of ``0755``. Similarly, explicit use of long
   literals (``01234L``) should be avoided.
 
-- The ``print`` operator can be avoided by using::
+- [H233] The ``print`` operator can be avoided by using::
 
     from __future__ import print_function
 
   at the top of your module.
 
-- ``assertEquals()`` logs a DeprecationWarning in Python 3.x, use
+- [H234] ``assertEquals()`` logs a DeprecationWarning in Python 3.x, use
   ``assertEqual()`` instead. The same goes for ``assertNotEquals()``.
 
-- ``assert_()`` is deprecated in Python 3.x, use ``assertTrue()`` instead.
+- [H235] ``assert_()`` is deprecated in Python 3.x, use ``assertTrue()`` instead.
 
-- Use ``six.add_metaclass`` instead of ``__metaclass__``.
+- [H236] Use ``six.add_metaclass`` instead of ``__metaclass__``.
 
   Example::
 
@@ -261,17 +268,17 @@ be a success condition or a failure condition, including an exception.
 When asserting that a particular exception is raised, the most specific
 exception possible should be used.
 
-In particular, testing for ``Exception`` being raised is almost always a
-mistake since it will match (almost) every exception, even those
-unrelated to the exception intended to be tested.
+- [H202] Testing for ``Exception`` being raised is almost always a
+  mistake since it will match (almost) every exception, even those
+  unrelated to the exception intended to be tested.
 
-This applies to catching exceptions manually with a try/except block,
-or using ``assertRaises()``.
+  This applies to catching exceptions manually with a try/except block,
+  or using ``assertRaises()``.
 
-Example::
+  Example::
 
-    self.assertRaises(exception.InstanceNotFound, db.instance_get_by_uuid,
-                          elevated, instance_uuid)
+      self.assertRaises(exception.InstanceNotFound, db.instance_get_by_uuid,
+                            elevated, instance_uuid)
 
 
 oslo-incubator
@@ -302,8 +309,8 @@ following capitalization:
 OpenStack Licensing
 -------------------
 
-Newly contributed Source Code should be licensed under the Apache 2.0 license.
-All source files should have the following header::
+- [H102 H103] Newly contributed Source Code should be licensed under the
+  Apache 2.0 license. All source files should have the following header::
 
     #  Licensed under the Apache License, Version 2.0 (the "License"); you may
     #  not use this file except in compliance with the License. You may obtain
@@ -317,32 +324,34 @@ All source files should have the following header::
     #  License for the specific language governing permissions and limitations
     #  under the License.
 
-Files with no code shouldn't contain any license header nor comments, and
-must be left completely empty.
+- [H104] Files with no code shouldn't contain any license header nor comments,
+  and must be left completely empty.
 
 Commit Messages
 ---------------
 Using a common format for commit messages will help keep our git history
 readable. Follow these guidelines:
 
-  First, provide a brief summary of 50 characters or less.  Summaries
+- [H802] First, provide a brief summary of 50 characters or less.  Summaries
   of greater then 72 characters will be rejected by the gate.
 
-  The first line of the commit message should provide an accurate
+- [H801] The first line of the commit message should provide an accurate
   description of the change, not just a reference to a bug or
-  blueprint. It must not end with a period and must be followed by
-  a single blank line.
+  blueprint.
 
-  If the change relates to a specific driver (libvirt, xenapi, qpid, etc...),
+- [H803] The first line of the commit message  must not end with a period
+  and must be followed by a single blank line.
+
+- If the change relates to a specific driver (libvirt, xenapi, qpid, etc...),
   begin the first line of the commit message with the driver name, lowercased,
   followed by a colon.
 
-  Following your brief summary, provide a more detailed description of
+- Following your brief summary, provide a more detailed description of
   the patch, manually wrapping the text at 72 characters. This
   description should provide enough detail that one does not have to
   refer to external resources to determine its high-level functionality.
 
-  Once you use 'git review', two lines will be appended to the commit
+- Once you use 'git review', two lines will be appended to the commit
   message: a blank line followed by a 'Change-Id'. This is important
   to correlate this commit with a specific review in Gerrit, and it
   should not be modified.
