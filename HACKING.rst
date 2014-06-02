@@ -183,7 +183,7 @@ Example::
 
   Example::
 
-      msg = _("Missing parameter: %s") % ("flavor")
+      msg = _LE("Missing parameter: %s") % ("flavor")
       LOG.error(msg)
 
 - [H703] If you have multiple variables to place in the string, use keyword
@@ -191,8 +191,12 @@ Example::
 
   Example::
 
-      msg = _("The server with id %(s_id)s has no key %(m_key)s")
+      msg = _LE("The server with id %(s_id)s has no key %(m_key)s")
       LOG.error(msg % {"s_id": "1234", "m_key": "imageId"})
+
+.. seealso::
+
+   * `oslo.i18n Guidelines <http://docs.openstack.org/developer/oslo.i18n/guidelines.html>`__
 
 Python 3.x compatibility
 ------------------------
