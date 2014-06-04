@@ -32,7 +32,8 @@ Imports
 - [H303] Do not use wildcard ``*`` import (*)
 - [H304] Do not make relative imports
 - Order your imports by the full module path
-- [H305 H306 H307] Organize your imports according to the following template
+- [H305 H306 H307] Organize your imports according to the `Import order
+  template`_ and `Real-world Import Order Examples`_ below.
 
 (*) exceptions are:
 
@@ -40,7 +41,10 @@ Imports
 - imports from ``sqlalchemy`` package
 - imports from ``oslo-incubator.openstack.common.gettextutils`` module
 
-Example::
+Import order template
+^^^^^^^^^^^^^^^^^^^^^
+
+::
 
   {{stdlib imports in human alphabetical order}}
   \n
@@ -51,9 +55,8 @@ Example::
   \n
   {{begin your code}}
 
-
-Human Alphabetical Order Examples
----------------------------------
+Real-world Import Order Examples
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Example::
 
   import httplib
