@@ -201,7 +201,7 @@ def _get_import_type(module):
 
 
 @core.flake8ext
-def hacking_import_groups(logical_line, blank_lines, previous_logical,
+def hacking_import_groups(logical_line, blank_before, previous_logical,
                           indent_level, previous_indent_level, physical_line,
                           noqa):
     r"""Check that imports are grouped correctly.
@@ -218,7 +218,7 @@ def hacking_import_groups(logical_line, blank_lines, previous_logical,
     H305: import os\nimport six
     H305: import os\nimport znon_existent_package
     """
-    if (noqa or blank_lines > 0 or
+    if (noqa or blank_before > 0 or
             indent_level != previous_indent_level):
         return
 
@@ -237,7 +237,7 @@ def hacking_import_groups(logical_line, blank_lines, previous_logical,
 
 
 @core.flake8ext
-def hacking_import_alphabetical(logical_line, blank_lines, previous_logical,
+def hacking_import_alphabetical(logical_line, blank_before, previous_logical,
                                 indent_level, previous_indent_level):
     r"""Check for imports in alphabetical order.
 
@@ -247,10 +247,11 @@ def hacking_import_alphabetical(logical_line, blank_lines, previous_logical,
     Okay: import os\nimport sys\n\nimport nova\nfrom nova import test
     Okay: import os\nimport sys
     H306: import sys\nimport os
+    Okay: import sys\n\n# foo\nimport six
     """
     # handle import x
     # use .lower since capitalization shouldn't dictate order
-    if blank_lines < 1 and indent_level == previous_indent_level:
+    if blank_before < 1 and indent_level == previous_indent_level:
         split_line = core.import_normalize(logical_line.
                                            strip()).lower().split()
         split_previous = core.import_normalize(previous_logical.
