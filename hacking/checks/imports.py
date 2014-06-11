@@ -48,6 +48,7 @@ def hacking_import_rules(logical_line, physical_line, filename, noqa):
     Okay: import os.path
     Okay: from nova.compute import rpcapi
     Okay: from os.path import dirname as dirname2  # noqa
+    Okay: from six.moves.urllib import parse
     H302: from os.path import dirname as dirname2
     H302: from os.path import (dirname as dirname2)
     H303: from os.path import *
@@ -65,6 +66,9 @@ def hacking_import_rules(logical_line, physical_line, filename, noqa):
 
     def is_module_for_sure(mod, search_path=sys.path):
         mod = mod.replace('(', '')  # Ignore parentheses
+        for finder in sys.meta_path:
+            if finder.find_module(mod) is not None:
+                return True
         try:
             mod_name = mod
             while '.' in mod_name:
@@ -130,7 +134,7 @@ def hacking_import_rules(logical_line, physical_line, filename, noqa):
             if 'from' == split_line[0] and split_line_len > 3:
                 mod = '.'.join((split_line[1], split_line[3]))
                 if core.is_import_exception(mod):
-                        return
+                    return
                 if RE_RELATIVE_IMPORT.search(logical_line):
                     yield logical_line.find('.'), (
                         "H304: No relative imports. '%s' is a relative import"
