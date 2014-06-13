@@ -95,7 +95,7 @@ Example::
 
   Then a new paragraph after a newline that explains in more detail any
   general information about the function, class or method. Example usages
-  are also great to have here if it is a complex class for function.
+  are also great to have here if it is a complex class or function.
 
   When writing the docstring for a class, an extra line should be placed
   after the closing quotations. For more in-depth explanations for these
