@@ -92,16 +92,12 @@ Example::
 Docstrings
 ----------
 - [H401] Docstrings should not start with a space.
-- [H402] The first line of a docstring should end with punctuation.
 - [H403] Multi line docstrings should end on a new line.
 - [H404] Multi line docstrings should start without a leading new line.
 - [H405] Multi line docstrings should start with a one line summary followed
   by an empty line.
 
 Example::
-
-  """A one line docstring looks like this and ends in a period."""
-
 
   """A multi line docstring has a one-line summary, less than 80 characters.
 
