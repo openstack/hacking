@@ -339,9 +339,6 @@ readable. Follow these guidelines:
   description of the change, not just a reference to a bug or
   blueprint.
 
-- [H803] The first line of the commit message  must not end with a period
-  and must be followed by a single blank line.
-
 For further information on constructing high quality commit messages,
 and how to split up commits into a series of changes, consult the
 project wiki:
