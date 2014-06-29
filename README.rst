@@ -41,6 +41,19 @@ Each check is a pep8 plugin so read
 
 - https://github.com/jcrocholl/pep8/blob/master/docs/developer.rst#contribute
 
+The focus of new or changed rules should be to do one of the following
+
+- Substantially increase the reviewability of the code (eg: H301,2,3
+  as they make it easy to understand where symbols come from)
+- Catch a common programming error that may arrise in the future (H201)
+- Prevent a situation that would 100% of the time be -1ed by
+  developers (H903)
+
+But, as always, remember that these are Guidelines. Treat them as
+such. There are always times for exceptions. All new rules should
+support noqa.
+
+
 Requirements
 ------------
 - The check must already have community support. We do not want to dictate style, only enforce it.

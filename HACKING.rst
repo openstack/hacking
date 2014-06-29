@@ -1,9 +1,21 @@
 OpenStack Style Guidelines
 ==========================
 
+OpenStack has a set of style guidelines for clarity. OpenStack is a
+very large code base (over 1 Million lines of python), spanning dozens
+of git trees, with over a thousand developers contributing every 12
+months. As such common style helps developers understand code in
+reviews, move between projects smoothly, and overall make the code
+more maintainable.
+
+
+Step 0
+------
+
 - Step 1: Read http://www.python.org/dev/peps/pep-0008/
 - Step 2: Read http://www.python.org/dev/peps/pep-0008/ again
 - Step 3: Read on
+
 
 General
 -------
