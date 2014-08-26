@@ -146,14 +146,14 @@ def hacking_no_assert_underscore(logical_line, tokens, noqa):
 def hacking_python3x_metaclass(logical_line, physical_line, noqa):
     r"""Check for metaclass to be Python 3.x compatible.
 
-    Okay: @six.add_metaclass(Meta)\nclass Foo():\n    pass
-    Okay: @six.with_metaclass(Meta)\nclass Foo():\n    pass
-    Okay: class Foo():\n    '''docstring\n\n    __metaclass__ = Meta\n'''
-    H236: class Foo():\n    __metaclass__ = Meta
-    H236: class Foo():\n    foo=bar\n    __metaclass__ = Meta
-    H236: class Foo():\n    '''docstr.'''\n    __metaclass__ = Meta
-    H236: class Foo():\n    __metaclass__ = \\\n        Meta
-    Okay: class Foo():\n    __metaclass__ = Meta  # noqa
+    Okay: @six.add_metaclass(Meta)\nclass Foo(object):\n    pass
+    Okay: @six.with_metaclass(Meta)\nclass Foo(object):\n    pass
+    Okay: class Foo(object):\n    '''docstring\n\n    __metaclass__ = Meta\n'''
+    H236: class Foo(object):\n    __metaclass__ = Meta
+    H236: class Foo(object):\n    foo=bar\n    __metaclass__ = Meta
+    H236: class Foo(object):\n    '''docstr.'''\n    __metaclass__ = Meta
+    H236: class Foo(object):\n    __metaclass__ = \\\n        Meta
+    Okay: class Foo(object):\n    __metaclass__ = Meta  # noqa
     """
     if noqa:
         return
@@ -203,3 +203,24 @@ def hacking_no_removed_module(logical_line, noqa):
         if module_name in removed_modules:
             yield 0, ("H237: module %s is "
                       "removed in Python 3" % module_name)
+
+
+RE_NEW_STYLE_CLASS = re.compile(r"^class [^(]+\([^)]+\):")
+
+
+@core.flake8ext
+def hacking_no_old_style_class(logical_line, noqa):
+    r"""Check for old style classes.
+
+    Examples:
+    Okay: class Foo(object):\n    pass
+    Okay: class Foo(Bar, Baz):\n    pass
+    Okay: class Foo(object, Baz):\n    pass
+    H238: class Bar:\n    pass
+    """
+    if noqa:
+        return
+    line = core.import_normalize(logical_line.strip())
+    if line.startswith("class ") and not RE_NEW_STYLE_CLASS.match(line):
+            yield (0, "H238: old style class declaration, "
+                   "use new style (inherit from `object`)")

@@ -249,6 +249,16 @@ Python 3.x compatible before it can be is fully Python 3.x compatible, we have c
     @six.add_metaclass(Meta)
     class YourClass():
 
+- [H238] Old style classes are deprecated and no longer available in Python 3
+  (they are converted to new style classes). In order to avoid any unwanted side
+  effects all classes should be declared using new style. See `the new-style
+  class documentation <https://www.python.org/doc/newstyle/>`_ for reference on
+  the differences.
+
+  Example::
+
+    class Foo(object):
+        pass
 
 Creating Unit Tests
 -------------------

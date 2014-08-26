@@ -559,7 +559,7 @@ def hacking_import_alphabetical(logical_line, blank_before, previous_logical,
                        % (split_previous[1], split_line[1]))
 
 
-class ImportGroupData:
+class ImportGroupData(object):
     """A class to hold persistent state data for import group checks.
 
     To verify import grouping, it is necessary to know the current group

@@ -51,13 +51,13 @@ def hacking_docstring_multiline_end(physical_line, previous_logical, tokens):
 
     Okay: '''foobar\nfoo\nbar\n'''
     Okay: def foo():\n    '''foobar\n\nfoo\nbar\n'''
-    Okay: class Foo:\n    '''foobar\n\nfoo\nbar\n'''
+    Okay: class Foo(object):\n    '''foobar\n\nfoo\nbar\n'''
     Okay: def foo():\n    a = '''not\na\ndocstring'''
     Okay: def foo():\n    a = '''not\na\ndocstring'''  # blah
     Okay: def foo():\n    pass\n'''foobar\nfoo\nbar\n   d'''
     H403: def foo():\n    '''foobar\nfoo\nbar\ndocstring'''
     H403: def foo():\n    '''foobar\nfoo\nbar\npretend raw: r'''
-    H403: class Foo:\n    '''foobar\nfoo\nbar\ndocstring'''\n\n
+    H403: class Foo(object):\n    '''foobar\nfoo\nbar\ndocstring'''\n\n
     """
     docstring = is_docstring(tokens, previous_logical)
     if docstring:
