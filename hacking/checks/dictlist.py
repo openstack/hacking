@@ -15,15 +15,22 @@ import tokenize
 from hacking import core
 
 
+LOCALS_TEXT_MAP = {
+    'locals': 'locals()',
+    'self': 'self.__dict__'
+}
+
+
 @core.flake8ext
 def hacking_no_locals(logical_line, physical_line, tokens, noqa):
-    """Do not use locals() for string formatting.
+    """Do not use locals() or self.__dict__ for string formatting.
 
     Okay: 'locals()'
     Okay: 'locals'
     Okay: locals()
     Okay: print(locals())
     H501: print("%(something)" % locals())
+    H501: LOG.info(_("%(something)") % self.__dict__)
     Okay: print("%(something)" % locals())  # noqa
     """
     if noqa:
@@ -32,6 +39,8 @@ def hacking_no_locals(logical_line, physical_line, tokens, noqa):
     for token_type, text, start, _, _ in tokens:
         if text == "%" and token_type == tokenize.OP:
             for_formatting = True
-        if (for_formatting and token_type == tokenize.NAME and text ==
-                "locals" and "locals()" in logical_line):
-            yield (start[1], "H501: Do not use locals() for string formatting")
+        if for_formatting and token_type == tokenize.NAME:
+            for k, v in LOCALS_TEXT_MAP.items():
+                if text == k and v in logical_line:
+                    yield (start[1],
+                           "H501: Do not use %s for string formatting" % v)
