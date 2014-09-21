@@ -493,12 +493,16 @@ def hacking_import_groups(logical_line, blank_before, previous_logical,
     third party library imports are together, and project imports are
     together
 
+    This check allows mixing of third-party and stdlib modules so we don't
+    fail on new Python 3 stdlib modules that used to be third-party.
+
     Okay: import os\nimport sys\n\nimport six\n\nimport hacking
     Okay: import six\nimport znon_existent_package
     Okay: import os\nimport threading
+    Okay: import mock\nimport os
     H305: import hacking\nimport os
-    H305: import os\nimport six
-    H305: import os\nimport znon_existent_package
+    H305: import hacking\nimport nonexistent
+    H305: import hacking\nimport mock
     """
     if (noqa or blank_before > 0 or
             indent_level != previous_indent_level):
@@ -507,11 +511,20 @@ def hacking_import_groups(logical_line, blank_before, previous_logical,
     normalized_line = core.import_normalize(logical_line.strip()).split()
     normalized_previous = core.import_normalize(previous_logical.
                                                 strip()).split()
+
+    def compatible(previous, current):
+        if previous == current:
+            return True
+        if ((previous in ['stdlib', 'third-party']) and
+                (current in ['stdlib', 'third-party'])):
+            return True
+        return False
+
     if normalized_line and normalized_line[0] == 'import':
         current_type = _get_import_type(normalized_line[1])
         if normalized_previous and normalized_previous[0] == 'import':
             previous_type = _get_import_type(normalized_previous[1])
-            if current_type != previous_type:
+            if not compatible(previous_type, current_type):
                 yield(0, 'H305: imports not grouped correctly '
                       '(%s: %s, %s: %s)' %
                       (normalized_previous[1], previous_type,
@@ -574,9 +587,16 @@ def hacking_import_groups_together(logical_line, blank_lines, indent_level,
     OpenStack HACKING guide recommendation for imports:
     Imports should be grouped together by type.
 
+    This check allows mixing of third-party libs into the stdlib group in
+    order to accomodate new Python 3 stdlib modules.
+
     Okay: import os\nimport sys
     Okay: try:\n    import foo\nexcept ImportError:\n    pass\n\nimport six
+    Okay: import mock\n\nimport six
+    Okay: import abc\nimport mock\n\nimport six
+    Okay: import eventlet\neventlet.monkey_patch()\n\nimport copy
     H307: import os\n\nimport sys
+    H307: import mock\nimport os\n\nimport sys
     """
     if line_number == 1 or filename != together_data.current_filename:
         together_data.current_group = None
@@ -585,17 +605,34 @@ def hacking_import_groups_together(logical_line, blank_lines, indent_level,
     if noqa:
         return
 
+    def update_current_group(current):
+        if together_data.current_group is None:
+            if current in ['stdlib', 'third-party']:
+                # Assume stdlib until we know otherwise
+                together_data.current_group = 'stdlib'
+                return
+        if (together_data.current_group == 'stdlib' and
+                current == 'third-party' and blank_lines < 1):
+            # Keep the current group stdlib, since there may be third-party
+            # libs in that group
+            return
+        together_data.current_group = current
+
     normalized_line = core.import_normalize(logical_line.strip()).split()
-    if normalized_line and normalized_line[0] == 'import':
-        current_type = _get_import_type(normalized_line[1])
-        previous_import = together_data.current_import
-        together_data.current_import = normalized_line[1]
-        matched = current_type == together_data.current_group
-        together_data.current_group = current_type
-        if (matched and indent_level == previous_indent_level and
-                blank_lines >= 1):
-            yield(0, 'H307: like imports should be grouped together (%s and '
-                  '%s from %s are separated by whitespace)' %
-                  (previous_import,
-                   together_data.current_import,
-                   current_type))
+    if normalized_line:
+        if normalized_line[0] == 'import':
+            current_type = _get_import_type(normalized_line[1])
+            previous_import = together_data.current_import
+            together_data.current_import = normalized_line[1]
+            matched = current_type == together_data.current_group
+            update_current_group(current_type)
+            if (matched and indent_level == previous_indent_level and
+                    blank_lines >= 1):
+                yield(0, 'H307: like imports should be grouped together (%s '
+                      'and %s from %s are separated by whitespace)' %
+                      (previous_import,
+                       together_data.current_import,
+                       current_type))
+        else:
+            # Reset on non-import code
+            together_data.current_group = None
