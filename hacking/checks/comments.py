@@ -16,6 +16,10 @@ import tokenize
 from hacking import core
 
 
+AUTHOR_TAG_RE = (re.compile("^\s*#\s*@?(a|A)uthor:"),
+                 re.compile("^\.\.\s+moduleauthor::"))
+
+
 @core.flake8ext
 def hacking_todo_format(physical_line, tokens):
     """Check for 'TODO()'.
@@ -161,3 +165,18 @@ under the License."""
         print ("<license>!=<apache2>:\n'%s' !=\n'%s'" %
                (content, stripped_apache2))
         return False
+
+
+@core.flake8ext
+def hacking_no_author_tags(physical_line):
+    """Check that no author tags are used.
+
+    H105 don't use author tags
+    """
+    for regex in AUTHOR_TAG_RE:
+        if regex.match(physical_line):
+            physical_line = physical_line.lower()
+            pos = physical_line.find('moduleauthor')
+            if pos < 0:
+                pos = physical_line.find('author')
+            return (pos, "H105: Don't use author tags")
