@@ -1,17 +1,25 @@
 Introduction
 ============
 
-hacking is a set of flake8 plugins that test and enforce the `OpenStack
+hacking is a set of flake8_ plugins that test and enforce the `OpenStack
 Style Guidlines <http://docs.openstack.org/developer/hacking>`_.
+
+.. _flake8: https://flake8.readthedocs.org/en/latest/
+
 
 Installation
 ============
 
-hacking is available from pypi, so just run:
+hacking is available from PyPI_, so just run:
 
-  ``pip install hacking``
+.. code-block:: bash
+
+   $ pip install hacking
 
 This will install ``flake8`` with the ``hacking`` and ``pyflake`` plugins
+
+.. _PyPI: https://pypi.python.org/pypi/hacking
+
 
 Origin
 ======
