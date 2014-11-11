@@ -83,6 +83,7 @@ Example::
   import webob.exc
 
   import nova.api.ec2
+  from nova.api import manager
   from nova.api import openstack
   from nova.auth import users
   from nova.endpoint import cloud
