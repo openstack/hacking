@@ -40,6 +40,21 @@ def flake8ext(f):
     f.name = __name__
     f.version = '0.0.1'
     f.skip_on_py3 = False
+    if not hasattr(f, 'off_by_default'):
+        f.off_by_default = False
+    return f
+
+
+def off_by_default(f):
+    """Decorator to turn check off by default.
+
+    To enable the check use the flake8 select setting in
+    tox.ini.
+
+    flake8 documentation:
+    http://flake8.readthedocs.org/en/latest/extensions.html.
+    """
+    f.off_by_default = True
     return f
 
 

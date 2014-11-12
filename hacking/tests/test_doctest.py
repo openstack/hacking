@@ -37,6 +37,13 @@ class HackingTestCase(hacking.tests.TestCase):
     scenarios = file_cases
 
     def test_pep8(self):
+
+        # NOTE(jecarey): Add tests marked as off_by_default to enable testing
+        turn_on = set(['H106'])
+        if self.options.select:
+            turn_on.update(self.options.select)
+        self.options.select = tuple(turn_on)
+
         report = pep8.BaseReport(self.options)
         checker = pep8.Checker(lines=self.lines, options=self.options,
                                report=report)

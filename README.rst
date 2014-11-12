@@ -53,6 +53,8 @@ But, as always, remember that these are Guidelines. Treat them as
 such. There are always times for exceptions. All new rules should
 support noqa.
 
+If a check needs to be staged in, or it does not apply to every project or its
+branch, it can be added as off by default.
 
 Requirements
 ------------

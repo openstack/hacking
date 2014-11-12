@@ -25,6 +25,7 @@ General
 - [H201] Do not write ``except:``, use ``except Exception:`` at the very least
 - [H101] Include your name with TODOs as in ``# TODO(yourname)``
 - [H105] Don't use author tags.
+- [H106] Don't put vim configuration in source files (off by default)
 - Do not shadow a built-in or reserved word. Example::
 
     def list():
