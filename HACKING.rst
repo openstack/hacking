@@ -251,6 +251,9 @@ Python 3.x compatible before it can be is fully Python 3.x compatible, we have c
     @six.add_metaclass(Meta)
     class YourClass():
 
+- [H237] Don't use modules that were removed in Python 3. Removed module list:
+  http://python3porting.com/stdlib.html#removed-modules
+
 - [H238] Old style classes are deprecated and no longer available in Python 3
   (they are converted to new style classes). In order to avoid any unwanted side
   effects all classes should be declared using new style. See `the new-style
