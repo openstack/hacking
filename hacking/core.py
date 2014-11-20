@@ -19,16 +19,12 @@ Built as a sets of pep8 checks using flake8.
 """
 
 import gettext
-import logging
 import sys
 
 import pbr.util
 import pep8
 
 from hacking import config
-
-# Don't need this for testing
-logging.disable(logging.CRITICAL)
 
 # Import tests need to inject _ properly into the builtins
 kwargs = {}
