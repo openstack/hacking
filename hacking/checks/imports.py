@@ -11,6 +11,7 @@
 #  under the License.
 
 import imp
+import inspect
 import os
 import re
 import sys
@@ -100,7 +101,20 @@ def hacking_import_rules(logical_line, physical_line, filename, noqa):
             else:
                 # NOTE(imelnikov): we imported the thing; if it was module,
                 # it must be there:
-                return mod in sys.modules
+                if mod in sys.modules:
+                    return True
+                else:
+                    # NOTE(dhellmann): If the thing isn't there under
+                    # its own name, look to see if it is a module
+                    # redirection import in one of the oslo libraries
+                    # where we are moving things out of the namespace
+                    # package.
+                    pack_name, _sep, mod_name = mod.rpartition('.')
+                    if pack_name in sys.modules:
+                        the_mod = getattr(sys.modules[pack_name],
+                                          mod_name, None)
+                        return inspect.ismodule(the_mod)
+                    return False
         return True
 
     def is_module(mod):
