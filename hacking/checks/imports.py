@@ -73,7 +73,7 @@ def hacking_import_rules(logical_line, physical_line, filename, noqa):
         try:
             mod_name = mod
             while '.' in mod_name:
-                pack_name, _sep, mod_name = mod.partition('.')
+                pack_name, _sep, mod_name = mod_name.partition('.')
                 f, p, d = imp.find_module(pack_name, search_path)
                 search_path = [p]
             imp.find_module(mod_name, search_path)
