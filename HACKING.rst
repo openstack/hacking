@@ -41,12 +41,12 @@ General
 
 Imports
 -------
-- [H302] Do not import objects, only modules (*)
+- Do not import objects, only modules (*)
 - [H301] Do not import more than one module per line (*)
 - [H303] Do not use wildcard ``*`` import (*)
 - [H304] Do not make relative imports
-- Order your imports by the full module path
-- [H305 H306 H307] Organize your imports according to the `Import order
+- [H306] Order your imports by the full module path
+- Organize your imports according to the `Import order
   template`_ and `Real-world Import Order Examples`_ below.
 
 (*) exceptions are:
