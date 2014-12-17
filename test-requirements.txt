@@ -11,3 +11,10 @@ oslosphinx>=2.2.0  # Apache-2.0
 testrepository>=0.0.18
 testscenarios>=0.4
 testtools>=0.9.36,!=1.2.0
+
+# hacking doesn't use this anywhere, but nova imports this in nova/__init__.py
+# since eventlet is such a common universal import, add it to the hacking test
+# virtualenv, so importing things like 'nova.hacking.checks.factory' will just
+# work.
+# See https://bugs.launchpad.net/hacking/+bug/1403270
+eventlet>=0.15.2
