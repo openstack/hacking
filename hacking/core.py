@@ -74,6 +74,10 @@ IMPORT_EXCEPTIONS += DEFAULT_IMPORT_EXCEPTIONS
 
 
 def is_import_exception(mod):
+    """Check module name to see if import has been whitelisted.
+
+       Import based rules should not run on any whitelisted module
+       """
     return (mod in IMPORT_EXCEPTIONS or
             any(mod.startswith(m + '.') for m in IMPORT_EXCEPTIONS))
 
