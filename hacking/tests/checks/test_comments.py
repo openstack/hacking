@@ -72,7 +72,13 @@ class CoreTestCase(tests.TestCase):
             '# author: Foo Bar'))
 
         self.assertTrue(comments.hacking_no_author_tags(
+            '# authors: Foo Bar'))
+
+        self.assertTrue(comments.hacking_no_author_tags(
             '# Author: Foo Bar'))
+
+        self.assertTrue(comments.hacking_no_author_tags(
+            '# Authors: Foo Bar'))
 
         self.assertTrue(comments.hacking_no_author_tags(
             '.. moduleauthor:: Foo Bar'))
