@@ -17,4 +17,4 @@ testtools>=0.9.36,!=1.2.0
 # virtualenv, so importing things like 'nova.hacking.checks.factory' will just
 # work.
 # See https://bugs.launchpad.net/hacking/+bug/1403270
-eventlet>=0.15.2
+eventlet>=0.16.1
