@@ -205,7 +205,7 @@ def hacking_no_removed_module(logical_line, noqa):
                       "removed in Python 3" % module_name)
 
 
-RE_NEW_STYLE_CLASS = re.compile(r"^class [^(]+\([^)]+\):")
+RE_NEW_STYLE_CLASS = re.compile(r"^class [^(]+\(.+\):")
 
 
 @core.flake8ext
@@ -216,7 +216,9 @@ def hacking_no_old_style_class(logical_line, noqa):
     Okay: class Foo(object):\n    pass
     Okay: class Foo(Bar, Baz):\n    pass
     Okay: class Foo(object, Baz):\n    pass
+    Okay: class Foo(somefunc()):\n    pass
     H238: class Bar:\n    pass
+    H238: class Bar():\n    pass
     """
     if noqa:
         return
