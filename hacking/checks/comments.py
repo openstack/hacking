@@ -16,7 +16,7 @@ import tokenize
 from hacking import core
 
 
-AUTHOR_TAG_RE = (re.compile("^\s*#\s*@?(a|A)uthor:"),
+AUTHOR_TAG_RE = (re.compile("^\s*#\s*@?(a|A)uthors?:"),
                  re.compile("^\.\.\s+moduleauthor::"))
 
 
