@@ -198,8 +198,8 @@ Example::
 
   Example::
 
-      msg = _LE("Missing parameter: %s") % ("flavor")
-      LOG.error(msg)
+      msg = _LE("Missing parameter: %s")
+      LOG.error(msg, "flavor")
 
 - [H703] If you have multiple variables to place in the string, use keyword
   parameters. This helps our translators reorder parameters when needed.
@@ -207,7 +207,7 @@ Example::
   Example::
 
       msg = _LE("The server with id %(s_id)s has no key %(m_key)s")
-      LOG.error(msg % {"s_id": "1234", "m_key": "imageId"})
+      LOG.error(msg, {"s_id": "1234", "m_key": "imageId"})
 
 .. seealso::
 
