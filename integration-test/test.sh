@@ -4,7 +4,7 @@
 # Note: you can clone from a local file with REPO_ROOT=file:////~/path/to/repo
 set -x
 set -e
-REPO_ROOT=${REPO_ROOT:-https://review.openstack.org/p}
+REPO_ROOT=${REPO_ROOT:-git://git.openstack.org}
 if [[ -z "$2" ]]; then
     org=openstack
     project=nova
