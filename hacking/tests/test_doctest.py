@@ -84,7 +84,7 @@ def load_tests(loader, tests, pattern):
         for (lineno, (raw, (code, source))) in enumerate(_get_lines(check)):
             lines = [part.replace(r'\t', '\t') + '\n'
                      for part in source.split(r'\n')]
-            file_cases.append(("%s-line-%s" % (name, lineno),
+            file_cases.append(("%s-%s-line-%s" % (entry.name, name, lineno),
                               dict(lines=lines, raw=raw, options=options,
                                    code=code)))
     return testscenarios.load_tests_apply_scenarios(loader, tests, pattern)
