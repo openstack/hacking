@@ -12,7 +12,12 @@ else
     org=$1
     project=$2
 fi
-git clone $REPO_ROOT/$org/$project --depth=1
+
+if [[ $REPO_ROOT  == file://* ]]; then
+    git clone $REPO_ROOT/$org/$project
+else
+    git clone $REPO_ROOT/$org/$project --depth=1
+fi
 cd $project
 set +e
 flake8 --select H --statistics
