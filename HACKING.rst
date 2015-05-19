@@ -22,11 +22,15 @@ General
 - [H903] Use only UNIX style newlines (``\n``), not Windows style (``\r\n``)
 - It is preferred to wrap long lines in parentheses and not a backslash
   for line continuation.
-- [H201] Do not write ``except:``, use ``except Exception:`` at the very least
-- [H101] Include your name with TODOs as in ``# TODO(yourname)``
-- [H105] Don't use author tags.
-- [H106] Don't put vim configuration in source files (off by default)
-- Do not shadow a built-in or reserved word. Example::
+- [H201] Do not write ``except:``, use ``except Exception:`` at the very least.
+  When catching an exception you should be as specific so you don't mistakenly
+  catch unexpected exceptions.
+- [H101] Include your name with TODOs as in ``# TODO(yourname)``. This makes
+  it easier to find out who the author of the comment was.
+- [H105] Don't use author tags. We use version control instead.
+- [H106] Don't put vim configuration in source files (off by default).
+- Do not shadow a built-in or reserved word. Shadowing built -in or reserved
+  words makes the code harder to understand. Example::
 
     def list():
         return [1, 2, 3]
@@ -42,12 +46,13 @@ General
 
 Imports
 -------
+
 - Do not import objects, only modules (*)
 - [H301] Do not import more than one module per line (*)
 - [H303] Do not use wildcard ``*`` import (*)
 - [H304] Do not make relative imports
-- [H306] Order your imports by the full module path
-- Organize your imports according to the `Import order
+- [H306] Alphabetically order your imports by the full module path.
+  Organize your imports according to the `Import order
   template`_ and `Real-world Import Order Examples`_ below.
 
 (*) exceptions are:
