@@ -20,7 +20,7 @@ Step 0
 General
 -------
 - [H903] Use only UNIX style newlines (``\n``), not Windows style (``\r\n``)
-- It is prefered to wrap long lines in parentheses and not a backslash
+- It is preferred to wrap long lines in parentheses and not a backslash
   for line continuation.
 - [H201] Do not write ``except:``, use ``except Exception:`` at the very least
 - [H101] Include your name with TODOs as in ``# TODO(yourname)``
