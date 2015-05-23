@@ -1,3 +1,5 @@
+.. _StyleGuide:
+
 OpenStack Style Guidelines
 ==========================
 
@@ -12,10 +14,11 @@ more maintainable.
 Step 0
 ------
 
-- Step 1: Read http://www.python.org/dev/peps/pep-0008/
-- Step 2: Read http://www.python.org/dev/peps/pep-0008/ again
+- Step 1: Read `pep8`_
+- Step 2: Read `pep8`_ again
 - Step 3: Read on
 
+.. _`pep8`: http://www.python.org/dev/peps/pep-0008/
 
 General
 -------
