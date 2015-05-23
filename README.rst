@@ -60,9 +60,9 @@ Each check is a pep8 plugin so read
 
 The focus of new or changed rules should be to do one of the following
 
-- Substantially increase the reviewability of the code (eg: H301,2,3
+- Substantially increase the reviewability of the code (eg: H301, H303)
   as they make it easy to understand where symbols come from)
-- Catch a common programming error that may arrise in the future (H201)
+- Catch a common programming error that may arise in the future (H201)
 - Prevent a situation that would 100% of the time be -1ed by
   developers (H903)
 
@@ -75,16 +75,19 @@ branch, it can be added as off by default.
 
 Requirements
 ------------
-- The check must already have community support. We do not want to dictate style, only enforce it.
+- The check must already have community support. We do not want to dictate
+  style, only enforce it.
 - The canonical source of the OpenStack Style Guidelines is
   `HACKING.rst
   <http://docs.openstack.org/developer/hacking>`_, and hacking just enforces
   them; so when adding a new check, it must be in ``HACKING.rst``
 - False negatives are ok, but false positives are not
 - Cannot be project specific, project specific checks should be `Local Checks`_
-- Docstring tests
+- Include extensive tests
 - Registered as entry_points in `setup.cfg <setup.cfg>`_
 - Error code must be in the relevant ``Hxxx`` group
+- The check should not attempt to import modules from the code being checked.
+  Importing random modules, has caused all kinds of trouble for us in the past.
 
 
 Local Checks
