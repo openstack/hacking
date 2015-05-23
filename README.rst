@@ -41,11 +41,14 @@ the process and remove the extra burden from human reviewers.
 Versioning
 ==========
 
-hacking uses the major.minor.maintenance release notation, where maintenance
+hacking uses the ``major.minor.maintenance`` release notation, where maintenance
 releases cannot contain new checks.  This way projects can gate on hacking
-by pinning on the major.minor number while accepting maintenance updates
+by pinning on the ``major.minor`` number while accepting maintenance updates
 without being concerned that a new version will break the gate with a new
 check.
+
+For example a project can depend on ``hacking>=0.10.0,<0.11.0``, and can know
+that ``0.10.1`` will not fail in places where ``0.10.0`` passed.
 
 
 Adding additional checks
