@@ -21,13 +21,22 @@ This will install specific versions of ``flake8`` with the ``hacking``,
 Origin
 ======
 
-Most of the additional style guidelines that OpenStack has taken on came from
-the Google Python Style Guide.
+Hacking started its life out as a text file in Nova's first commit. It was
+initially based on the `Google Python Style Guide`_, and over time more
+OpenStack specific rules were added. Hacking serves several purposes:
 
-- http://google-styleguide.googlecode.com/svn/trunk/pyguide.html
+1. Agree on a common style guide so reviews don't get bogged down on style
+   nit picks. (example: docstring guidelines)
+2. Make code written by many different authors easier to read by making the
+   style more uniform. (example: unix vs windows newlines)
+3. Call out dangerous patterns and avoid them. (example: shadowing built-in
+   or reserved words)
 
-Since then, a few more OpenStack specific ones have been added or modified.
+Initially the hacking style guide was enforced manually by reviewers, but this
+was a big waste of time so hacking, the tool, was born to automate
+the process and remove the extra burden from human reviewers.
 
+.. _`Google Python Style Guide`: http://google-styleguide.googlecode.com/svn/trunk/pyguide.html
 
 Versioning
 ==========
