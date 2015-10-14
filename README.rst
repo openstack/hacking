@@ -1,7 +1,7 @@
 Introduction
 ============
 
-hacking is a set of flake8 plugins that test and enforce the :ref:`StyleGuide`.
+This is a set of flake8 plugins that test and enforce the `StyleGuide <http://docs.openstack.org/developer/hacking/#openstack-style-guidelines>`_.
 
 Hacking pins its dependencies, as a new release of some dependency can break
 hacking based gating jobs. This is because new versions of dependencies can
@@ -76,9 +76,8 @@ Requirements
 ------------
 - The check must already have community support. We do not want to dictate
   style, only enforce it.
-- The canonical source of the OpenStack Style Guidelines is :ref:`StyleGuide`,
-  and hacking just enforces
-  them; so when adding a new check, it must be in ``HACKING.rst``
+- The `StyleGuide`_ is the canonical source of the OpenStack Style Guidelines
+  hacking just enforces them; so when adding a new check, it must be in ``HACKING.rst``
 - False negatives are ok, but false positives are not
 - Cannot be project specific, project specific checks should be `Local Checks`_
 - Include extensive tests
