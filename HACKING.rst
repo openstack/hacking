@@ -62,7 +62,7 @@ Imports
 
 - imports from ``migrate`` package
 - imports from ``sqlalchemy`` package
-- imports from ``oslo-incubator.openstack.common.gettextutils`` module
+- function imports from ``i18n`` module
 
 Import order template
 ^^^^^^^^^^^^^^^^^^^^^
@@ -98,6 +98,7 @@ Example::
   from nova.auth import users
   from nova.endpoint import cloud
   import nova.flags
+  from nova.i18n import _, _LC
   from nova import test
 
 
