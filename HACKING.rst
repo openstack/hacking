@@ -227,7 +227,7 @@ Python 3.x compatibility
 ------------------------
 OpenStack code should become Python 3.x compatible. That means all Python 2.x-only
 constructs or dependencies should be avoided. In order to start making code
-Python 3.x compatible before it can be is fully Python 3.x compatible, we have checks for Python 2.x-only constructs:
+Python 3.x compatible before it can be fully Python 3.x compatible, we have checks for Python 2.x-only constructs:
 
 - [H231] ``except``. Instead of::
 
