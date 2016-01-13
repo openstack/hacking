@@ -4,6 +4,7 @@
 # Note: you can clone from a local file with REPO_ROOT=file:////~/path/to/repo
 set -x
 set -e
+
 REPO_ROOT=${REPO_ROOT:-git://git.openstack.org}
 if [[ -z "$2" ]]; then
     org=openstack
@@ -13,13 +14,19 @@ else
     project=$2
 fi
 
-if [[ $REPO_ROOT  == file://* ]]; then
-    git clone $REPO_ROOT/$org/$project
-else
-    git clone $REPO_ROOT/$org/$project --depth=1
-fi
-cd $project
-set +e
-flake8 --select H --statistics
-cd ..
-rm -rf $project
+tempdir="$(mktemp -d)"
+
+pushd $tempdir
+    if [[ $REPO_ROOT  == file://* ]]; then
+        git clone $REPO_ROOT/$org/$project
+    else
+        git clone $REPO_ROOT/$org/$project --depth=1
+    fi
+
+    pushd $project
+        set +e
+        flake8 --select H --statistics
+    popd
+popd
+
+rm -rf $tempdir
