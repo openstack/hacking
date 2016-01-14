@@ -304,22 +304,6 @@ exception possible should be used.
                             elevated, instance_uuid)
 
 
-oslo-incubator
-----------------
-
-A number of modules from oslo-incubator are imported into the project.
-
-These modules are "incubating" in oslo-incubator and are kept in sync
-with the help of oslo-incubator's update.py script. See:
-
-  https://wiki.openstack.org/wiki/Oslo#Incubation
-
-
-The copy of the code should never be directly modified here. Please
-always update oslo-incubator first and then run the script to copy
-the changes across.
-
-
 OpenStack Trademark
 -------------------
 
