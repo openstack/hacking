@@ -17,4 +17,4 @@ testtools>=1.4.0 # MIT
 # virtualenv, so importing things like 'nova.hacking.checks.factory' will just
 # work.
 # See https://bugs.launchpad.net/hacking/+bug/1403270
-eventlet>=0.17.4 # MIT
+eventlet!=0.18.0,>=0.17.4 # MIT
