@@ -35,5 +35,5 @@ def no_vim_headers(physical_line, line_number, lines):
     Okay: # vim, ze nemluvis cesky
     """
     if ((line_number <= 5 or line_number > len(lines) - 5) and
-         vim_header_re.match(physical_line)):
+            vim_header_re.match(physical_line)):
         return 0, "H106: Don't put vim configuration in source files"

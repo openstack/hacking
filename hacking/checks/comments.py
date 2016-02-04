@@ -162,8 +162,8 @@ under the License."""
     if stripped_apache2 in content:
         return True
     else:
-        print ("<license>!=<apache2>:\n'%s' !=\n'%s'" %
-               (content, stripped_apache2))
+        print("<license>!=<apache2>:\n'%s' !=\n'%s'" %
+              (content, stripped_apache2))
         return False
 
 
