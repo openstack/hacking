@@ -304,6 +304,11 @@ exception possible should be used.
       with self.assertRaises(exception.InstanceNotFound):
           db.instance_get_by_uuid(elevated, instance_uuid)
 
+- [H203] Unit test assertions tend to give better messages for more specific
+  assertions. As a result, ``assertIsNone(...)`` is preferred over
+  ``assertEqual(None, ...)`` and ``assertIs(None, ...)``, and
+  ``assertIsNotNone(...)`` is preferred over ``assertNotEqual(None, ...)``
+  and ``assertIsNot(None, ...)``. Off by default.
 
 OpenStack Trademark
 -------------------
