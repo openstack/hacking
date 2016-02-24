@@ -300,8 +300,8 @@ exception possible should be used.
 
   Example::
 
-      self.assertRaises(exception.InstanceNotFound, db.instance_get_by_uuid,
-                            elevated, instance_uuid)
+      with self.assertRaises(exception.InstanceNotFound):
+          db.instance_get_by_uuid(elevated, instance_uuid)
 
 
 OpenStack Trademark
