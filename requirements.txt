@@ -5,7 +5,7 @@ pbr>=1.6 # Apache-2.0
 
 pep8==1.5.7 # MIT
 pyflakes==0.8.1 # MIT
-flake8<2.6.0,>2.4.1 # MIT
+flake8<2.6.0,>=2.5.4 # MIT
 mccabe==0.2.1 # MIT License
 
 six>=1.9.0 # MIT
