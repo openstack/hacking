@@ -18,3 +18,5 @@ testtools>=1.4.0 # MIT
 # work.
 # See https://bugs.launchpad.net/hacking/+bug/1403270
 eventlet!=0.18.3,>=0.18.2 # MIT
+
+reno>=1.6.2
