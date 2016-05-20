@@ -125,10 +125,9 @@ def hacking_localization_strings(logical_line, tokens, noqa):
     H702: _LW("Bob %s" % foo)
     H702: _LE("Bob %s" % foo)
     H702: _LC("Bob %s" % foo)
-    # H703 check is not quite right, disabled by removing colon
-    H703 _("%s %s" % (foo, bar))
+    H702: _("%s %s" % (foo, bar))
+    H703: _("%s %s") % (foo, bar)
     """
-    # TODO(sdague) actually get these tests working
     if noqa:
         return
     gen = check_i18n()
