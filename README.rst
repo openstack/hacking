@@ -35,7 +35,7 @@ Initially the hacking style guide was enforced manually by reviewers, but this
 was a big waste of time so hacking, the tool, was born to automate
 the process and remove the extra burden from human reviewers.
 
-.. _`Google Python Style Guide`: http://google-styleguide.googlecode.com/svn/trunk/pyguide.html
+.. _`Google Python Style Guide`: https://google.github.io/styleguide/pyguide.html
 
 Versioning
 ==========
