@@ -20,7 +20,7 @@ RE_ASSERT_RAISES_EXCEPTION = re.compile(r"self\.assertRaises\(Exception[,\)]")
 
 
 @core.flake8ext
-def hacking_except_format(logical_line, physical_line, noqa):
+def hacking_except_format(logical_line, noqa):
     r"""Check for 'except:'.
 
     OpenStack HACKING guide recommends not using except:
@@ -38,7 +38,7 @@ def hacking_except_format(logical_line, physical_line, noqa):
 
 
 @core.flake8ext
-def hacking_except_format_assert(logical_line, physical_line, noqa):
+def hacking_except_format_assert(logical_line, noqa):
     r"""Check for 'assertRaises(Exception'.
 
     OpenStack HACKING guide recommends not using assertRaises(Exception...):

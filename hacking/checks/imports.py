@@ -18,7 +18,7 @@ RE_RELATIVE_IMPORT = re.compile('^from\s*[.]')
 
 
 @core.flake8ext
-def hacking_import_rules(logical_line, physical_line, filename, noqa):
+def hacking_import_rules(logical_line, filename, noqa):
     r"""Check for imports.
 
     OpenStack HACKING guide recommends one import per line:

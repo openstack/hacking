@@ -22,7 +22,7 @@ LOCALS_TEXT_MAP = {
 
 
 @core.flake8ext
-def hacking_no_locals(logical_line, physical_line, tokens, noqa):
+def hacking_no_locals(logical_line, tokens, noqa):
     """Do not use locals() or self.__dict__ for string formatting.
 
     Okay: 'locals()'

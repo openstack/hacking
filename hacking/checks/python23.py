@@ -21,7 +21,7 @@ RE_PRINT = re.compile(r"\bprint(?:$|\s+[^\(])")
 
 @core.skip_on_py3
 @core.flake8ext
-def hacking_python3x_except_compatible(logical_line, physical_line, noqa):
+def hacking_python3x_except_compatible(logical_line, noqa):
     r"""Check for except statements to be Python 3.x compatible
 
     As of Python 3.x, the construct 'except x,y:' has been removed.
@@ -78,7 +78,7 @@ def hacking_python3x_octal_literals(logical_line, tokens, noqa):
 
 @core.skip_on_py3
 @core.flake8ext
-def hacking_python3x_print_function(logical_line, physical_line, noqa):
+def hacking_python3x_print_function(logical_line, noqa):
     r"""Check that all print occurrences look like print functions.
 
     Check that all occurrences of print look like functions, not
@@ -143,7 +143,7 @@ def hacking_no_assert_underscore(logical_line, tokens, noqa):
 
 
 @core.flake8ext
-def hacking_python3x_metaclass(logical_line, physical_line, noqa):
+def hacking_python3x_metaclass(logical_line, noqa):
     r"""Check for metaclass to be Python 3.x compatible.
 
     Okay: @six.add_metaclass(Meta)\nclass Foo(object):\n    pass
