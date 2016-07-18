@@ -32,6 +32,7 @@ General
   it easier to find out who the author of the comment was.
 - [H105] Don't use author tags. We use version control instead.
 - [H106] Don't put vim configuration in source files (off by default).
+- [H904] Delay string interpolations at logging calls.
 - Do not shadow a built-in or reserved word. Shadowing built -in or reserved
   words makes the code harder to understand. Example::
 
