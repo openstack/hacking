@@ -71,6 +71,15 @@ def is_none(node):
     return isinstance(node, ast.NameConstant) and node.value is None
 
 
+def _get_local_func_name(node):
+    if isinstance(node.func, ast.Attribute):
+        return node.func.attr
+    elif isinstance(node.func, ast.Name):
+        return node.func.id
+    else:
+        return None
+
+
 class NoneArgChecker(ast.NodeVisitor):
     '''NodeVisitor to check function calls for None arguments.
 
@@ -85,12 +94,7 @@ class NoneArgChecker(ast.NodeVisitor):
         self.none_found = False
 
     def visit_Call(self, node):
-        if isinstance(node.func, ast.Attribute):
-            local_func_name = node.func.attr
-        elif isinstance(node.func, ast.Name):
-            local_func_name = node.func.id
-        else:  # ast.Subscript, etc. -- ignore
-            local_func_name = None
+        local_func_name = _get_local_func_name(node)
 
         if local_func_name == self.func_name:
             args_to_check = node.args[:self.num_args]
@@ -129,3 +133,92 @@ def hacking_assert_is_none(logical_line, noqa):
         checker.visit(ast.parse(logical_line))
         if checker.none_found:
             yield start, "H203: Use assertIs(Not)None to check for None"
+
+
+class AssertTrueFalseChecker(ast.NodeVisitor):
+    '''NodeVisitor to find "assert[True|False](some comparison)" statements.
+
+    :param method_names: methods to look for: assertTrue and/or assertFalse
+    :param ops: list of comparisons we want to look for (objects from the ast
+                module)
+    '''
+    def __init__(self, method_names, ops):
+        self.method_names = method_names
+        self.ops = tuple(ops)
+        self.error = False
+
+    def visit_Call(self, node):
+        # No need to keep visiting the AST if we already found something.
+        if self.error:
+            return
+
+        self.generic_visit(node)
+
+        local_func_name = _get_local_func_name(node)
+
+        if (local_func_name in self.method_names and
+                len(node.args) == 1 and
+                isinstance(node.args[0], ast.Compare) and
+                len(node.args[0].ops) == 1 and
+                isinstance(node.args[0].ops[0], self.ops)):
+            self.error = True
+
+
+@core.flake8ext
+@core.off_by_default
+def hacking_assert_equal(logical_line, noqa):
+    r"""Check that self.assertEqual and self.assertNotEqual are used.
+
+    Okay: self.assertEqual(x, y)
+    Okay: self.assertNotEqual(x, y)
+    H204: self.assertTrue(x == y)
+    H204: self.assertTrue(x != y)
+    H204: self.assertFalse(x == y)
+    H204: self.assertFalse(x != y)
+    """
+    if noqa:
+        return
+
+    methods = ['assertTrue', 'assertFalse']
+    for method in methods:
+        start = logical_line.find('.%s' % method) + 1
+        if start != 0:
+            break
+    else:
+        return
+    comparisons = [ast.Eq, ast.NotEq]
+    checker = AssertTrueFalseChecker(methods, comparisons)
+    checker.visit(ast.parse(logical_line))
+    if checker.error:
+        yield start, 'H204: Use assert(Not)Equal()'
+
+
+@core.flake8ext
+@core.off_by_default
+def hacking_assert_greater_less(logical_line, noqa):
+    r"""Check that self.assert{Greater,Less}[Equal] are used.
+
+    Okay: self.assertGreater(x, y)
+    Okay: self.assertGreaterEqual(x, y)
+    Okay: self.assertLess(x, y)
+    Okay: self.assertLessEqual(x, y)
+    H205: self.assertTrue(x > y)
+    H205: self.assertTrue(x >= y)
+    H205: self.assertTrue(x < y)
+    H205: self.assertTrue(x <= y)
+    """
+    if noqa:
+        return
+
+    methods = ['assertTrue', 'assertFalse']
+    for method in methods:
+        start = logical_line.find('.%s' % method) + 1
+        if start != 0:
+            break
+    else:
+        return
+    comparisons = [ast.Gt, ast.GtE, ast.Lt, ast.LtE]
+    checker = AssertTrueFalseChecker(methods, comparisons)
+    checker.visit(ast.parse(logical_line))
+    if checker.error:
+        yield start, 'H205: Use assert{Greater,Less}[Equal]'
