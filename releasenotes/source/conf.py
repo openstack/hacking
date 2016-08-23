@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import pbr.version
+
 # Hacking Release Notes documentation build configuration file, created by
 # sphinx-quickstart on Tue Nov  3 17:40:50 2015.
 #
@@ -62,7 +64,6 @@ copyright = u'2015, Hacking Developers'
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 
-import pbr.version
 version_info = pbr.version.VersionInfo('hacking')
 # The short X.Y version.
 release = version_info.version_string_with_vcs()

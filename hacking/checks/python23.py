@@ -37,12 +37,12 @@ def hacking_python3x_except_compatible(logical_line, noqa):
         return
 
     def is_old_style_except(logical_line):
-        return (',' in logical_line
-                and ')' not in logical_line.rpartition(',')[2])
+        return (',' in logical_line and
+                ')' not in logical_line.rpartition(',')[2])
 
-    if (logical_line.startswith("except ")
-            and logical_line.endswith(':')
-            and is_old_style_except(logical_line)):
+    if (logical_line.startswith("except ") and
+            logical_line.endswith(':') and
+            is_old_style_except(logical_line)):
         yield 0, "H231: Python 3.x incompatible 'except x,y:' construct"
 
 
