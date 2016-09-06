@@ -32,7 +32,7 @@ General
   it easier to find out who the author of the comment was.
 - [H105] Don't use author tags. We use version control instead.
 - [H106] Don't put vim configuration in source files (off by default).
-- [H904] Delay string interpolations at logging calls.
+- [H904] Delay string interpolations at logging calls (off by default).
 - Do not shadow a built-in or reserved word. Shadowing built -in or reserved
   words makes the code harder to understand. Example::
 
@@ -304,7 +304,8 @@ exception possible should be used.
       with self.assertRaises(exception.InstanceNotFound):
           db.instance_get_by_uuid(elevated, instance_uuid)
 
-- [H203] Unit test assertions tend to give better messages for more specific
+- [H203] Use assertIs(Not)None to check for None (off by default)
+  Unit test assertions tend to give better messages for more specific
   assertions. As a result, ``assertIsNone(...)`` is preferred over
   ``assertEqual(None, ...)`` and ``assertIs(None, ...)``, and
   ``assertIsNotNone(...)`` is preferred over ``assertNotEqual(None, ...)``
