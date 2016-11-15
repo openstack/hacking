@@ -145,20 +145,29 @@ class ProxyChecks(GlobalCheck):
     name = 'ProxyChecker'
 
     @classmethod
-    def add_options(cls, parser):
+    def parse_options(cls, options):
         # We're looking for local checks, so we need to include the local
         # dir in the search path
         sys.path.append('.')
+        local_check_fact = options.factory or CONF.get('local-check-factory')
 
-        local_check = CONF.get_multiple('local-check', default=[])
-        for check_path in set(local_check):
-            if check_path.strip():
-                checker = pbr.util.resolve_name(check_path)
-                pep8.register_check(checker)
+        if not options.factory:
+            # local factory on CLI trumps everything else
+            local_check = CONF.get_multiple('local-check', default=[])
+            for check_path in set(local_check):
+                if check_path.strip():
+                    checker = pbr.util.resolve_name(check_path)
+                    pep8.register_check(checker)
 
-        local_check_fact = CONF.get('local-check-factory')
         if local_check_fact:
             factory = pbr.util.resolve_name(local_check_fact)
             factory(pep8.register_check)
 
         sys.path.pop()
+
+    @classmethod
+    def add_options(cls, parser):
+        # allow local check factory to be specified as CLI option to flake8
+        # in which case its used as the sole source of checks
+        parser.add_option('--local-check-factory', action='store',
+                          type='string', dest='factory')

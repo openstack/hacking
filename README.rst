@@ -129,3 +129,13 @@ register. Such as:
 
   [hacking]
   local-check-factory = nova.tests.hacking.factory
+
+In addition, hacking provides a flake8 option to specify the
+``local-check-factory`` on the CLI. When specified via CLI with
+the ``--local-check-factory`` option to flake8, the specified
+factory takes precedence over ``tox.ini`` and the local checks
+from ``tox.ini`` are not used.
+
+For example, via CLI (any check specified in ``tox.ini`` are ignored)::
+
+  flake8 --local-check-factory mypkg.warn_checks --exit-zero
