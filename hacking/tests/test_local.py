@@ -14,10 +14,8 @@
 # limitations under the License.
 
 from flake8 import engine
-import mock
 import pep8
 
-from hacking import core
 import hacking.tests
 
 
@@ -36,11 +34,3 @@ class HackingTestCase(hacking.tests.TestCase):
                                report=report)
         checker.check_all()
         self.assertIn("L100", report.counters)
-
-    @mock.patch.object(core, 'CONF')
-    def test_local_check_factory_cli_option(self, mock_conf):
-        mock_opts = mock.Mock()
-        mock_opts.factory = 'mypkg.factory'
-        self.assertRaises(
-            ImportError, core.ProxyChecks.parse_options, mock_opts)
-        self.assertFalse(mock_conf.called)
