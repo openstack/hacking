@@ -1,7 +1,7 @@
 # The order of packages is significant, because pip processes them in the order
 # of appearance. Changing the order has an impact on the overall integration
 # process, which may cause wedges in the gate later.
-coverage>=3.6 # Apache-2.0
+coverage>=4.0 # Apache-2.0
 discover # BSD
 fixtures>=3.0.0 # Apache-2.0/BSD
 mock>=2.0 # BSD
@@ -19,4 +19,4 @@ testtools>=1.4.0 # MIT
 # See https://bugs.launchpad.net/hacking/+bug/1403270
 eventlet!=0.18.3,>=0.18.2 # MIT
 
-reno>=1.8.0 # Apache2
+reno>=1.8.0 # Apache-2.0
