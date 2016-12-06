@@ -39,7 +39,7 @@ class HackingTestCase(hacking.tests.TestCase):
     def test_pep8(self):
 
         # NOTE(jecarey): Add tests marked as off_by_default to enable testing
-        turn_on = set(['H106', 'H203', 'H904'])
+        turn_on = set(['H106', 'H203', 'H904', 'H204', 'H205'])
         if self.options.select:
             turn_on.update(self.options.select)
         self.options.select = tuple(turn_on)
