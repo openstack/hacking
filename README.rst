@@ -82,7 +82,7 @@ Requirements
 - False negatives are ok, but false positives are not
 - Cannot be project specific, project specific checks should be `Local Checks`_
 - Include extensive tests
-- Registered as entry_points in `setup.cfg <setup.cfg>`_
+- Registered as entry_points in ``setup.cfg``
 - Error code must be in the relevant ``Hxxx`` group
 - The check should not attempt to import modules from the code being checked.
   Importing random modules, has caused all kinds of trouble for us in the past.
