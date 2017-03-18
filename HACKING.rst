@@ -311,6 +311,24 @@ exception possible should be used.
   ``assertIsNotNone(...)`` is preferred over ``assertNotEqual(None, ...)``
   and ``assertIsNot(None, ...)``. Off by default.
 
+- [H210] Require ``autospec``, ``spec``, or ``spec_set`` in ``mock.patch()`` or
+  ``mock.patch.object()`` calls (off by default)
+
+  Users of ``mock.patch()`` or ``mock.patch.object()`` may think they are doing
+  a correct assertion for example::
+
+    my_mock_obj.called_once_with()
+
+  When the correct call is::
+
+    my_mock_obj.assert_called_once_with()
+
+  By using ``autospec=True`` those kind of errors can be caught. This test does
+  not force them to use ``autospec=True``, but requires that they define some
+  value for ``autospec``, ``spec``, or ``spec_set``. It could be
+  ``autospec=False``. We just want them to make a conscious decision on using
+  or not using ``autospec``.
+
 OpenStack Trademark
 -------------------
 
