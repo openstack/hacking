@@ -8,7 +8,12 @@ sys.path.insert(0, os.path.abspath('../..'))
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'oslosphinx']
+extensions = ['sphinx.ext.autodoc', 'openstackdocstheme']
+
+# openstackdocstheme options
+repository_name = 'openstack-dev/hacking'
+bug_project = 'hacking'
+bug_tag = ''
 
 # autodoc generation is a bit aggressive and a nuisance when doing heavy
 # text edit cycles.
@@ -38,6 +43,9 @@ add_module_names = True
 pygments_style = 'sphinx'
 
 # -- Options for HTML output --------------------------------------------------
+
+html_theme = 'openstackdocs'
+html_last_updated_fmt = '%Y-%m-%d %H:%M'
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = '%sdoc' % project
