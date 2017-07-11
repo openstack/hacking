@@ -222,7 +222,7 @@ Example::
 
 .. seealso::
 
-   * `oslo.i18n Guidelines <http://docs.openstack.org/developer/oslo.i18n/guidelines.html>`__
+   * `oslo.i18n Guidelines <https://docs.openstack.org/oslo.i18n/latest/user/guidelines.html>`__
 
 Python 3.x compatibility
 ------------------------
