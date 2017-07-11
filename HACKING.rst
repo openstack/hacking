@@ -315,7 +315,7 @@ OpenStack Trademark
 -------------------
 
 OpenStack is a registered trademark of the OpenStack Foundation, and uses the
-following capitalization:
+following capitalization::
 
    OpenStack
 
@@ -349,5 +349,4 @@ readable.
 For further information on constructing high quality commit messages,
 and how to split up commits into a series of changes, consult the
 project wiki:
-
-   https://wiki.openstack.org/GitCommitMessages
+https://wiki.openstack.org/GitCommitMessages

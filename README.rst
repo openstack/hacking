@@ -10,9 +10,9 @@ introduce new rules, or make existing rules stricter.
 Installation
 ============
 
-hacking is available from pypi, so just run:
+hacking is available from pypi, so just run::
 
-  ``pip install hacking``
+  pip install hacking
 
 This will install specific versions of ``flake8`` with the ``hacking``,
 ``pep8``, ``mccabe`` and ``pyflakes`` plugins.
