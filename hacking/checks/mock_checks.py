@@ -31,7 +31,9 @@ class MockAutospecCheck(object):
     Okay: mock.patch('target_module_1', spec_set=['data'])
 
     H210: mock.patch('target_module_1')
+    Okay: mock.patch('target_module_1')  # noqa
     H210: mock.patch('target_module_1', somearg=23)
+    Okay: mock.patch('target_module_1', somearg=23)  # noqa
 
     Okay: mock.patch.object('target_module_2', 'attribute', autospec=True)
     Okay: mock.patch.object('target_module_2', 'attribute', autospec=False)
