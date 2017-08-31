@@ -311,6 +311,18 @@ exception possible should be used.
   ``assertIsNotNone(...)`` is preferred over ``assertNotEqual(None, ...)``
   and ``assertIsNot(None, ...)``. Off by default.
 
+- [H204] Use assert(Not)Equal to check for equality.
+  Unit test assertions tend to give better messages for more specific
+  assertions. As a result, ``assertEqual(...)`` is preferred over
+  ``assertTrue(... == ...)``, and ``assertNotEqual(...)`` is preferred over
+  ``assertFalse(... == ...)``. Off by default.
+
+- [H205] Use assert(Greater|Less)(Equal) for comparison.
+  Unit test assertions tend to give better messages for more specific
+  assertions. As a result, ``assertGreater(Equal)(...)`` is preferred over
+  ``assertTrue(... >(=) ...)``, and ``assertLess(Equal)(...)`` is preferred over
+  ``assertTrue(... <(=) ...)``. Off by default.
+
 - [H210] Require ``autospec``, ``spec``, or ``spec_set`` in ``mock.patch()`` or
   ``mock.patch.object()`` calls (off by default)
 

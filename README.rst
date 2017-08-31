@@ -95,6 +95,8 @@ Some of the available checks are disabled by default. These checks are:
 
 - [H106] Don't put vim configuration in source files.
 - [H203] Use assertIs(Not)None to check for None.
+- [H204] Use assert(Not)Equal to check for equality.
+- [H205] Use assert(Greater|Less)(Equal) for comparison.
 - [H210] Require 'autospec', 'spec', or 'spec_set' in
   mock.patch/mock.patch.object calls
 - [H904] Delay string interpolations at logging calls.
