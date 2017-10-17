@@ -339,7 +339,9 @@ exception possible should be used.
   not force them to use ``autospec=True``, but requires that they define some
   value for ``autospec``, ``spec``, or ``spec_set``. It could be
   ``autospec=False``. We just want them to make a conscious decision on using
-  or not using ``autospec``.
+  or not using ``autospec``. If any of the following are used then ``autospec``
+  will not be required:  ``new``, ``new_callable``, ``spec``, ``spec_set``,
+  ``wraps``
 
 OpenStack Trademark
 -------------------
