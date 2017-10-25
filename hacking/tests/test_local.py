@@ -14,7 +14,7 @@
 # limitations under the License.
 
 from flake8 import engine
-import pep8
+import pycodestyle
 
 import hacking.tests
 
@@ -28,9 +28,9 @@ def check(physical_line):
 class HackingTestCase(hacking.tests.TestCase):
     def test_local_check(self):
         flake8_style = engine.get_style_guide(parse_argv=False, ignore='F')
-        report = pep8.BaseReport(flake8_style.options)
+        report = pycodestyle.BaseReport(flake8_style.options)
         line = ["#this-is-the-test-phrase"]
-        checker = pep8.Checker(lines=line, options=flake8_style.options,
-                               report=report)
+        checker = pycodestyle.Checker(lines=line, options=flake8_style.options,
+                                      report=report)
         checker.check_all()
         self.assertIn("L100", report.counters)

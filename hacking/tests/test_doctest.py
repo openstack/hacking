@@ -17,7 +17,8 @@
 import re
 
 from flake8 import engine
-import pep8
+import pycodestyle
+
 import pkg_resources
 import six
 import testscenarios
@@ -36,7 +37,7 @@ class HackingTestCase(hacking.tests.TestCase):
 
     scenarios = file_cases
 
-    def test_pep8(self):
+    def test_pycodestyle(self):
 
         # NOTE(jecarey): Add tests marked as off_by_default to enable testing
         turn_on = set(['H106', 'H203', 'H904', 'H204', 'H205', 'H210'])
@@ -44,9 +45,9 @@ class HackingTestCase(hacking.tests.TestCase):
             turn_on.update(self.options.select)
         self.options.select = tuple(turn_on)
 
-        report = pep8.BaseReport(self.options)
-        checker = pep8.Checker(lines=self.lines, options=self.options,
-                               report=report)
+        report = pycodestyle.BaseReport(self.options)
+        checker = pycodestyle.Checker(lines=self.lines, options=self.options,
+                                      report=report)
         checker.check_all()
         self.addDetail('doctest', content.text_content(self.raw))
         if self.code == 'Okay':

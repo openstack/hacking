@@ -15,14 +15,14 @@
 
 """OpenStack HACKING file compliance testing
 
-Built as a sets of pep8 checks using flake8.
+Built as a sets of pycodestyle checks using flake8.
 """
 
 import gettext
 import sys
 
 import pbr.util
-import pep8
+import pycodestyle
 
 from hacking import config
 
@@ -127,8 +127,8 @@ class GlobalCheck(object):
 
         Store in a global registry the list of checks we've run. If we have
         run that one before, just skip doing anything the subsequent times.
-        This way, since pep8 is file/line based, we don't wind up re-running
-        a check on a git commit message over and over again.
+        This way, since pycodestyle is file/line based, we don't wind
+        up re-running a check on a git commit message over and over again.
         """
         if self.name and self.name not in self.__class__._has_run:
             self.__class__._has_run.add(self.name)
@@ -154,11 +154,11 @@ class ProxyChecks(GlobalCheck):
         for check_path in set(local_check):
             if check_path.strip():
                 checker = pbr.util.resolve_name(check_path)
-                pep8.register_check(checker)
+                pycodestyle.register_check(checker)
 
         local_check_fact = CONF.get('local-check-factory')
         if local_check_fact:
             factory = pbr.util.resolve_name(local_check_fact)
-            factory(pep8.register_check)
+            factory(pycodestyle.register_check)
 
         sys.path.pop()
