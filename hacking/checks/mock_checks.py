@@ -29,6 +29,7 @@ class MockAutospecCheck(object):
     Okay: mock.patch('target_module_1', defined_mock)
     Okay: mock.patch('target_module_1', spec=1000)
     Okay: mock.patch('target_module_1', spec_set=['data'])
+    Okay: mock.patch('target_module_1', wraps=some_obj)
 
     H210: mock.patch('target_module_1')
     Okay: mock.patch('target_module_1')  # noqa
@@ -43,6 +44,8 @@ class MockAutospecCheck(object):
     Okay: mock.patch.object('target_module_2', 'attribute', new_callable=AFunc)
     Okay: mock.patch.object('target_module_2', 'attribute', spec=3)
     Okay: mock.patch.object('target_module_2', 'attribute', spec_set=[3])
+    Okay: mock.patch.object('target_module_2', 'attribute', wraps=some_obj)
+
 
     H210: mock.patch.object('target_module_2', 'attribute', somearg=2)
     H210: mock.patch.object('target_module_2', 'attribute')
@@ -67,7 +70,8 @@ class MockCheckVisitor(ast.NodeVisitor):
     # Patchers we are looking for and minimum number of 'args' without
     # 'autospec' to not be flagged
     patchers = {'mock.patch': 2, 'mock.patch.object': 3}
-    spec_keywords = {"autospec", "new", "new_callable", "spec", "spec_set"}
+    spec_keywords = {"autospec", "new", "new_callable", "spec", "spec_set",
+                     "wraps"}
 
     def __init__(self, filename):
         super(MockCheckVisitor, self).__init__()
