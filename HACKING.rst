@@ -58,6 +58,9 @@ Imports
 - [H306] Alphabetically order your imports by the full module path.
   Organize your imports according to the `Import order
   template`_ and `Real-world Import Order Examples`_ below.
+  For the purposes of import order, OpenStack projects other than the
+  one to which the file belongs are considered "third party". Only
+  imports from the same Git repo are considered "project imports"
 
 (*) exceptions are:
 
