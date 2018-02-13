@@ -16,14 +16,14 @@ import tokenize
 from hacking import core
 
 
-FORMAT_RE = re.compile("%(?:"
-                       "%|"           # Ignore plain percents
-                       "(\(\w+\))?"   # mapping key
-                       "([#0 +-]?"    # flag
-                       "(?:\d+|\*)?"  # width
-                       "(?:\.\d+)?"   # precision
-                       "[hlL]?"       # length mod
-                       "\w))")        # type
+FORMAT_RE = re.compile(r"%(?:"
+                       r"%|"           # Ignore plain percents
+                       r"(\(\w+\))?"   # mapping key
+                       r"([#0 +-]?"    # flag
+                       r"(?:\d+|\*)?"  # width
+                       r"(?:\.\d+)?"   # precision
+                       r"[hlL]?"       # length mod
+                       r"\w))")        # type
 
 
 class LocalizationError(Exception):
