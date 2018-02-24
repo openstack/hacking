@@ -2,6 +2,19 @@
     check:
       jobs:
         - openstack-tox-lower-constraints
+        - hacking-integration-nova:
+            voting: false
     gate:
       jobs:
         - openstack-tox-lower-constraints
+
+- job:
+    name: hacking-integration-nova
+    parent: openstack-tox
+    description: |
+      Run the integration job against nova with proposed hacking change.
+    required-projects:
+      - openstack/nova
+    vars:
+      tox_envlist: integration
+      tox_extra_args: -vv openstack nova {{ ansible_user_dir }}/{{ zuul.projects['git.openstack.org/openstack/nova'].src_dir }}

@@ -10,6 +10,7 @@ set -x
 set -e
 
 REPO_ROOT=${REPO_ROOT:-git://git.openstack.org}
+HACKING="$(pwd)"
 
 if [[ $# -lt 2 ]] ; then
     echo "Script needs at least two arguments:"
@@ -38,9 +39,20 @@ fi
 
 pushd $projectdir
 set +e
+
+# Install project with test-requirements so that hacking's
+# local-check-factory works
+pip install -r test-requirements.txt
+pip install .
+# Reinstall hacking, the above might have uninstalled it
+pip install $HACKING
+
 flake8 --select H --statistics
+RET=$?
 popd
 
 if [ "$clone" = "1" ] ; then
     popd
 fi
+
+exit $RET
