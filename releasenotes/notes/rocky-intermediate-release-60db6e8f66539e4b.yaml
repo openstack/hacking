@@ -1,0 +1,16 @@
+---
+prelude: |
+    This release includes below changes:
+
+    - Transition to flake8 2.6.x:
+
+      * flake8 2.6.x performed the conversion to pycodestyle (which is
+        the new name of pep8). Remove the explicit dependencies of
+        hacking as flake8 is going to pull in mccabe, pyflakes and
+        pycodestyle in the versions that are needed.
+
+    - Allow 'wraps' to be an alternative to autospec:
+
+      * Don't cause an H210 error if the mock.patch/mock.patch.object call uses
+        the 'wraps' keyword. As that serves the same purpose in catching wrong
+        attributes.
