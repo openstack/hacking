@@ -1,6 +1,8 @@
 - project:
     templates:
       - publish-openstack-docs-pti
+      - openstack-cover-jobs
+      - openstack-lower-constraints-jobs
       - openstack-python-jobs
       - openstack-python35-jobs
       - openstack-python36-jobs
@@ -8,16 +10,9 @@
       - release-notes-jobs-python3
     check:
       jobs:
-        - openstack-tox-lower-constraints
         - hacking-integration-nova:
             voting: false
-    gate:
-      jobs:
-        - openstack-tox-lower-constraints
 
-    post:
-      jobs:
-        - openstack-tox-cover
 - job:
     name: hacking-integration-nova
     parent: openstack-tox
