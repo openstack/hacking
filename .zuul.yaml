@@ -1,4 +1,10 @@
 - project:
+    templates:
+      - publish-openstack-sphinx-docs
+      - openstack-python-jobs
+      - openstack-python35-jobs
+      - openstack-pypy-jobs-nonvoting
+      - release-notes-jobs
     check:
       jobs:
         - openstack-tox-lower-constraints
@@ -8,6 +14,9 @@
       jobs:
         - openstack-tox-lower-constraints
 
+    post:
+      jobs:
+        - openstack-tox-cover
 - job:
     name: hacking-integration-nova
     parent: openstack-tox
