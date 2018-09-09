@@ -1,10 +1,10 @@
 - project:
     templates:
-      - publish-openstack-sphinx-docs
+      - publish-openstack-docs-pti
       - openstack-python-jobs
       - openstack-python35-jobs
       - openstack-pypy-jobs-nonvoting
-      - release-notes-jobs
+      - release-notes-jobs-python3
     check:
       jobs:
         - openstack-tox-lower-constraints
