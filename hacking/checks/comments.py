@@ -65,6 +65,8 @@ def hacking_has_license(physical_line, filename, lines, line_number):
             # header
             if 0 <= line.find('Licensed under the Apache License') < 10:
                     license_found = True
+            if 0 <= line.find('SPDX-License-Identifier:') < 10:
+                    license_found = True
         if not license_found:
             return (0, "H102: Apache 2.0 license header not found")
 
@@ -86,8 +88,9 @@ def hacking_has_correct_license(physical_line, filename, lines, line_number):
             column = line.find('Licensed under the Apache License')
             if (0 < column < 10 and not
                     _check_for_exact_apache(idx, lines)):
-                return (column, "H103: Header does not match Apache 2.0 "
-                        "License notice")
+                if (line.find('SPDX-License-Identifier: Apache-2.0') <= 0):
+                    return (column, "H103: Header does not match Apache 2.0 "
+                            "License notice")
 
 
 EMPTY_LINE_RE = re.compile("^\s*(#.*|$)")
