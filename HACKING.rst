@@ -373,6 +373,11 @@ OpenStack Licensing
     #  License for the specific language governing permissions and limitations
     #  under the License.
 
+  Alternately also check for the
+  `SPDX license header <https://spdx.org/licenses/Apache-2.0.html>`__  for Apache 2.0::
+
+    # SPDX-License-Identifier: Apache-2.0
+
 - [H104] Files with no code shouldn't contain any license header nor comments,
   and must be left completely empty.
 
