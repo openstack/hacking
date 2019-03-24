@@ -9,7 +9,7 @@
 set -x
 set -e
 
-REPO_ROOT=${REPO_ROOT:-git://git.openstack.org}
+REPO_ROOT=${REPO_ROOT:-https://git.openstack.org}
 HACKING="$(pwd)"
 
 if [[ $# -lt 2 ]] ; then
