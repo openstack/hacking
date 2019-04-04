@@ -16,8 +16,8 @@ import tokenize
 from hacking import core
 
 
-AUTHOR_TAG_RE = (re.compile("^\s*#\s*@?(a|A)uthors?:"),
-                 re.compile("^\.\.\s+moduleauthor::"))
+AUTHOR_TAG_RE = (re.compile(r"^\s*#\s*@?(a|A)uthors?:"),
+                 re.compile(r"^\.\.\s+moduleauthor::"))
 
 
 @core.flake8ext
@@ -93,7 +93,7 @@ def hacking_has_correct_license(physical_line, filename, lines, line_number):
                             "License notice")
 
 
-EMPTY_LINE_RE = re.compile("^\s*(#.*|$)")
+EMPTY_LINE_RE = re.compile(r"^\s*(#.*|$)")
 
 
 @core.flake8ext
