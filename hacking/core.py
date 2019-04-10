@@ -21,9 +21,6 @@ Built as a sets of pycodestyle checks using flake8.
 import gettext
 import sys
 
-import pbr.util
-import pycodestyle
-
 from hacking import config
 
 # Import tests need to inject _ properly into the builtins
@@ -138,27 +135,3 @@ class GlobalCheck(object):
 
     def run_once(self):
         pass
-
-
-class ProxyChecks(GlobalCheck):
-    """Provide a mechanism for locally defined checks."""
-    name = 'ProxyChecker'
-
-    @classmethod
-    def add_options(cls, parser):
-        # We're looking for local checks, so we need to include the local
-        # dir in the search path
-        sys.path.append('.')
-
-        local_check = CONF.get_multiple('local-check', default=[])
-        for check_path in set(local_check):
-            if check_path.strip():
-                checker = pbr.util.resolve_name(check_path)
-                pycodestyle.register_check(checker)
-
-        local_check_fact = CONF.get('local-check-factory')
-        if local_check_fact:
-            factory = pbr.util.resolve_name(local_check_fact)
-            factory(pycodestyle.register_check)
-
-        sys.path.pop()
