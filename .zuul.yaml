@@ -22,4 +22,4 @@
       - openstack/nova
     vars:
       tox_envlist: integration
-      tox_extra_args: -vv openstack nova {{ ansible_user_dir }}/{{ zuul.projects['git.openstack.org/openstack/nova'].src_dir }}
+      tox_extra_args: -vv openstack nova {{ ansible_user_dir }}/{{ zuul.projects['opendev.org/openstack/nova'].src_dir }}
