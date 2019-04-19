@@ -1,5 +1,5 @@
 [gerrit]
-host=review.openstack.org
+host=review.opendev.org
 port=29418
-project=openstack-dev/hacking.git
+project=openstack/hacking.git
 defaultbranch=0.8.x
