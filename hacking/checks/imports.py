@@ -14,7 +14,7 @@ import re
 
 from hacking import core
 
-RE_RELATIVE_IMPORT = re.compile('^from\s*[.]')
+RE_RELATIVE_IMPORT = re.compile(r'^from\s*[.]')
 
 
 @core.flake8ext
