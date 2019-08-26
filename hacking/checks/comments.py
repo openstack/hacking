@@ -158,9 +158,9 @@ under the License."""
     # the Apache starting words were found, strip all the '#' and collapse the
     # spaces.
     content = ''.join(lines[start:(start + 12)])
-    content = re.sub('\#', '', content)
-    content = re.sub('\s+', ' ', content).strip()
-    stripped_apache2 = re.sub('\s+', ' ', APACHE2).strip()
+    content = re.sub(r'\#', '', content)
+    content = re.sub(r'\s+', ' ', content).strip()
+    stripped_apache2 = re.sub(r'\s+', ' ', APACHE2).strip()
 
     if stripped_apache2 in content:
         return True
