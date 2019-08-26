@@ -59,7 +59,7 @@ def hacking_has_license(physical_line, filename, lines, line_number):
     # skip files that are < 10 lines, which isn't enough for a license to fit
     # this allows us to handle empty files, as well as not fail on the Okay
     # doctests.
-    if line_number is 1 and len(lines) > 10 and _project_is_apache():
+    if line_number == 1 and len(lines) > 10 and _project_is_apache():
         for idx, line in enumerate(lines):
             # if it's more than 10 characters in, it's probably not in the
             # header
@@ -83,7 +83,7 @@ def hacking_has_correct_license(physical_line, filename, lines, line_number):
     # skip files that are < 10 lines, which isn't enough for a license to fit
     # this allows us to handle empty files, as well as not fail on the Okay
     # doctests.
-    if line_number is 1 and len(lines) > 10 and _project_is_apache():
+    if line_number == 1 and len(lines) > 10 and _project_is_apache():
         for idx, line in enumerate(lines):
             column = line.find('Licensed under the Apache License')
             if (0 < column < 10 and not
