@@ -224,5 +224,5 @@ def hacking_no_old_style_class(logical_line, noqa):
         return
     line = core.import_normalize(logical_line.strip())
     if line.startswith("class ") and not RE_NEW_STYLE_CLASS.match(line):
-            yield (0, "H238: old style class declaration, "
-                   "use new style (inherit from `object`)")
+        yield (0, "H238: old style class declaration, "
+               "use new style (inherit from `object`)")

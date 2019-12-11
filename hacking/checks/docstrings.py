@@ -118,7 +118,7 @@ def hacking_docstring_summary(physical_line, previous_logical, tokens):
             # not a multi line docstring
             return
         lines = docstring.split('\n')
-        if len(lines) > 1 and len(lines[1].strip()) is not 0:
+        if len(lines) > 1 and len(lines[1].strip()) != 0:
             # docstrings get tokenized on the last line of the docstring, so
             # we don't know the exact position.
             return (0, "H405: multi line docstring "
