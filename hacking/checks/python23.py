@@ -209,6 +209,7 @@ RE_NEW_STYLE_CLASS = re.compile(r"^class [^(]+\(.+\):")
 
 
 @core.flake8ext
+@core.off_by_default
 def hacking_no_old_style_class(logical_line, noqa):
     r"""Check for old style classes.
 
