@@ -114,24 +114,38 @@ For example to enable H106 and H203:
 Local Checks
 ============
 
-hacking supports having local changes in a source tree. They can be configured
-to run in two different ways. They can be registered individually, or with
-a factory function.
+hacking supports having local changes in a source tree. They need to
+be registered individually in tox.ini:
 
-For individual registration, put a comma separated list of pep8 compatible
-check functions into the hacking section of tox.ini. E.g.:
-
-.. code-block:: ini
-
-  [hacking]
-  local-check = nova.tests.hacking.bad_code_is_terrible
-
-Alternately, you can specify the location of a callable that will be called
-at registration time and will be passed the registration function. The callable
-should expect to call the passed in function on everything if wants to
-register. Such as:
+Add to tox.ini a new section `flake8:local-plugins` and list each plugin with
+its entry-point. Additionally, you can add the path to the files
+containing the plugins so that the repository does not need to be
+installed with the `paths` directive.
 
 .. code-block:: ini
 
-  [hacking]
-  local-check-factory = nova.tests.hacking.factory
+   [flake8:local-plugins]
+   extension =
+     N307 = checks:import_no_db_in_virt
+     N325 = checks:CheckForStrUnicodeExc
+   paths =
+     ./nova/hacking
+
+The plugins, in the example above they live in
+`nova/hacking/checks.py`, need to annotate all functions with `@core.flake8ext`
+
+.. code-block:: python
+
+   from hacking import core
+   ...
+   @core.flake8ext
+   def import_no_db_in_virt(logical_line, filename):
+       ...
+
+   class CheckForStrUnicodeExc(BaseASTChecker):
+      name = "check_for_str_unicode_exc"
+      version = "1.0"
+      ...
+
+Further details are part of the `flake8 documentation
+<https://flake8.pycqa.org/en/latest/plugin-development/index.html>`_.
