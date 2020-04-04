@@ -20,7 +20,6 @@ import sys
 import tempfile
 
 import pkg_resources
-import six
 import testscenarios
 from testtools import content
 
@@ -75,7 +74,7 @@ def load_tests(loader, tests, pattern):
             continue
 
         check = entry.load()
-        if check.skip_on_py3 and six.PY3:
+        if check.skip_on_py3:
             continue
 
         name = entry.attrs[0]

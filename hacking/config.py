@@ -11,12 +11,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from six import moves
+import configparser
 
 
 class Config(object):
     def __init__(self, default_section=None, tox_file='tox.ini'):
-        conf = moves.configparser.RawConfigParser()
+        conf = configparser.RawConfigParser()
         conf.read(tox_file)
 
         self.conf = conf

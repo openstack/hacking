@@ -22,7 +22,6 @@ pytz==2013.6
 PyYAML==3.12
 reno==2.5.0
 requests==2.14.2
-six==1.10.0
 snowballstemmer==1.2.1
 stestr==2.0.0
 testscenarios==0.4
