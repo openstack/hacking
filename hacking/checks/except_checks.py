@@ -15,8 +15,6 @@
 import ast
 import re
 
-from six import PY2
-
 from hacking import core
 
 RE_ASSERT_RAISES_EXCEPTION = re.compile(r"self\.assertRaises\(Exception[,\)]")
@@ -61,13 +59,7 @@ def hacking_except_format_assert(logical_line, noqa):
 
 
 def is_none(node):
-    '''Check whether an AST node corresponds to None.
-
-    In Python 2 None uses the same ast.Name class that variables etc. use,
-    but in Python 3 there is a new ast.NameConstant class.
-    '''
-    if PY2:
-        return isinstance(node, ast.Name) and node.id == 'None'
+    '''Check whether an AST node corresponds to None.'''
     return isinstance(node, ast.NameConstant) and node.value is None
 
 
