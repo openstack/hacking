@@ -18,6 +18,37 @@ import re
 from hacking import core
 
 RE_ASSERT_RAISES_EXCEPTION = re.compile(r"self\.assertRaises\(Exception[,\)]")
+RE_ASSERT_TRUE_INST = re.compile(
+    r"(.)*assertTrue\(isinstance\((\w|\.|\'|\"|\[|\])+, "
+    r"(\w|\.|\'|\"|\[|\])+\)\)")
+RE_ASSERT_EQUAL_TYPE = re.compile(
+    r"(.)*assertEqual\(type\((\w|\.|\'|\"|\[|\])+\), "
+    r"(\w|\.|\'|\"|\[|\])+\)")
+RE_ASSERT_EQUAL_IN_START_WITH_TRUE_OR_FALSE = re.compile(
+    r"assertEqual\("
+    r"(True|False), (\w|[][.'\"])+ in (\w|[][.'\", ])+\)")
+RE_ASSERT_RAISES_REGEXP = re.compile(r"assertRaisesRegexp\(")
+# NOTE(snikitin): Next two regexes weren't united to one for more readability.
+#                 asse_true_false_with_in_or_not_in regex checks
+#                 assertTrue/False(A in B) cases where B argument has no spaces
+#                 asse_true_false_with_in_or_not_in_spaces regex checks cases
+#                 where B argument has spaces and starts/ends with [, ', ".
+#                 For example: [1, 2, 3], "some string", 'another string'.
+#                 We have to separate these regexes to escape a false positives
+#                 results. B argument should have spaces only if it starts
+#                 with [, ", '. Otherwise checking of string
+#                 "assertFalse(A in B and C in D)" will be false positives.
+#                 In this case B argument is "B and C in D".
+RE_ASSERT_TRUE_FALSE_WITH_IN_OR_NOT_IN = re.compile(
+    r"assert(True|False)\("
+    r"(\w|[][.'\"])+( not)? in (\w|[][.'\",])+(, .*)?\)")
+RE_ASSERT_TRUE_FALSE_WITH_IN_OR_NOT_IN_SPACES = re.compile(
+    r"assert(True|False)"
+    r"\((\w|[][.'\"])+( not)? in [\[|'|\"](\w|[][.'\", ])+"
+    r"[\[|'|\"](, .*)?\)")
+RE_ASSERT_EQUAL_IN_END_WITH_TRUE_OR_FALSE = re.compile(
+    r"assertEqual\("
+    r"(\w|[][.'\"])+ in (\w|[][.'\", ])+, (True|False)\)")
 
 
 @core.flake8ext
@@ -80,6 +111,7 @@ class NoneArgChecker(ast.NodeVisitor):
 
     self.none_found will be True if any None arguments were found.
     '''
+
     def __init__(self, func_name, num_args=2):
         self.func_name = func_name
         self.num_args = num_args
@@ -134,6 +166,7 @@ class AssertTrueFalseChecker(ast.NodeVisitor):
     :param ops: list of comparisons we want to look for (objects from the ast
                 module)
     '''
+
     def __init__(self, method_names, ops):
         self.method_names = method_names
         self.ops = tuple(ops)
@@ -214,3 +247,78 @@ def hacking_assert_greater_less(logical_line, noqa):
     checker.visit(ast.parse(logical_line))
     if checker.error:
         yield start, 'H205: Use assert{Greater,Less}[Equal]'
+
+
+@core.flake8ext
+def hacking_assert_true_instance(logical_line):
+    """Check for assertTrue(isinstance(a, b)) sentences
+
+    H211
+    """
+    if RE_ASSERT_TRUE_INST.match(logical_line):
+        yield (
+            0,
+            "H211: Use assert{Is,IsNot}instance")
+
+
+@core.flake8ext
+def hacking_assert_equal_type(logical_line):
+    """Check for assertEqual(type(A), B) sentences
+
+    H212
+    """
+    if RE_ASSERT_EQUAL_TYPE.match(logical_line):
+        yield (
+            0,
+            "H212: Use assert{type(A),B} instance")
+
+
+@core.flake8ext
+def hacking_assert_raises_regexp(logical_line):
+    """Check for usage of deprecated assertRaisesRegexp
+
+    H213
+    """
+    res = RE_ASSERT_RAISES_REGEXP.search(logical_line)
+    if res:
+        yield (
+            0,
+            "H213: assertRaisesRegex must be used instead "
+            "of assertRaisesRegexp")
+
+
+@core.flake8ext
+def hacking_assert_true_or_false_with_in(logical_line):
+    """Check for assertTrue/False(A in B), assertTrue/False(A not in B),
+
+    assertTrue/False(A in B, message) or assertTrue/False(A not in B, message)
+    sentences.
+    H214
+    """
+    res = (RE_ASSERT_TRUE_FALSE_WITH_IN_OR_NOT_IN.search(logical_line)
+           or RE_ASSERT_TRUE_FALSE_WITH_IN_OR_NOT_IN_SPACES.search
+           (logical_line))
+    if res:
+        yield (
+            0,
+            "H214: Use assertIn/NotIn(A, B) rather than "
+            "assertTrue/False(A in/not in B) when checking collection "
+            "contents.")
+
+
+@core.flake8ext
+def hacking_assert_equal_in(logical_line):
+    """Check for assertEqual(A in B, True), assertEqual(True, A in B),
+
+    assertEqual(A in B, False) or assertEqual(False, A in B) sentences
+
+    H215
+    """
+    res = (RE_ASSERT_EQUAL_IN_START_WITH_TRUE_OR_FALSE.search(logical_line) or
+           RE_ASSERT_EQUAL_IN_END_WITH_TRUE_OR_FALSE.search(logical_line))
+    if res:
+        yield (
+            0,
+            "H215: Use assertIn/NotIn(A, B) rather than "
+            "assertEqual(A in B, True/False) when checking collection "
+            "contents.")

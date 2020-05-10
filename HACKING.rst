@@ -346,6 +346,21 @@ exception possible should be used.
   will not be required:  ``new``, ``new_callable``, ``spec``, ``spec_set``,
   ``wraps``
 
+- [H211] Change assertTrue(isinstance(A, B)) by optimal assert like
+  assertIsInstance(A, B).
+
+- [H212] Change assertEqual(type(A), B) by optimal assert like
+  assertIsInstance(A, B)
+
+- [H213] Check for usage of deprecated assertRaisesRegexp
+
+- [H214] Change assertTrue/False(A in/not in B, message) to the more
+  specific assertIn/NotIn(A, B, message)
+
+- [H215] Change assertEqual(A in B, True), assertEqual(True, A in B),
+  assertEqual(A in B, False) or assertEqual(False, A in B) to the more
+  specific assertIn/NotIn(A, B)
+
 OpenStack Trademark
 -------------------
 
