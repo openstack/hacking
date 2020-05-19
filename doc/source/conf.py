@@ -11,9 +11,9 @@ sys.path.insert(0, os.path.abspath('../..'))
 extensions = ['sphinx.ext.autodoc', 'openstackdocstheme']
 
 # openstackdocstheme options
-repository_name = 'openstack-dev/hacking'
-bug_project = 'hacking'
-bug_tag = ''
+openstackdocs_repo_name = 'openstack/hacking'
+openstackdocs_bug_project = 'hacking'
+openstackdocs_bug_tag = ''
 
 # autodoc generation is a bit aggressive and a nuisance when doing heavy
 # text edit cycles.
@@ -40,12 +40,11 @@ add_function_parentheses = True
 add_module_names = True
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+pygments_style = 'native'
 
 # -- Options for HTML output --------------------------------------------------
 
 html_theme = 'openstackdocs'
-html_last_updated_fmt = '%Y-%m-%d %H:%M'
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = '%sdoc' % project
