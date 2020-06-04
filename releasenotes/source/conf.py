@@ -43,9 +43,10 @@ extensions = [
 ]
 
 # openstackdocstheme options
-repository_name = 'openstack-dev/hacking'
-bug_project = 'hacking'
-bug_tag = ''
+openstackdocs_repo_name = 'openstack/hacking'
+openstackdocs_bug_project = 'hacking'
+openstackdocs_bug_tag = ''
+openstackdocs_auto_name = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -99,7 +100,7 @@ exclude_patterns = []
 # show_authors = False
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+pygments_style = 'native'
 
 # A list of ignored prefixes for module index sorting.
 # modindex_common_prefix = []
@@ -147,10 +148,6 @@ html_theme = 'openstackdocs'
 # .htaccess) here, relative to this directory. These files are copied
 # directly to the root of the documentation.
 # html_extra_path = []
-
-# If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
-# using the given strftime format.
-html_last_updated_fmt = '%Y-%m-%d %H:%M'
 
 # If true, SmartyPants will be used to convert quotes and dashes to
 # typographically correct entities.
