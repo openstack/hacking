@@ -6,14 +6,14 @@ dulwich==0.15.0
 eventlet==0.18.2
 extras==1.0.0
 fixtures==3.0.0
-flake8==3.6.0
+flake8==3.8.0
 imagesize==0.7.1
 Jinja2==2.10
 linecache2==1.0.0
 MarkupSafe==1.0
 mccabe==0.6.0
 pycodestyle==2.4.0
-pyflakes==2.0.0
+pyflakes==2.1.1
 Pygments==2.2.0
 python-mimeparse==1.6.0
 python-subunit==1.0.0
