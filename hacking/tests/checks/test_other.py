@@ -37,3 +37,13 @@ class OthersTestCase(tests.TestCase):
         else:
             self.assertCheckPasses(other.hacking_delayed_string_interpolation,
                                    line, noqa)
+
+    @ddt.unpack
+    @ddt.data(
+        (False, 'import os\r\nimport sys'),
+        (True, 'import os\nimport sys'))
+    def test_H903_hacking_no_cr(self, passes, line):
+        if passes:
+            self.assertCheckPasses(other.hacking_no_cr, line)
+        else:
+            self.assertCheckFails(other.hacking_no_cr, line)
