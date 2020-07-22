@@ -361,6 +361,24 @@ exception possible should be used.
   assertEqual(A in B, False) or assertEqual(False, A in B) to the more
   specific assertIn/NotIn(A, B)
 
+- [H216] Make sure unittest.mock is used instead of the third party mock
+  library. On by default.
+
+  Starting with Python 3.3 and later, the mock module was added under unittest.
+  Previously, this functionality was only available by using the third party
+  ``mock`` library.
+
+  Most users are not aware of this subtle distinction. This results in issues
+  where the project does not declare the ``mock`` library in its requirements
+  file, but the code does an ``import mock`` assuming that the module is
+  present. This may work initially if one of the project's dependencies ends up
+  pulling that dependency in indirectly, but then can cause things to suddenly
+  break if that transitive dependency goes away.
+
+  Since this third party library usage is done without being aware of it, this
+  check is enabled by default to make sure those projects that actually do
+  intend to use the ``mock`` library are doing so explicitly.
+
 OpenStack Trademark
 -------------------
 
