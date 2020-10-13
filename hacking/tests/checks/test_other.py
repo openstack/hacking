@@ -28,6 +28,7 @@ class OthersTestCase(tests.TestCase):
         (0, 'LOG.error("Test %s" % foo)', '# noqa'),
         (1, 'LOG.debug("Test %s" % "foo")', None),
         (0, 'LOG.debug("Test %s", "foo")', None),
+        (0, 'LOG.warning("Test %s", ",".join("%s:%s" % (a, b)))', None),
         (0, "LOG.warning('Testing some stuff')", None))
     def test_H904_hacking_delayed_string_interpolation(
             self, err_count, line, noqa):

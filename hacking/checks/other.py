@@ -52,5 +52,8 @@ def hacking_delayed_string_interpolation(logical_line, noqa):
         # Line is a log statement, strip out strings and see if % is used,
         # just to make sure we don't match on a format specifier in a string.
         line = re.sub(r"[\"'].+?[\"']", '', logical_line)
+        # There are some cases where string formatting of the arguments are
+        # needed, so don't include those when checking.
+        line = re.sub(r",.*", '', line)
         if '%' in line:
             yield 0, msg
