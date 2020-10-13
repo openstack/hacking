@@ -28,9 +28,8 @@ def hacking_no_cr(physical_line):
     # upstream fix
     H903 import os\r\nimport sys
     """
-    pos = physical_line.find('\r')
-    if pos != -1 and pos == (len(physical_line) - 2):
-        return (pos, "H903: Windows style line endings not allowed in code")
+    if '\r' in physical_line:
+        yield (0, "H903: Windows style line endings not allowed in code")
 
 
 @core.flake8ext
