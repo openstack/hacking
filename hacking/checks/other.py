@@ -15,9 +15,8 @@ import re
 from hacking import core
 
 
-log_string_interpolation = re.compile(r".*LOG\.(?:error|warn|warning|info"
-                                      r"|critical|exception|debug)"
-                                      r"\([^,]*%[^,]*[,)]")
+log_string = re.compile(r".*LOG\.(?:error|warn|warning|info"
+                        r"|critical|exception|debug)")
 
 
 @core.flake8ext
@@ -50,5 +49,9 @@ def hacking_delayed_string_interpolation(logical_line, noqa):
     if noqa:
         return
 
-    if log_string_interpolation.match(logical_line):
-        yield 0, msg
+    if log_string.match(logical_line):
+        # Line is a log statement, strip out strings and see if % is used,
+        # just to make sure we don't match on a format specifier in a string.
+        line = re.sub(r"[\"'].+?[\"']", '', logical_line)
+        if '%' in line:
+            yield 0, msg
