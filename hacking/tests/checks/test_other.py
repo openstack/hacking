@@ -25,6 +25,7 @@ class OthersTestCase(tests.TestCase):
     @ddt.data(
         (1, 'LOG.debug("Test %s" % foo)', None),
         (0, 'LOG.info("Test %s", foo)', None),
+        (1, 'LOG.info("Test {}".format(foo))', None),
         (0, 'LOG.error("Test %s" % foo)', '# noqa'),
         (1, 'LOG.debug("Test %s" % "foo")', None),
         (0, 'LOG.debug("Test %s", "foo")', None),

@@ -55,5 +55,5 @@ def hacking_delayed_string_interpolation(logical_line, noqa):
         # There are some cases where string formatting of the arguments are
         # needed, so don't include those when checking.
         line = re.sub(r",.*", '', line)
-        if '%' in line:
+        if '%' in line or '.format' in line:
             yield 0, msg
