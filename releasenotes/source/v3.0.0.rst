@@ -1,0 +1,6 @@
+=====================
+v3.0.0 Release Notes
+=====================
+
+.. release-notes:: 3.0.0 Release Notes
+   :version: 3.0.0
