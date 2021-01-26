@@ -2,7 +2,6 @@
     templates:
       - publish-openstack-docs-pti
       - openstack-cover-jobs
-      - openstack-lower-constraints-jobs
       - openstack-python35-jobs
       - openstack-python3-victoria-jobs
       - release-notes-jobs-python3
@@ -10,6 +9,10 @@
       jobs:
         - hacking-integration-nova:
             voting: false
+        # TODO(paras333) Set to voting if we fix and keep the lower-constraint job
+        - openstack-tox-lower-constraints:
+            voting: false
+
 
 - job:
     name: hacking-integration-nova
