@@ -12,8 +12,8 @@
 # limitations under the License.
 
 import textwrap
+from unittest import mock
 
-import mock
 import pycodestyle
 
 from hacking.checks import except_checks

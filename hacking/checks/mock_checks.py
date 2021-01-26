@@ -11,6 +11,7 @@
 #  under the License.
 
 import ast
+import re
 
 from hacking import core
 
@@ -139,3 +140,37 @@ class FunctionNameFinder(ast.NodeVisitor):
         if isinstance(node, ast.Call):
             return super(FunctionNameFinder, self).visit(node.func)
         return super(FunctionNameFinder, self).visit(node)
+
+
+third_party_mock = re.compile('^import.mock')
+from_third_party_mock = re.compile('^from.mock.import')
+
+
+@core.flake8ext
+def hacking_no_third_party_mock(logical_line, noqa):
+    """Check for use of mock instead of unittest.mock.
+
+    Projects have had issues with using mock without including it in their
+    requirements, thinking it is the standard library version. This makes it so
+    these projects need to explicitly turn off this check to make it clear they
+    intended to use it.
+
+    Okay: from unittest import mock
+    Okay: from unittest.mock import patch
+    Okay: import unittest.mock
+    H216: import mock
+    H216: from mock import patch
+    Okay: try: import mock
+    Okay: import mock  # noqa
+    """
+    msg = ('H216: The unittest.mock module should be used rather than the '
+           'third party mock package unless actually needed. If so, disable '
+           'the H216 check in hacking config and ensure mock is declared in '
+           "the project's requirements.")
+
+    if noqa:
+        return
+
+    if (re.match(third_party_mock, logical_line) or
+            re.match(from_third_party_mock, logical_line)):
+        yield (0, msg)
