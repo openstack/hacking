@@ -9,10 +9,6 @@
       jobs:
         - hacking-integration-nova:
             voting: false
-        # TODO(paras333) Set to voting if we fix and keep the lower-constraint job
-        - openstack-tox-lower-constraints:
-            voting: false
-
 
 - job:
     name: hacking-integration-nova
