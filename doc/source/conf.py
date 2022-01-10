@@ -29,8 +29,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'hacking'
-copyright = u'2013, OpenStack Foundation'
+project = 'hacking'
+copyright = '2013, OpenStack Foundation'
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
 add_function_parentheses = True
@@ -55,6 +55,6 @@ htmlhelp_basename = '%sdoc' % project
 latex_documents = [
         ('index',
          'doc-%s.tex' % project,
-         u'%s Documentation' % project,
-         u'OpenStack Foundation', 'manual'),
+         '%s Documentation' % project,
+         'OpenStack Foundation', 'manual'),
 ]
