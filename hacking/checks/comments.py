@@ -86,11 +86,12 @@ def hacking_has_correct_license(physical_line, filename, lines, line_number):
     if line_number == 1 and len(lines) > 10 and _project_is_apache():
         for idx, line in enumerate(lines):
             column = line.find('Licensed under the Apache License')
-            if (0 < column < 10 and not
-                    _check_for_exact_apache(idx, lines)):
-                if (line.find('SPDX-License-Identifier: Apache-2.0') <= 0):
+            if 0 < column < 10:
+                exact, cmp_str = _check_for_exact_apache(idx, lines)
+                if (not exact and
+                        line.find('SPDX-License-Identifier: Apache-2.0') <= 0):
                     return (column, "H103: Header does not match Apache 2.0 "
-                            "License notice")
+                            "License notice" + cmp_str)
 
 
 EMPTY_LINE_RE = re.compile(r"^\s*(#.*|$)")
@@ -163,11 +164,10 @@ under the License."""
     stripped_apache2 = re.sub(r'\s+', ' ', APACHE2).strip()
 
     if stripped_apache2 in content:
-        return True
+        return (True, None)
     else:
-        print("<license>!=<apache2>:\n'%s' !=\n'%s'" %
-              (content, stripped_apache2))
-        return False
+        return (False, "\n<license>!=<apache2>:\n'%s' !=\n'%s'" %
+                       (content, stripped_apache2))
 
 
 @core.flake8ext
