@@ -152,7 +152,7 @@ def hacking_python3x_metaclass(logical_line, noqa):
     H236: class Foo(object):\n    __metaclass__ = Meta
     H236: class Foo(object):\n    foo=bar\n    __metaclass__ = Meta
     H236: class Foo(object):\n    '''docstr.'''\n    __metaclass__ = Meta
-    H236: class Foo(object):\n    __metaclass__ = \\\n        Meta
+    H236: class Foo(object):\n    __metaclass__ = \\n        Meta
     Okay: class Foo(object):\n    __metaclass__ = Meta  # noqa
     """
     if noqa:

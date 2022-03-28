@@ -60,7 +60,6 @@ def hacking_except_format(logical_line, noqa):
 
     Okay: try:\n    pass\nexcept Exception:\n    pass
     H201: try:\n    pass\nexcept:\n    pass
-    H201: except:
     Okay: try:\n    pass\nexcept:  # noqa\n    pass
     """
     if noqa:
