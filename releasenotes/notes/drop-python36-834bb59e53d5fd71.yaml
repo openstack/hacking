@@ -1,0 +1,8 @@
+---
+upgrade:
+  - |
+    Support for Python 3.5 through 3.7 has been dropped. The minimum
+    supported Python version is now 3.8.
+  - |
+    ``hacking`` is now compatible with ``flake8~=4.0.1``. flake8 3.x
+    is no longer supported.
