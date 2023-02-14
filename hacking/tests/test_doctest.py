@@ -40,7 +40,8 @@ class HackingTestCase(hacking.tests.TestCase):
             f.write(''.join(self.lines))
 
         cmd = [sys.executable, '-mflake8', '--isolated',
-               '--select=%s' % self.code, '--ignore=F',
+               '--select=%s' % self.code,
+               '--enable-extensions=%s' % self.code, '--ignore=F',
                '--format=%(code)s\t%(path)s\t%(row)d', f.name]
         out, _ = subprocess.Popen(cmd, stdout=subprocess.PIPE).communicate()
 
@@ -52,6 +53,7 @@ class HackingTestCase(hacking.tests.TestCase):
             self.addDetail('reason',
                            content.text_content("Failed to trigger rule %s" %
                                                 self.code))
+
             self.assertNotEqual('', out)
             self.assertEqual(self.code, out.split('\t')[0].rstrip(':'), out)
 

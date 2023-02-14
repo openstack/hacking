@@ -158,8 +158,11 @@ def hacking_python3x_metaclass(logical_line, noqa):
     if noqa:
         return
     split_line = logical_line.split()
-    if(len(split_line) > 2 and split_line[0] == '__metaclass__' and
-       split_line[1] == '='):
+    if (
+        len(split_line) > 2
+        and split_line[0] == '__metaclass__'
+        and split_line[1] == '='
+    ):
         yield (logical_line.find('__metaclass__'),
                "H236: Python 3.x incompatible __metaclass__, "
                "use six.add_metaclass()")
