@@ -269,7 +269,7 @@ def hacking_assert_equal_type(logical_line):
     if RE_ASSERT_EQUAL_TYPE.match(logical_line):
         yield (
             0,
-            "H212: Use assert{type(A),B} instance")
+            "H211: Use assert{Is,IsNot}instance")
 
 
 @core.flake8ext
