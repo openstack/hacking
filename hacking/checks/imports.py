@@ -88,17 +88,35 @@ def hacking_import_alphabetical(logical_line, blank_before, previous_logical,
     Okay: import os\nimport sys
     H306: import sys\nimport os
     Okay: import sys\n\n# foo\nimport six
+    Okay: from a import c\nfrom a.b import d
     """
     # handle import x
+    # handle from x.y import z
+    # handle from x.y import z as a
     # use .lower since capitalization shouldn't dictate order
     if blank_before < 1 and indent_level == previous_indent_level:
-        split_line = core.import_normalize(logical_line.
-                                           strip()).lower().split()
-        split_previous = core.import_normalize(previous_logical.
-                                               strip()).lower().split()
-        length = [2, 4]
-        if (len(split_line) in length and len(split_previous) in length and
-                split_line[0] == "import" and split_previous[0] == "import"):
-            if split_line[1] < split_previous[1]:
+        strip_line = logical_line.strip()
+        strip_prev = previous_logical.strip()
+        split_line = strip_line.lower().split()
+        split_prev = strip_prev.lower().split()
+        if (len(split_line) in [4, 6] and len(split_prev) in [4, 6] and
+                split_line[0] == "from" and split_line[2] == "import" and
+                split_prev[0] == "from" and split_prev[2] == "import"):
+            if (split_line[1] < split_prev[1]):
                 yield (0, "H306: imports not in alphabetical order (%s, %s)"
-                       % (split_previous[1], split_line[1]))
+                       % (split_prev[1], split_line[1]))
+            if (split_line[1] == split_prev[1] and
+                    split_line[3] < split_prev[3]):
+                line = "%s.%s" % (split_line[1], split_line[3])
+                prev = "%s.%s" % (split_prev[1], split_prev[3])
+                yield (0, "H306: imports not in alphabetical order (%s, %s)"
+                       % (prev, line))
+        else:
+            split_line = core.import_normalize(strip_line).lower().split()
+            split_prev = core.import_normalize(strip_prev).lower().split()
+            length = [2, 4]
+            if (len(split_line) in length and len(split_prev) in length and
+                    split_line[0] == "import" and split_prev[0] == "import" and
+                    split_line[1] < split_prev[1]):
+                yield (0, "H306: imports not in alphabetical order (%s, %s)"
+                       % (split_prev[1], split_line[1]))
