@@ -47,7 +47,7 @@ pip install .
 # Reinstall hacking, the above might have uninstalled it
 pip install $HACKING
 
-flake8 --select H --statistics
+flake8 --select E,H --statistics
 RET=$?
 popd
 
