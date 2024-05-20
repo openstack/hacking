@@ -1,0 +1,16 @@
+---
+upgrade:
+  - |
+    The following checks have been removed:
+
+    - H231 (incompatible ``except x,y:`` construct)
+    - H232 (incompatible octal format)
+    - H233 (incompatible use of ``print`` operator)
+    - H234 (``assertEquals``/``assertNotEquals`` is deprecated)
+    - H235 (``assert_`` is deprecated)
+    - H236 (incompatible ``__metaclass__``)
+    - H237 (removed module)
+    - H238 (old style classes)
+
+    These all checked for Python 3-incompatible code. They were disabled on
+    Python 3 codebases and have therefore been no-ops for some time now.
