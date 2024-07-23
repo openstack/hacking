@@ -90,7 +90,7 @@ def hacking_except_format_assert(logical_line, noqa):
 
 def is_none(node):
     '''Check whether an AST node corresponds to None.'''
-    return isinstance(node, ast.NameConstant) and node.value is None
+    return isinstance(node, ast.Constant) and node.value is None
 
 
 def _get_local_func_name(node):
