@@ -153,7 +153,13 @@ def hacking_assert_is_none(logical_line, noqa):
         except ValueError:
             continue
         checker = NoneArgChecker(func_name)
-        checker.visit(ast.parse(logical_line))
+        try:
+            parsed_logical_line = ast.parse(logical_line)
+        except SyntaxError:
+            # let flake8 catch this itself
+            # https://github.com/PyCQA/flake8/issues/1948
+            continue
+        checker.visit(parsed_logical_line)
         if checker.none_found:
             yield start, "H203: Use assertIs(Not)None to check for None"
 
@@ -212,7 +218,13 @@ def hacking_assert_equal(logical_line, noqa):
         return
     comparisons = [ast.Eq, ast.NotEq]
     checker = AssertTrueFalseChecker(methods, comparisons)
-    checker.visit(ast.parse(logical_line))
+    try:
+        parsed_logical_line = ast.parse(logical_line)
+    except SyntaxError:
+        # let flake8 catch this itself
+        # https://github.com/PyCQA/flake8/issues/1948
+        return
+    checker.visit(parsed_logical_line)
     if checker.error:
         yield start, 'H204: Use assert(Not)Equal()'
 
@@ -243,7 +255,13 @@ def hacking_assert_greater_less(logical_line, noqa):
         return
     comparisons = [ast.Gt, ast.GtE, ast.Lt, ast.LtE]
     checker = AssertTrueFalseChecker(methods, comparisons)
-    checker.visit(ast.parse(logical_line))
+    try:
+        parsed_logical_line = ast.parse(logical_line)
+    except SyntaxError:
+        # let flake8 catch this itself
+        # https://github.com/PyCQA/flake8/issues/1948
+        return
+    checker.visit(parsed_logical_line)
     if checker.error:
         yield start, 'H205: Use assert{Greater,Less}[Equal]'
 
