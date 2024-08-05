@@ -8,6 +8,12 @@
       jobs:
         - hacking-integration-nova:
             voting: false
+        - openstack-tox-py312:
+            voting: true
+    gate:
+      jobs:
+        - openstack-tox-py312:
+            voting: true
 
 - job:
     name: hacking-integration-nova
