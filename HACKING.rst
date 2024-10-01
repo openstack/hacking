@@ -227,58 +227,6 @@ Example::
 
    * `oslo.i18n Guidelines <https://docs.openstack.org/oslo.i18n/latest/user/guidelines.html>`__
 
-Python 3.x compatibility
-------------------------
-OpenStack code should become Python 3.x compatible. That means all Python 2.x-only
-constructs or dependencies should be avoided. In order to start making code
-Python 3.x compatible before it can be fully Python 3.x compatible, we have checks for Python 2.x-only constructs:
-
-- [H231] ``except``. Instead of::
-
-    except x,y:
-
-  Use::
-
-    except x as y:
-
-- [H232] Python 3.x has become more strict regarding octal string
-  literals. Use ``0o755`` instead of ``0755``. Similarly, explicit use of long
-  literals (``01234L``) should be avoided.
-
-- [H233] The ``print`` operator can be avoided by using::
-
-    from __future__ import print_function
-
-  at the top of your module.
-
-- [H234] ``assertEquals()`` logs a DeprecationWarning in Python 3.x, use
-  ``assertEqual()`` instead. The same goes for ``assertNotEquals()``.
-
-- [H235] ``assert_()`` is deprecated in Python 3.x, use ``assertTrue()`` instead.
-
-- [H236] Use ``six.add_metaclass`` instead of ``__metaclass__``.
-
-  Example::
-
-    import six
-
-    @six.add_metaclass(Meta)
-    class YourClass():
-
-- [H237] Don't use modules that were removed in Python 3. Removed module list:
-  http://python3porting.com/stdlib.html#removed-modules
-
-- [H238] Old style classes are deprecated and no longer available in Python 3
-  (they are converted to new style classes). In order to avoid any unwanted side
-  effects all classes should be declared using new style. See `the new-style
-  class documentation <https://www.python.org/doc/newstyle/>`_ for reference on
-  the differences.
-
-  Example::
-
-    class Foo(object):
-        pass
-
 Creating Unit Tests
 -------------------
 For every new feature, unit tests should be created that both test and
