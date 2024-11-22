@@ -57,3 +57,15 @@ def hacking_delayed_string_interpolation(logical_line, noqa):
         line = re.sub(r",.*", '', line)
         if '%' in line or '.format(' in line:
             yield 0, msg
+
+
+@core.flake8ext
+def hacking_no_log_warn(logical_line):
+    """Disallow 'LOG.warn('
+
+    Use LOG.warning() instead of Deprecated LOG.warn().
+    https://docs.python.org/3/library/logging.html#logging.warning
+    """
+
+    if "LOG.warn(" in logical_line:
+        yield (0, "H905: LOG.warn is deprecated, please use LOG.warning!")

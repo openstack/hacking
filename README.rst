@@ -101,7 +101,10 @@ Some of the available checks are disabled by default. These checks are:
 - [H205] Use assert(Greater|Less)(Equal) for comparison.
 - [H210] Require 'autospec', 'spec', or 'spec_set' in
   mock.patch/mock.patch.object calls
+- [H216] Make sure unittest.mock is used instead of the third party mock
+  library
 - [H904] Delay string interpolations at logging calls.
+- [H905] Log.warn is deprecated. Enforce use of LOG.warning.
 
 To enable these checks, edit the ``flake8`` section of the ``tox.ini`` file.
 For example to enable H106 and H203:
