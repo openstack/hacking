@@ -117,10 +117,10 @@ Local Checks
 hacking supports having local changes in a source tree. They need to
 be registered individually in tox.ini:
 
-Add to tox.ini a new section `flake8:local-plugins` and list each plugin with
+Add to tox.ini a new section ``flake8:local-plugins`` and list each plugin with
 its entry-point. Additionally, you can add the path to the files
 containing the plugins so that the repository does not need to be
-installed with the `paths` directive.
+installed with the ``paths`` directive.
 
 .. code-block:: ini
 
@@ -132,7 +132,7 @@ installed with the `paths` directive.
      ./nova/hacking
 
 The plugins, in the example above they live in
-`nova/hacking/checks.py`, need to annotate all functions with `@core.flake8ext`
+``nova/hacking/checks.py``, need to annotate all functions with ``@core.flake8ext``
 
 .. code-block:: python
 
