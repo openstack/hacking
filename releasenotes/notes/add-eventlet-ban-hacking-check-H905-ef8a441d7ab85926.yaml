@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    Added new hacking check ``H905`` to detect and ban ``eventlet`` usage in
+    OpenStack projects. This check supports the ongoing ``eventlet`` removal
+    effort across OpenStack as part of the async migration to ``threading``
+    and ``asyncio``.

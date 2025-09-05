@@ -33,6 +33,9 @@ General
 - [H105] Don't use author tags. We use version control instead.
 - [H106] Don't put vim configuration in source files (off by default).
 - [H904] Delay string interpolations at logging calls (off by default).
+- [H905] Do not import eventlet (off by default). Eventlet usage is being
+  removed from OpenStack projects as part of the async migration effort.
+  Use threading or asyncio instead.
 - Do not shadow a built-in or reserved word. Shadowing built -in or reserved
   words makes the code harder to understand. Example::
 
@@ -86,14 +89,15 @@ Real-world Import Order Examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Example::
 
+  import asyncio
   import httplib
   import logging
   import random
   import StringIO
+  import threading
   import time
   import unittest
 
-  import eventlet
   import webob.exc
 
   import nova.api.ec2
