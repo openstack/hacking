@@ -19,7 +19,7 @@ import subprocess
 import sys
 import tempfile
 
-import pkg_resources
+import importlib.metadata
 import testscenarios
 from testtools import content
 
@@ -71,20 +71,21 @@ def _get_lines(check):
 
 def load_tests(loader, tests, pattern):
 
-    for entry in pkg_resources.iter_entry_points('flake8.extension'):
-        if not entry.module_name.startswith('hacking.'):
+    for entry in importlib.metadata.entry_points().select(
+        group='flake8.extension'
+    ):
+        if not entry.module.startswith('hacking.'):
             continue
 
         check = entry.load()
         if check.skip_on_py3:
             continue
 
-        name = entry.attrs[0]
         for lineno, (raw, (code, source)) in enumerate(_get_lines(check)):
             lines = [part.replace(r'\t', '\t') + '\n'
                      for part in source.split(r'\n')]
             file_cases.append((
-                '%s-%s-line-%s' % (entry.name, name, lineno),
+                '%s-%s-line-%s' % (entry.name, entry.attr, lineno),
                 {'lines': lines, 'raw': raw, 'code': code},
             ))
 
