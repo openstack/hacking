@@ -19,18 +19,12 @@ Built as a sets of pycodestyle checks using flake8.
 """
 
 import gettext
-import sys
+import warnings
 
 from hacking import config
 
 # Import tests need to inject _ properly into the builtins
-kwargs = {}
-if sys.version_info[0] < 3:
-    # In Python2, ensure that the _() that gets installed into built-ins
-    # always returns unicodes. This matches the default behavior under Python
-    # 3, although the keyword argument is not present in the Python 3 API.
-    kwargs['unicode'] = True
-gettext.install('hacking', **kwargs)
+gettext.install('hacking')
 
 
 def flake8ext(f):
@@ -56,6 +50,11 @@ def off_by_default(f):
 
 
 def skip_on_py3(f):
+    warnings.warn(
+        "The skip_on_py3 decorator is deprecated for removal: any check that "
+        "does not run on py3 should be removed",
+        UserWarning,
+    )
     f.skip_on_py3 = True
     return f
 
@@ -63,7 +62,6 @@ def skip_on_py3(f):
 
 # H1xx comments
 # H20x except
-# H23x Python 2.x -> 3.x portability issues
 # H3xx imports
 # H4xx docstrings
 # H5xx dictionaries/lists
