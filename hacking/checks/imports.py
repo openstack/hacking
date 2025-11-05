@@ -15,6 +15,8 @@ import re
 from hacking import core
 
 RE_RELATIVE_IMPORT = re.compile(r'^from\s*[.]')
+RE_EVENTLET_IMPORT = re.compile(
+    r'^\s*(?:import\s+eventlet(?:\s|$|\.)|from\s+eventlet(?:\s|$|\.))')
 
 
 @core.flake8ext
@@ -102,3 +104,25 @@ def hacking_import_alphabetical(logical_line, blank_before, previous_logical,
             if split_line[1] < split_previous[1]:
                 yield (0, "H306: imports not in alphabetical order (%s, %s)"
                        % (split_previous[1], split_line[1]))
+
+
+@core.flake8ext
+@core.off_by_default
+def hacking_no_eventlet(logical_line, noqa):
+    r"""Check that eventlet is not imported.
+
+    Eventlet is being removed from OpenStack projects as part of the
+    async migration effort. New code should use threading or asyncio instead.
+
+    Examples:
+    H905: import eventlet
+    H905: from eventlet import something
+    Okay: import asyncio
+    Okay: import threading
+    """
+    if noqa:
+        return
+
+    if RE_EVENTLET_IMPORT.match(logical_line):
+        yield (0, "H905: eventlet import detected. "
+                  "Eventlet is banned, use threading or asyncio instead.")
