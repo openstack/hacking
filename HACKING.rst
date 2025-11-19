@@ -22,6 +22,7 @@ Step 0
 
 General
 -------
+
 - [H903] Use only UNIX style newlines (``\n``), not Windows style (``\r\n``)
 - It is preferred to wrap long lines in parentheses and not a backslash
   for line continuation.
@@ -68,9 +69,11 @@ Imports
 
 (*) exceptions are:
 
-- imports from ``migrate`` package
-- imports from ``sqlalchemy`` package
-- function imports from ``i18n`` module
+- imports from stdlib ``collections.abc``, ``types``, and ``typing`` packages
+- imports from third-party ``sqlalchemy`` package
+- other objects that are only used for type hinting
+- function imports from ``i18n`` module (this should be enforced at the project
+  level using the ``[hacking] import_exceptions`` config option)
 
 Import order template
 ^^^^^^^^^^^^^^^^^^^^^

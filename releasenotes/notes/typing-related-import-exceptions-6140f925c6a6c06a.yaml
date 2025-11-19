@@ -1,0 +1,8 @@
+---
+upgrade:
+  - |
+    The default set of exceptions for the H301 (Do not import more than one
+    module per line) and H303 (Do not use wildcard ``*`` import) rules has
+    changed, with the end-of-life ``migrate`` package being removed and the
+    ``collections.abc``, ``types``, and ``typing`` stdlib packages being
+    added.
