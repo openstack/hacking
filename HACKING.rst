@@ -50,6 +50,7 @@ General
 
     mylist = Foo().list() # OKAY, does not shadow built-in
 
+- [H905] Log.warn is deprecated. Enforce use of LOG.warning.
 
 Imports
 -------
