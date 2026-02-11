@@ -1,0 +1,68 @@
+[build-system]
+requires = ["pbr>=6.1.1"]
+build-backend = "pbr.build"
+
+[project]
+name = "hacking"
+description = "OpenStack Hacking Guideline Enforcement"
+authors = [
+    {name = "OpenStack", email = "openstack-discuss@lists.openstack.org"},
+]
+readme = {file = "README.rst", content-type = "text/x-rst"}
+license = {text = "Apache-2.0"}
+dynamic = ["version", "dependencies"]
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Environment :: OpenStack",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[project.urls]
+Homepage = "https://docs.openstack.org/hacking/latest"
+Issues = "https://bugs.launchpad.net/hacking"
+Repository = "https://opendev.org/openstack/hacking"
+
+[project.entry-points."flake8.extension"]
+H101 = "hacking.checks.comments:hacking_todo_format"
+H102 = "hacking.checks.comments:hacking_has_license"
+H103 = "hacking.checks.comments:hacking_has_correct_license"
+H104 = "hacking.checks.comments:hacking_has_only_comments"
+H105 = "hacking.checks.comments:hacking_no_author_tags"
+H106 = "hacking.checks.vim_check:no_vim_headers"
+H201 = "hacking.checks.except_checks:hacking_except_format"
+H202 = "hacking.checks.except_checks:hacking_except_format_assert"
+H203 = "hacking.checks.except_checks:hacking_assert_is_none"
+H204 = "hacking.checks.except_checks:hacking_assert_equal"
+H205 = "hacking.checks.except_checks:hacking_assert_greater_less"
+H210 = "hacking.checks.mock_checks:MockAutospecCheck"
+H211 = "hacking.checks.except_checks:hacking_assert_true_instance"
+H212 = "hacking.checks.except_checks:hacking_assert_equal_type"
+H213 = "hacking.checks.except_checks:hacking_assert_raises_regexp"
+H214 = "hacking.checks.except_checks:hacking_assert_true_or_false_with_in"
+H215 = "hacking.checks.except_checks:hacking_assert_equal_in"
+H216 = "hacking.checks.mock_checks:hacking_no_third_party_mock"
+H301 = "hacking.checks.imports:hacking_import_rules"
+H306 = "hacking.checks.imports:hacking_import_alphabetical"
+H401 = "hacking.checks.docstrings:hacking_docstring_start_space"
+H403 = "hacking.checks.docstrings:hacking_docstring_multiline_end"
+H404 = "hacking.checks.docstrings:hacking_docstring_multiline_start"
+H405 = "hacking.checks.docstrings:hacking_docstring_summary"
+H501 = "hacking.checks.dictlist:hacking_no_locals"
+H700 = "hacking.checks.localization:hacking_localization_strings"
+H903 = "hacking.checks.other:hacking_no_cr"
+H904 = "hacking.checks.other:hacking_delayed_string_interpolation"
+H905 = "hacking.checks.imports:hacking_no_eventlet"
+
+[tool.setuptools.packages.find]
+include = ["hacking*"]
