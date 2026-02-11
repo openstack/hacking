@@ -5,8 +5,3 @@
   language: python
   types: [python]
   require_serial: true
-  additional_dependencies:
-    # This enables the pep257 extra from hacking by default. If you want
-    # to avoid it, just override additional_dependencies in your hook config
-    # by listing only `- .`. We assume that most users want this feature.
-    - .[pep257]
