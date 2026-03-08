@@ -18,7 +18,9 @@
 Built as a sets of pycodestyle checks using flake8.
 """
 
+from collections.abc import Callable, Generator
 import gettext
+from typing import Any, TypeVar
 import warnings
 
 from hacking import config
@@ -27,16 +29,19 @@ from hacking import config
 gettext.install('hacking')
 
 
-def flake8ext(f):
-    f.name = __name__
-    f.version = '0.0.1'
-    f.skip_on_py3 = False
+F = TypeVar('F', bound=Callable[..., Any])
+
+
+def flake8ext(f: F) -> F:
+    setattr(f, 'name', __name__)
+    setattr(f, 'version', '0.0.1')
+    setattr(f, 'skip_on_py3', False)
     if not hasattr(f, 'off_by_default'):
-        f.off_by_default = False
+        setattr(f, 'off_by_default', False)
     return f
 
 
-def off_by_default(f):
+def off_by_default(f: F) -> F:
     """Decorator to turn check off by default.
 
     To enable the check use the flake8 select setting in
@@ -45,17 +50,17 @@ def off_by_default(f):
     flake8 documentation:
     http://flake8.readthedocs.org/en/latest/extensions.html.
     """
-    f.off_by_default = True
+    setattr(f, 'off_by_default', True)
     return f
 
 
-def skip_on_py3(f):
+def skip_on_py3(f: F) -> F:
     warnings.warn(
         "The skip_on_py3 decorator is deprecated for removal: any check that "
         "does not run on py3 should be removed",
         UserWarning,
     )
-    f.skip_on_py3 = True
+    setattr(f, 'skip_on_py3', True)
     return f
 
 # Error code block layout
@@ -85,7 +90,7 @@ IMPORT_EXCEPTIONS = CONF.get_multiple('import_exceptions', default=[])
 IMPORT_EXCEPTIONS += DEFAULT_IMPORT_EXCEPTIONS
 
 
-def is_import_exception(mod):
+def is_import_exception(mod: str) -> bool:
     """Check module name to see if import has been whitelisted.
 
        Import based rules should not run on any whitelisted module
@@ -94,7 +99,7 @@ def is_import_exception(mod):
             any(mod.startswith(m + '.') for m in IMPORT_EXCEPTIONS))
 
 
-def import_normalize(line):
+def import_normalize(line: str) -> str:
     # convert "from x import y" to "import x.y"
     # handle "from x import y as z" to "import x.y as z"
     split_line = line.split()
@@ -108,18 +113,23 @@ def import_normalize(line):
         return line
 
 
-class GlobalCheck(object):
+# TODO(stephenfin): Remove this class. No one is using it.
+class GlobalCheck:
     """Base class for checks that should be run only once."""
 
     name = None
     version = '0.0.1'
     skip_on_py3 = False
-    _has_run = set()
+    _has_run: set[str] = set()
 
     def __init__(self, tree, *args):
+        warnings.warn(
+            'The {self.__class__.__name__} class is deprecated for removal',
+            DeprecationWarning,
+        )
         pass
 
-    def run(self):
+    def run(self) -> Generator[Any]:
         """Make run a no-op if run() has been called before.
 
         Store in a global registry the list of checks we've run. If we have
@@ -133,5 +143,5 @@ class GlobalCheck(object):
             if ret is not None:
                 yield ret
 
-    def run_once(self):
+    def run_once(self) -> Any:
         pass
