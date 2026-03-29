@@ -54,7 +54,7 @@ class OthersTestCase(tests.TestCase):
     @ddt.data(
         (False, 'LOG.warn("LOG.warn is deprecated")'),
         (True, 'LOG.warning("LOG.warn is deprecated")'))
-    def test_H905_no_log_warn(self, passes, line):
+    def test_H906_no_log_warn(self, passes, line):
         if passes:
             self.assertCheckPasses(other.hacking_no_log_warn, line)
         else:

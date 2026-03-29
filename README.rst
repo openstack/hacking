@@ -104,7 +104,8 @@ Some of the available checks are disabled by default. These checks are:
 - [H216] Make sure unittest.mock is used instead of the third party mock
   library
 - [H904] Delay string interpolations at logging calls.
-- [H905] Log.warn is deprecated. Enforce use of LOG.warning.
+- [H905] Do not import eventlet.
+- [H906] Log.warn is deprecated. Enforce use of LOG.warning.
 
 To enable these checks, edit the ``flake8`` section of the ``tox.ini`` file.
 For example to enable H106 and H203:

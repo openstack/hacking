@@ -63,6 +63,7 @@ H700 = "hacking.checks.localization:hacking_localization_strings"
 H903 = "hacking.checks.other:hacking_no_cr"
 H904 = "hacking.checks.other:hacking_delayed_string_interpolation"
 H905 = "hacking.checks.imports:hacking_no_eventlet"
+H906 = "hacking.checks.other:hacking_no_log_warn"
 
 [tool.setuptools.packages.find]
 include = ["hacking*"]

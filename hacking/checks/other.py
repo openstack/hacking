@@ -68,4 +68,4 @@ def hacking_no_log_warn(logical_line):
     """
 
     if "LOG.warn(" in logical_line:
-        yield (0, "H905: LOG.warn is deprecated, please use LOG.warning!")
+        yield (0, "H906: LOG.warn is deprecated, please use LOG.warning!")
