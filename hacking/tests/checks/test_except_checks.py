@@ -41,7 +41,9 @@ class ExceptChecksTest(tests.TestCase):
         # NOTE(sdague): the standard reporter has printing to stdout
         # as a normal part of check_all, which bleeds through to the
         # test output stream in an unhelpful way. This blocks that printing.
-        with mock.patch('pycodestyle.StandardReport.get_file_results'):
+        with mock.patch(
+            'pycodestyle.StandardReport.get_file_results', autospec=True
+        ):
             checker.check_all()
         checker.report._deferred_print.sort()
         return checker.report._deferred_print
