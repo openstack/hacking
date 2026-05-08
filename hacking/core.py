@@ -75,8 +75,10 @@ CONF = config.Config('hacking')
 
 
 DEFAULT_IMPORT_EXCEPTIONS = [
+    'collections.abc',
     'sqlalchemy',
-    'migrate',
+    'types',
+    'typing'
 ]
 
 IMPORT_EXCEPTIONS = CONF.get_multiple('import_exceptions', default=[])
